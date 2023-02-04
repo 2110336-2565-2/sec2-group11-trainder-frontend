@@ -1,7 +1,19 @@
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { login } from "@/services/auth.service";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const router = useRouter();
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      username: { value: string };
+      password: { value: string };
+    };
+    const data = login(target.username.value, target.password.value);
+    router.push("/account/profile");
+  };
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-1/2 h-full bg-blue hidden md:flex flex-col items-center justify-center">
@@ -18,14 +30,14 @@ export default function Login() {
           </span>
         </p>
         <p className="text-center text-gray">Please login to your account</p>
-        <form className="w-1/2 p-3 mt-2" action="/api/auth/login" method="post">
+        <form className="w-1/2 p-3 mt-2" onSubmit={handleLogin} method="post">
           <div className="relative flex items-center">
             <input
               className="w-full pl-3.5 pr-12 py-2.5 mt-4 mb-2 block border border-gray rounded-xl"
               type="text"
-              placeholder="Email"
+              placeholder="Username"
               required
-              name="email"
+              name="username"
             ></input>
             <EnvelopeIcon
               className=" absolute h-8 w-8 mt-2 mr-2 right-0 text-gray"
@@ -35,7 +47,7 @@ export default function Login() {
           <div className="relative flex items-center">
             <input
               className="w-full pl-3.5 pr-12 py-2.5 mt-4 mb-2 block border border-gray rounded-xl"
-              type="text"
+              type="password"
               placeholder="Password"
               required
               name="password"
