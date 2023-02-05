@@ -17,7 +17,7 @@ const renderForm = (i: number) => {
   const fields: Fields[][] = [
     [
       { placeholder: "Email", type: "text", icon: true },
-      { placeholder: "Password", type: "text", icon: true },
+      { placeholder: "Password", type: "password", icon: true },
       {
         placeholder: "User Type",
         type: "select",
@@ -63,18 +63,18 @@ const renderForm = (i: number) => {
             {field.type == "select" ? (
               <>
                 <select
-                  className="w-full pl-3.5 pr-12 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl appearance-none hover:cursor-pointer"
+                  className="w-full px-3.5 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl appearance-none hover:cursor-pointer bg-white"
                   value={selected}
                   defaultValue={""}
                   onChange={(event) => setSelected(event.target.value)}
                   required
                   name={field.placeholder}
                 >
-                  <option disabled value="" hidden>
+                  <option disabled value="" hidden key="default">
                     {field.placeholder}
                   </option>
                   {field.choices?.map((choice) => {
-                    return <option value={choice}>{choice}</option>;
+                    return <option value={choice} key={choice}>{choice}</option>;
                   })}
                 </select>
                 <ChevronDownIcon
@@ -84,7 +84,10 @@ const renderForm = (i: number) => {
               </>
             ) : (
               <input
-                className="w-full pl-3.5 pr-12 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl"
+                className={
+                  "w-full py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl" +
+                  (field.icon != null ? " pl-3.5 pr-12" : " px-3.5")
+                }
                 placeholder={field.placeholder}
                 type={field.type}
                 pattern={field.pattern ?? "*"}
@@ -95,7 +98,7 @@ const renderForm = (i: number) => {
             {field.icon != null ? (
               field.placeholder == "Email" ? (
                 <EnvelopeIcon
-                  className=" absolute h-8 w-8 mr-4 right-0 text-gray"
+                  className="absolute h-8 w-8 mr-4 right-0 text-gray"
                   strokeWidth="2"
                 />
               ) : (
@@ -117,11 +120,11 @@ const renderForm = (i: number) => {
 export default function Signup() {
   return (
     <main className="flex h-screen bg-backgroundColor">
-      <div className="w-2/5 h-full bg-blue hidden md:flex flex-col">
-        {/* <img src="/signup.png" alt="" className="scale-50" /> */}
-        {/* <p className="text-center text-white text-lg">
+      <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
+        <img src="/signup.png" alt="" className="object-contain h-3/5 my-12"/>
+        <p className="text-center text-white text-xl">
           Make an appointment then start workout!
-        </p> */}
+        </p>
       </div>
       <div className="w-full md:w-3/5 h-full flex flex-col justify-center items-center">
         <p className="text-center text-4xl">Hello !</p>
