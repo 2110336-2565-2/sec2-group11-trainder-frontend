@@ -5,13 +5,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-interface CurrentUserData {
+interface UserProfile {
   username: string;
 }
 
-export const getCurrentUserFromAPI = () => {
+export const getCurrentUserProfile = () => {
   return axios
-    .get<CurrentUserData>(API_URL + "/protected/user", {
+    .get<UserProfile>(API_URL + "/protected/profile", {
       headers: authHeader(),
     })
     .then((response) => response.data);

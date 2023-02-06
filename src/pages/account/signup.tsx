@@ -16,7 +16,7 @@ const renderForm = (i: number) => {
 
   const fields: Fields[][] = [
     [
-      { placeholder: "Email", type: "text", icon: true },
+      { placeholder: "Username", type: "text", icon: true },
       { placeholder: "Password", type: "password", icon: true },
       {
         placeholder: "User Type",
@@ -74,7 +74,11 @@ const renderForm = (i: number) => {
                     {field.placeholder}
                   </option>
                   {field.choices?.map((choice) => {
-                    return <option value={choice} key={choice}>{choice}</option>;
+                    return (
+                      <option value={choice} key={choice}>
+                        {choice}
+                      </option>
+                    );
                   })}
                 </select>
                 <ChevronDownIcon
@@ -121,7 +125,7 @@ export default function Signup() {
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
-        <img src="/signup.png" alt="" className="object-contain h-3/5 my-12"/>
+        <img src="/signup.png" alt="" className="object-contain h-3/5 my-12" />
         <p className="text-center text-white text-xl">
           Make an appointment then start workout!
         </p>
