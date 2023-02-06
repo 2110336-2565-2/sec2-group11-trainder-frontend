@@ -18,7 +18,7 @@ export default function Login() {
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-1/2 h-full bg-blue hidden md:flex flex-col items-center justify-center">
         <img src="/login.png" alt="" className="object-center scale-75" />
-        <p className="text-center text-xl text-white font-lexand-deca">
+        <p className="text-center text-xl text-white">
           Be fit together with <span className="text-4xl">TRAINDER</span>
         </p>
       </div>
