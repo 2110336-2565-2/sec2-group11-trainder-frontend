@@ -17,7 +17,7 @@ const renderForm = (i: number) => {
   const fields: Fields[][] = [
     [
       {
-        placeholder: "Email",
+        placeholder: "Username",
         type: "text",
         icon: (
           <EnvelopeIcon
