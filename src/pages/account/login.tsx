@@ -1,8 +1,8 @@
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { login } from "@/services/auth.service";
+import { checkLoggedIn, login } from "@/services/auth.service";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface LoginFormData {
   username: { value: string };
@@ -11,15 +11,29 @@ interface LoginFormData {
 
 export default function Login() {
   const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const handleLogin = useCallback(
     (e: React.FormEvent<HTMLFormElement>): void => {
       e.preventDefault();
       const target = e.target as typeof e.target & LoginFormData;
-      const _ = login(target.username.value, target.password.value);
-      router.push("/account/profile");
+      login(target.username.value, target.password.value).then((data) => {
+        if (data.status == 200) {
+          setLoggedIn(true);
+        } else if (data.message) {
+          alert(data.message);
+        }
+      });
     },
     []
   );
+  useEffect(() => {
+    if (loggedIn) {
+      router.push("/account/profile");
+    }
+  }, [loggedIn]);
+  useEffect(() => {
+    setLoggedIn(checkLoggedIn());
+  }, []);
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-1/2 h-full bg-blue hidden md:flex flex-col items-center justify-center">
