@@ -1,7 +1,7 @@
 import {
   ChevronDownIcon,
-  EnvelopeIcon,
   LockClosedIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
@@ -20,7 +20,7 @@ const renderForm = (i: number) => {
         placeholder: "Username",
         type: "text",
         icon: (
-          <EnvelopeIcon
+          <UserCircleIcon
             className="absolute h-8 w-8 mr-4 right-0 text-gray"
             strokeWidth="2"
           />

@@ -1,4 +1,4 @@
-import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import { LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { checkLoggedIn, login } from "@/services/auth.service";
 import { useRouter } from "next/router";
@@ -62,7 +62,7 @@ export default function Login() {
               required
               name="username"
             ></input>
-            <EnvelopeIcon
+            <UserCircleIcon
               className=" absolute h-8 w-8 mt-2 mr-2 right-0 text-gray"
               strokeWidth="2"
             />
