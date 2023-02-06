@@ -9,15 +9,33 @@ const renderForm = (i: number) => {
   type Fields = {
     placeholder: string;
     type: string;
-    icon?: boolean | undefined;
+    icon?: object | undefined;
     pattern?: string | undefined;
     choices?: string[] | undefined;
   };
 
   const fields: Fields[][] = [
     [
-      { placeholder: "Email", type: "text", icon: true },
-      { placeholder: "Password", type: "password", icon: true },
+      {
+        placeholder: "Email",
+        type: "text",
+        icon: (
+          <EnvelopeIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
+      },
+      {
+        placeholder: "Password",
+        type: "password",
+        icon: (
+          <LockClosedIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
+      },
       {
         placeholder: "User Type",
         type: "select",
@@ -74,7 +92,11 @@ const renderForm = (i: number) => {
                     {field.placeholder}
                   </option>
                   {field.choices?.map((choice) => {
-                    return <option value={choice} key={choice}>{choice}</option>;
+                    return (
+                      <option value={choice} key={choice}>
+                        {choice}
+                      </option>
+                    );
                   })}
                 </select>
                 <ChevronDownIcon
@@ -95,21 +117,7 @@ const renderForm = (i: number) => {
                 name={field.placeholder}
               />
             )}
-            {field.icon != null ? (
-              field.placeholder == "Email" ? (
-                <EnvelopeIcon
-                  className="absolute h-8 w-8 mr-4 right-0 text-gray"
-                  strokeWidth="2"
-                />
-              ) : (
-                <LockClosedIcon
-                  className="absolute h-8 w-8 mr-4 right-0 text-gray"
-                  strokeWidth="2"
-                />
-              )
-            ) : (
-              <></>
-            )}
+            {field.icon != null ? <>{field.icon}</> : <></>}
           </div>
         );
       })}
@@ -121,7 +129,7 @@ export default function Signup() {
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
-        <img src="/signup.png" alt="" className="object-contain h-3/5 my-12"/>
+        <img src="/signup.png" alt="" className="object-contain h-3/5 my-12" />
         <p className="text-center text-white text-xl">
           Make an appointment then start workout!
         </p>
