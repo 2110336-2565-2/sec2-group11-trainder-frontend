@@ -1,7 +1,7 @@
 import {
   ChevronDownIcon,
-  EnvelopeIcon,
   LockClosedIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
@@ -9,15 +9,33 @@ const renderForm = (i: number) => {
   type Fields = {
     placeholder: string;
     type: string;
-    icon?: boolean | undefined;
+    icon?: object | undefined;
     pattern?: string | undefined;
     choices?: string[] | undefined;
   };
 
   const fields: Fields[][] = [
     [
-      { placeholder: "Username", type: "text", icon: true },
-      { placeholder: "Password", type: "password", icon: true },
+      {
+        placeholder: "Username",
+        type: "text",
+        icon: (
+          <UserCircleIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
+      },
+      {
+        placeholder: "Password",
+        type: "password",
+        icon: (
+          <LockClosedIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
+      },
       {
         placeholder: "User Type",
         type: "select",
@@ -99,21 +117,7 @@ const renderForm = (i: number) => {
                 name={field.placeholder}
               />
             )}
-            {field.icon != null ? (
-              field.placeholder == "Email" ? (
-                <EnvelopeIcon
-                  className="absolute h-8 w-8 mr-4 right-0 text-gray"
-                  strokeWidth="2"
-                />
-              ) : (
-                <LockClosedIcon
-                  className="absolute h-8 w-8 mr-4 right-0 text-gray"
-                  strokeWidth="2"
-                />
-              )
-            ) : (
-              <></>
-            )}
+            {field.icon != null ? <>{field.icon}</> : <></>}
           </div>
         );
       })}
