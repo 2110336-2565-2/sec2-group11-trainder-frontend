@@ -10,13 +10,9 @@ const profile = () => {
     router.push("/");
   }, []);
   useEffect(() => {
-    getCurrentUserProfile()
-      .then((data) => {
-        setProfile(data);
-      })
-      .catch(() => {
-        router.push("/");
-      });
+    getCurrentUserProfile().then((data) => {
+      setProfile(data);
+    });
   }, []);
   return (
     <div className="flex-auto h-screen w-full justify-center place-items-center bg-backgroundColor">

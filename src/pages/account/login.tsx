@@ -26,14 +26,17 @@ export default function Login() {
     },
     []
   );
+
+  useEffect(() => {
+    setLoggedIn(checkLoggedIn());
+  }, []);
+
   useEffect(() => {
     if (loggedIn) {
       router.push("/account/profile");
     }
   }, [loggedIn]);
-  useEffect(() => {
-    setLoggedIn(checkLoggedIn());
-  }, []);
+
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-1/2 h-full bg-blue hidden md:flex flex-col items-center justify-center">
