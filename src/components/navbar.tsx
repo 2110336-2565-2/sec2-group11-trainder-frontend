@@ -16,12 +16,12 @@ const navLinks = [
   },
   {
     name: "Notification",
-    path: "/notification",
+    path: "/user/notification",
     icon: <BellIcon className="mx-2 h-6 w-6" strokeWidth={2} />,
   },
   {
     name: "Chat",
-    path: "/chat",
+    path: "/user/chat",
     icon: (
       <ChatBubbleLeftEllipsisIcon className="mx-2 h-6 w-6" strokeWidth={2} />
     ),

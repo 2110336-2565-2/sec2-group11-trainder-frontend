@@ -1,3 +1,5 @@
-export const TrainerFilter = () => {
+const TrainerFilter = () => {
     return <></>;
 }
+
+export default TrainerFilter;

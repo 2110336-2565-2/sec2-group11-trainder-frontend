@@ -1,6 +1,6 @@
 import { NavBar } from "@/components/navbar";
 
-export const Notification = () => {
+const Notification = () => {
   return (
     <>
       <NavBar />
@@ -10,3 +10,5 @@ export const Notification = () => {
     </>
   );
 };
+
+export default Notification;
