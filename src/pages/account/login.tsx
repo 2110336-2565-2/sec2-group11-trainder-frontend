@@ -47,7 +47,7 @@ export default function Login() {
       </div>
       <div className="w-full md:w-1/2 h-full flex flex-col items-center justify-center">
         <p className="text-center text-4xl">
-          Welcome{" "}
+          Welcome {" "}
           <span className="flex md:hidden">
             to&nbsp;<span className="text-blue">TRAINDER</span>
           </span>
