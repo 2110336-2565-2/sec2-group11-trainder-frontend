@@ -4,12 +4,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-interface LoginResponse {
+type LoginResponse = {
   status: number;
   message?: string;
   token?: string;
   username?: string;
-}
+};
 
 export const login = (username: string, password: string) => {
   return axios
@@ -29,9 +29,23 @@ export const login = (username: string, password: string) => {
 };
 export const logout = () => localStorage.removeItem("user");
 
-export const register = (username: string, password: string) => {
+type RegistrationData = {
+  username: string;
+  password: string;
+  userType: string;
+  firstname: string;
+  lastname: string;
+  birthdate: string;
+  citizenId: string;
+  gender: string;
+  phoneNumber: string;
+  address: string;
+  subAddress: string;
+};
+
+export const register = (registrationData: RegistrationData) => {
   return axios
-    .post(API_URL + "/register", { username, password })
+    .post(API_URL + "/register", registrationData)
     .then((response) => {
       return response;
     });
