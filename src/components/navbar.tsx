@@ -1,17 +1,19 @@
-import { getCurrentUser } from "@/services/auth.service";
+import { getCurrentUser, logout } from "@/services/auth.service";
 import {
   BellIcon,
   ChatBubbleLeftEllipsisIcon,
+  ChevronDownIcon,
   HomeIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const navLinks = [
   {
     name: "Home",
-    path: "/",
+    path: "/user/home",
     icon: <HomeIcon className="mx-2 h-6 w-6 " strokeWidth={2} />,
   },
   {
@@ -30,6 +32,22 @@ const navLinks = [
 
 export const NavBar = () => {
   const router = useRouter();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdown = useRef<any>(null);
+
+  const profileMenu = [
+    {
+      name: "profile",
+      onclick: () => router.push("/account/profile"),
+    },
+    {
+      name: "logout",
+      onclick: useCallback(() => {
+        logout();
+        router.push("/");
+      }, []),
+    },
+  ];
 
   return (
     <>
@@ -63,9 +81,36 @@ export const NavBar = () => {
             );
           })}
         </ul>
-        <div className="w-2/3 inline-flex items-center text-lg justify-end">
-          <UserCircleIcon  className="text-white h-6 w-6 mx-2" strokeWidth={2}/>
-          <p className="text-white">{getCurrentUser().username ?? 'Username'}</p>
+        <div className="w-3/5 flex justify-end items-center">
+          <div className="flex flex-col">
+            <button
+              type="button"
+              className="text-white inline-flex items-center text-lg hover:underline"
+              onClick={() => setShowDropdown((state) => !state)}
+            >
+              <UserCircleIcon className="h-6 w-6 mx-2" strokeWidth={2} />
+              {getCurrentUser().username ?? "Username"}
+
+              <ChevronDownIcon className="h-6 w-6 mx-2" strokeWidth={2} />
+            </button>
+            {showDropdown && (
+              <div ref={dropdown}>
+                <ul className="block z-10 absolute bg-white m-2 shadow rounded-xl border border-gray-light">
+                  {profileMenu.map((menu, index) => {
+                    return (
+                      <li
+                        key={index}
+                        className="hover:text-white hover:bg-black hover:cursor-pointer py-2 px-8 rounded-xl"
+                        onClick={menu.onclick}
+                      >
+                        {menu.name}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     </>
