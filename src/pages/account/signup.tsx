@@ -1,13 +1,18 @@
+import { register } from "@/services/auth.service";
+import type { RegistrationData } from "@/services/auth.service";
 import {
   ChevronDownIcon,
   LockClosedIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { Router, useRouter } from "next/router";
+import { AxiosError } from "axios";
 
 const renderForm = (i: number) => {
   type Fields = {
     placeholder: string;
+    name: string;
     type: string;
     icon?: object | undefined;
     pattern?: string | undefined;
@@ -18,6 +23,7 @@ const renderForm = (i: number) => {
     [
       {
         placeholder: "Username",
+        name: "username",
         type: "text",
         icon: (
           <UserCircleIcon
@@ -28,6 +34,7 @@ const renderForm = (i: number) => {
       },
       {
         placeholder: "Password",
+        name: "password",
         type: "password",
         icon: (
           <LockClosedIcon
@@ -38,26 +45,30 @@ const renderForm = (i: number) => {
       },
       {
         placeholder: "User Type",
+        name: "userType",
         type: "select",
         choices: ["Trainer", "Trainee"],
       },
     ],
     [
-      { placeholder: "First Name", type: "text" },
-      { placeholder: "Last Name", type: "text" },
-      { placeholder: "Birth date", type: "date" },
+      { placeholder: "First Name", name: "firstname", type: "text" },
+      { placeholder: "Last Name", name: "lastname", type: "text" },
+      { placeholder: "Birth date", name: "birthdate", type: "date" },
       {
         placeholder: "Citizen ID",
+        name: "citizenId",
         type: "text",
         pattern: "[0-9]{13}",
       },
       {
         placeholder: "Phone number",
+        name: "phoneNumber",
         type: "text",
         pattern: "[0-9]{10}",
       },
       {
         placeholder: "Gender",
+        name: "gender",
         type: "select",
         choices: ["Male", "Female", "Other"],
       },
@@ -65,9 +76,15 @@ const renderForm = (i: number) => {
     [
       {
         placeholder: "House No. & Street",
+        name: "address",
         type: "text",
       },
-      { placeholder: "Postal code", type: "text", pattern: "[0-9]{5}" },
+      {
+        placeholder: "Postal code",
+        name: "postalCode",
+        type: "text",
+        pattern: "[0-9]{5}",
+      },
     ],
   ];
 
@@ -86,7 +103,7 @@ const renderForm = (i: number) => {
                   defaultValue={""}
                   onChange={(event) => setSelected(event.target.value)}
                   required
-                  name={field.placeholder}
+                  name={field.name}
                 >
                   <option disabled value="" hidden key="default">
                     {field.placeholder}
@@ -114,7 +131,7 @@ const renderForm = (i: number) => {
                 type={field.type}
                 pattern={field.pattern ?? "*"}
                 required
-                name={field.placeholder}
+                name={field.name}
               />
             )}
             {field.icon != null ? <>{field.icon}</> : <></>}
@@ -125,7 +142,61 @@ const renderForm = (i: number) => {
   );
 };
 
+type RegistrationFormInput = {
+  username: { value: string };
+  password: { value: string };
+  userType: { value: string };
+  firstname: { value: string };
+  lastname: { value: string };
+  birthdate: { value: string };
+  citizenId: { value: string };
+  phoneNumber: { value: string };
+  gender: { value: string };
+  address: { value: string };
+  postalCode: { value: string };
+};
+
 export default function Signup() {
+  const router = useRouter();
+  const handleRegistrationForm = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const formData = e.target as typeof e.target & RegistrationFormInput;
+      // TODO: Refactor this I think there is a better way to do this.
+      register({
+        username: formData.username.value,
+        password: formData.password.value,
+        userType: formData.userType.value,
+        firstname: formData.firstname.value,
+        lastname: formData.lastname.value,
+        birthdate: formData.birthdate.value,
+        citizenId: formData.citizenId.value,
+        phoneNumber: formData.phoneNumber.value,
+        gender: formData.gender.value,
+        address: formData.address.value,
+        subAddress: formData.postalCode.value,
+      } as RegistrationData)
+        .then(() => {
+          // TODO: Show registration successful, wait a bit, then redirect back to login.
+          router.push("/");
+        })
+        .catch((error: AxiosError) => {
+          if (error.response && error.response.status !== 200) {
+            const errorMsg = error.response as typeof error.response & {
+              data: {
+                message: string;
+              };
+            };
+            if (errorMsg.data.message !== undefined) {
+              alert(errorMsg.data.message);
+              return;
+            }
+          }
+          throw error;
+        });
+    },
+    []
+  );
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
@@ -139,7 +210,11 @@ export default function Signup() {
         <p className="text-gray text-center">
           Please enter your personal details <br /> and start journey with us
         </p>
-        <form className="w-4/5 mt-3 flex flex-col" action="">
+        <form
+          className="w-4/5 mt-3 flex flex-col"
+          action=""
+          onSubmit={handleRegistrationForm}
+        >
           <div className="grid grid-cols-2 justify-items-stretch">
             {renderForm(0)}
           </div>

@@ -29,7 +29,7 @@ export const login = (username: string, password: string) => {
 };
 export const logout = () => localStorage.removeItem("user");
 
-type RegistrationData = {
+export type RegistrationData = {
   username: string;
   password: string;
   userType: string;
@@ -44,11 +44,7 @@ type RegistrationData = {
 };
 
 export const register = (registrationData: RegistrationData) => {
-  return axios
-    .post(API_URL + "/register", registrationData)
-    .then((response) => {
-      return response;
-    });
+  return axios.post(API_URL + "/register", registrationData);
 };
 export const checkLoggedIn = (): boolean => {
   return !!localStorage.getItem("user");
