@@ -7,5 +7,3 @@ const TrainerFilter = () => {
     
     </>;
 }
-
-export default TrainerFilter;
