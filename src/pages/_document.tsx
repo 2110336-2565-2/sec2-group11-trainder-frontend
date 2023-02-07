@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Lexend+Exa&display=swap"
           rel="stylesheet"
         ></link>
       </Head>
@@ -14,5 +14,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  )
+  );
 }

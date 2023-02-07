@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['"Lexend Deca"', 'sans-serif'],
+        "lexend-exa": ['"Lexend Exa"', 'san-serif'],
       },
       colors: {
         backgroundColor: "#FCF4F1",
@@ -22,9 +23,9 @@ module.exports = {
         blue: "#5D86BC",
         yellow: "#E7BD44",
         green: "#296D6C",
-        brown: '#DDD2C7',
+        brown: "#DDD2C7",
       },
     },
   },
   plugins: [],
-}
+};
