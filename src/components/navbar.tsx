@@ -37,6 +37,7 @@ export const NavBar = () => {
     {
       name: "profile",
       onclick: () => router.push("/account/profile"),
+      color: "black",
     },
     {
       name: "logout",
@@ -44,6 +45,7 @@ export const NavBar = () => {
         logout();
         router.push("/");
       }, []),
+      color: "pink-dark",
     },
   ];
 
@@ -95,7 +97,7 @@ export const NavBar = () => {
                   return (
                     <Dropdown.Item
                       key={index}
-                      className="hover:text-white hover:bg-black hover:cursor-pointer py-2 px-8 my-1 rounded-xl"
+                      className={`hover:text-white hover:bg-${menu.color} hover:cursor-pointer py-2 px-8 my-1 rounded-xl`}
                     >
                       {menu.name}
                     </Dropdown.Item>
