@@ -73,7 +73,6 @@ const TrainerFilter = () => {
             <button>FILTER</button>
             <hr />
           </div>
-          
           <div>
             <button>SPECIALITY</button>
             <hr />
