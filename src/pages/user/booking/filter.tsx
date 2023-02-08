@@ -31,8 +31,7 @@ const navLinks = [
 const TrainerFilter = () => {
     const router = useRouter();
     return <>
-    <main className="flex h-screen bg-backgroundColor">
-    <div>
+    <main className="h-screen bg-backgroundColor">
         <nav className="bg-blue flex px-6">
         <div className="flex items-center mr-10 justify-evenly">
           <p className="text-backgroundColor text-3xl mx-2 font-lexend-exa">
@@ -68,10 +67,34 @@ const TrainerFilter = () => {
           <p className="text-white">{getCurrentUser().username ?? 'Username'}</p>
         </div>
       </nav>
-      <div>
-        <h3>Choose your trainer</h3>
+      <div className="grid grid-cols-2">
+      <div className="box-border w-auto p-4 flex flex-col">
+          <div>
+          FILTER
+          </div>
+          <div>
+          SPECIALITY
+          </div>
+          <div>
+          TRAINING FEE
+          </div>
       </div>
-    </div>
+      <div>
+      <h3>Choose your trainer</h3>
+      <div className="box-border w-20 border-4 flex">
+          OATORO
+          Speciality:
+          Rating:
+          Training fee:
+      </div>
+      <div className="box-border w-20 border-4 flex">
+          ABCD
+          Speciality:
+          Rating:
+          Training fee:
+      </div>
+      </div>
+      </div>
     </main>
     </>;
 }
