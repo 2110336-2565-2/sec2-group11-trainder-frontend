@@ -31,9 +31,8 @@ const navLinks = [
 const TrainerFilter = () => {
     const router = useRouter();
     return <>
+    <main className="flex h-screen bg-backgroundColor">
     <div>
-        {/* <p>test</p>
-        Hello meeen */}
         <nav className="bg-blue flex px-6">
         <div className="flex items-center mr-10 justify-evenly">
           <p className="text-backgroundColor text-3xl mx-2 font-lexend-exa">
@@ -69,8 +68,11 @@ const TrainerFilter = () => {
           <p className="text-white">{getCurrentUser().username ?? 'Username'}</p>
         </div>
       </nav>
+      <div>
+        <h3>Choose your trainer</h3>
+      </div>
     </div>
-    
+    </main>
     </>;
 }
 
