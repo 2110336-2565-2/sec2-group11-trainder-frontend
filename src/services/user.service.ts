@@ -5,14 +5,25 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-interface UserProfile {
+export type UserProfile = {
   username: string;
-}
+  firstname: string;
+  lastname: string;
+  birthdate: Date;
+  citizenId: string;
+  gender: string;
+  phoneNumber: string;
+  address: string;
+  subAddress: string;
+};
 
 export const getCurrentUserProfile = () => {
   return axios
-    .get<UserProfile>(API_URL + "/protected/profile", {
+    .get(API_URL + "/protected/profile", {
       headers: authHeader(),
     })
-    .then((response) => response.data);
+    .then((response) => response.data.user as UserProfile)
+    .catch((error) => {
+      throw error;
+    });
 };
