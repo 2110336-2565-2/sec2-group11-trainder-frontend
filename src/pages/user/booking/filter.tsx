@@ -32,7 +32,7 @@ const TrainerFilter = () => {
     const router = useRouter();
     return <>
     <main className="h-screen bg-backgroundColor">
-        <nav className="bg-blue flex px-6">
+    <nav className="bg-blue flex px-6">
         <div className="flex items-center mr-10 justify-evenly">
           <p className="text-backgroundColor text-3xl mx-2 font-lexend-exa">
             Trainder
@@ -68,15 +68,34 @@ const TrainerFilter = () => {
         </div>
       </nav>
       <div className="grid grid-cols-2">
-      <div className="box-border w-auto p-4 flex flex-col">
+      <div className="bg-white box-border w-auto h-screen p-4 flex flex-col">
           <div>
-          FILTER
+            <button>FILTER</button>
+  
           </div>
           <div>
-          SPECIALITY
+            <button>SPECIALITY</button>
+            <div className = "box-border w-42 h-40 flex flex-col">
+              <label >
+              <input type="checkbox" />
+              Weight Loss (100)
+              </label>
+              <label >
+              <input type="checkbox" />
+              Rehabilitation (100)
+              </label>
+              <label >
+              <input type="checkbox" />
+              Weight Training (100)
+              </label>
+              <label >
+              <input type="checkbox" />
+              Yoga (100)
+              </label>
+            </div>
           </div>
           <div>
-          TRAINING FEE
+            <button>TRAINING FEE</button>
           </div>
       </div>
       <div>
