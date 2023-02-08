@@ -2,13 +2,13 @@ import { getCurrentUser, logout } from "@/services/auth.service";
 import {
   BellIcon,
   ChatBubbleLeftEllipsisIcon,
-  ChevronDownIcon,
   HomeIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
+import { Dropdown } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 
 const navLinks = [
   {
@@ -32,8 +32,6 @@ const navLinks = [
 
 export const NavBar = () => {
   const router = useRouter();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdown = useRef<any>(null);
 
   const profileMenu = [
     {
@@ -51,7 +49,7 @@ export const NavBar = () => {
 
   return (
     <>
-      <nav className="bg-blue flex px-6">
+      <nav className="bg-blue flex px-6 py-1">
         <div className="flex items-center mr-10 justify-evenly">
           <p className="text-backgroundColor text-3xl mx-2 font-lexend-exa">
             Trainder
@@ -83,33 +81,28 @@ export const NavBar = () => {
         </ul>
         <div className="w-3/5 flex justify-end items-center">
           <div className="flex flex-col">
-            <button
-              type="button"
-              className="text-white inline-flex items-center text-lg hover:underline"
-              onClick={() => setShowDropdown((state) => !state)}
-            >
-              <UserCircleIcon className="h-6 w-6 mx-2" strokeWidth={2} />
-              {getCurrentUser().username ?? "Username"}
-
-              <ChevronDownIcon className="h-6 w-6 mx-2" strokeWidth={2} />
-            </button>
-            {showDropdown && (
-              <div ref={dropdown}>
-                <ul className="block z-10 absolute bg-white m-2 shadow rounded-xl border border-gray-light">
-                  {profileMenu.map((menu, index) => {
-                    return (
-                      <li
-                        key={index}
-                        className="hover:text-white hover:bg-black hover:cursor-pointer py-2 px-8 rounded-xl"
-                        onClick={menu.onclick}
-                      >
-                        {menu.name}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
+            <Dropdown>
+              <Dropdown.Button light css={{ color: "white" }}>
+                <div className=" inline-flex items-center text-lg">
+                  <UserCircleIcon className="h-6 w-6 mx-2" strokeWidth={2} />
+                  {getCurrentUser().username ?? "Username"}
+                </div>
+              </Dropdown.Button>
+              <Dropdown.Menu
+                onAction={(key) => profileMenu[key as number].onclick()}
+              >
+                {profileMenu.map((menu, index) => {
+                  return (
+                    <Dropdown.Item
+                      key={index}
+                      className="hover:text-white hover:bg-black hover:cursor-pointer py-2 px-8 my-1 rounded-xl"
+                    >
+                      {menu.name}
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
       </nav>
