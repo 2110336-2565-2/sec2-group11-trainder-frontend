@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-type UserProfile = {
+export type UserProfile = {
   username: string;
   firstname: string;
   lastname: string;

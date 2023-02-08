@@ -7,8 +7,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Lexend Deca"', 'sans-serif'],
-        "lexend-exa": ['"Lexend Exa"', 'san-serif'],
+        sans: ['"Lexend Deca"', "sans-serif"],
+        "lexend-exa": ['"Lexend Exa"', "san-serif"],
       },
       colors: {
         backgroundColor: "#FCF4F1",
@@ -24,6 +24,21 @@ module.exports = {
         yellow: "#E7BD44",
         green: "#296D6C",
         brown: "#DDD2C7",
+      },
+      keyframes: {
+        fade: {
+          "0%": {
+            transform: "translateY(50%)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0%)",
+            opacity: "1",
+          },
+        },
+      },
+      animation: {
+        fade: "fade 0.5s linear",
       },
     },
   },
