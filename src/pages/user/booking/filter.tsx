@@ -99,19 +99,25 @@ const TrainerFilter = () => {
             <button>TRAINING FEE</button>
             <hr />
           </div>
-            <button className="bg-pink-dark rounded-lg">
+            <button className="bg-pink-dark w-12 rounded-lg bg-center">
               Apply
             </button>
       </div>
       <div>
       <h3>Choose your trainer</h3>
-      <div className="box-border w-20 border-4 rounded-lg">
+      <div className="box-border w-50 border-4 rounded-lg flex flex-row">
+          <div className="bg-slate-500 w-30 h-30 rounded-lg">
+            IMG
+          </div>
           OATORO
           Speciality:
           Rating:
           Training fee:
       </div>
-      <div className="box-border w-20 border-4 rounded-lg">
+      <div className="box-border w-50 border-4 rounded-lg flex flex-row">
+      <div className="bg-slate-500 w-30 h-30 rounded-lg">
+        IMG
+        </div>
           ABCD
           Speciality:
           Rating:
