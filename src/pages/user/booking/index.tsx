@@ -106,7 +106,7 @@ const TrainerFilter = () => {
       <div>
       <h3>Choose your trainer</h3>
       <div className="box-border w-50 border-4 rounded-lg flex flex-row">
-          <div className="bg-slate-500 w-30 h-30 rounded-lg">
+          <div className="bg-slate-500 w-20 h-20 rounded-lg">
             IMG
           </div>
           OATORO
@@ -115,7 +115,7 @@ const TrainerFilter = () => {
           Training fee:
       </div>
       <div className="box-border w-50 border-4 rounded-lg flex flex-row">
-      <div className="bg-slate-500 w-30 h-30 rounded-lg">
+      <div className="bg-slate-500 w-20 h-20 rounded-lg">
         IMG
         </div>
           ABCD
