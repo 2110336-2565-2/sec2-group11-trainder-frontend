@@ -71,10 +71,12 @@ const TrainerFilter = () => {
       <div className="bg-white box-border w-auto h-screen p-4 flex flex-col">
           <div>
             <button>FILTER</button>
-  
+            <hr />
           </div>
+          
           <div>
             <button>SPECIALITY</button>
+            <hr />
             <div className = "box-border w-42 h-40 flex flex-col">
               <label >
               <input type="checkbox" />
@@ -96,17 +98,21 @@ const TrainerFilter = () => {
           </div>
           <div>
             <button>TRAINING FEE</button>
+            <hr />
           </div>
+            <button className="bg-pink-dark rounded-lg">
+              Apply
+            </button>
       </div>
       <div>
       <h3>Choose your trainer</h3>
-      <div className="box-border w-20 border-4 flex">
+      <div className="box-border w-20 border-4 rounded-lg">
           OATORO
           Speciality:
           Rating:
           Training fee:
       </div>
-      <div className="box-border w-20 border-4 flex">
+      <div className="box-border w-20 border-4 rounded-lg">
           ABCD
           Speciality:
           Rating:
