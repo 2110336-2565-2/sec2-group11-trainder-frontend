@@ -15,44 +15,108 @@ const profile = () => {
       setProfile(data);
     });
   }, []);
-
+  const getBirthDate = () => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const month = profile?.birthdate.toString().split("T")[0].split("-")[1];
+    const month_str = months[parseInt(month!) - 1];
+    const day = profile?.birthdate.toString().split("T")[0].split("-")[2];
+    const year = profile?.birthdate.toString().split("T")[0].split("-")[0];
+    return (
+      <div>
+        Birth:{" "}
+        <strong>
+          {day}/{month_str}/{year}
+        </strong>
+      </div>
+    );
+  };
+  const getGender = () => {
+    const gender_first = profile?.gender[0].toUpperCase();
+    const gender = gender_first! + profile?.gender.slice(1);
+    return (
+      <div>
+        Gender: <strong>{gender}</strong>
+      </div>
+    );
+  };
+  const getID = () => {
+    return (
+      <div>
+        ID: <strong>*********{profile?.citizenId.slice(9, 13)}</strong>
+      </div>
+    );
+  };
+  const getPhone = () => {
+    return (
+      <div>
+        Phone:{" "}
+        <strong>
+          {profile?.phoneNumber.slice(0, 3)}-{profile?.phoneNumber.slice(3, 6)}-
+          {profile?.phoneNumber.slice(6)}
+        </strong>
+      </div>
+    );
+  };
+  const getAddress = () => {
+    return (
+      <div>
+        Address: <strong>{profile?.address}</strong>
+      </div>
+    );
+  };
+  const getSubAddress = () => {
+    return (
+      <div>
+        Sub-Address: <strong>{profile?.subAddress}</strong>
+      </div>
+    );
+  };
   return (
     <>
-      <NavBar />
-      <div className="flex bg-blue h-screen justify-center">
-        <div className="container bg-backgroundColor rounded-3xl drop-shadow-lg w-1/2 h-3/4 mt-16 animate-fade">
-          <div className="text-4xl mt-10 text-center">
-            <p>
-              Hello, {profile?.firstname} {profile?.lastname}
-            </p>
-          </div>
-          <div className="py-6">
-            <img src="../trainder_icon.png" alt="" className="w-1/3 mx-auto" />
-          </div>
-          <div className=" container bg-white p-10 rounded-3xl w-4/5 mx-auto">
-            <div className="columns-2 text-xl">
-              <div>
-                ID: <strong>*********{profile?.citizenId.slice(9, 13)}</strong>
-              </div>
-              <div>
-                Birth-Date:{" "}
-                <strong>{profile?.birthdate.toString().split("T")[0]}</strong>
-              </div>
-              <div>
-                Gender: <strong>{profile?.gender}</strong>
-              </div>
-              <div>
-                Phone: <strong>{profile?.phoneNumber}</strong>
-              </div>
-              <div>
-                Address: <strong>{profile?.address}</strong>
-              </div>
-              <div>
-                Sub-Address: <strong>{profile?.subAddress}</strong>
+      <div className="bg-blue h-screen">
+        <NavBar />
+        <div className="flex justify-center items-center">
+          <div className="container bg-backgroundColor rounded-3xl drop-shadow-lg w-1/2 p-10 mt-20 animate-fade">
+            <div className="text-4xl text-center">
+              <p>
+                Hello,{" "}
+                <strong>
+                  {profile?.firstname} {profile?.lastname}
+                </strong>
+              </p>
+            </div>
+            <div className="py-6">
+              <img
+                src="../trainder_icon.png"
+                alt=""
+                className="w-1/3 mx-auto"
+              />
+            </div>
+            <div className=" container bg-white p-10 rounded-3xl w-5/6 mx-auto">
+              <div className="columns-2 text-xl">
+                {getID()}
+                {getBirthDate()}
+                {getGender()}
+                {getPhone()}
+                {getAddress()}
+                {getSubAddress()}
               </div>
             </div>
+            <hr className="w-1/3 h-1 bg-black mx-auto mt-10"></hr>
           </div>
-          <hr className="w-1/3 h-1 bg-black mx-auto mt-10"></hr>
         </div>
       </div>
     </>
