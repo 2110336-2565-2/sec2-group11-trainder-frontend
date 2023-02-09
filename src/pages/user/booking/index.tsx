@@ -68,7 +68,7 @@ const TrainerFilter = () => {
         </div>
       </nav>
       <div className="grid grid-cols-2">
-      <div className="bg-white box-border w-auto h-screen p-4 flex flex-col">
+      <div className="bg-white box-border w-2/3 h-screen p-4 flex flex-col">
           <div>
             <button>FILTER</button>
             <hr />
