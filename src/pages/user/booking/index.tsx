@@ -4,6 +4,10 @@ import {
   ChatBubbleLeftEllipsisIcon,
   HomeIcon,
   UserCircleIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -71,10 +75,12 @@ const TrainerFilter = () => {
       <div className="bg-white box-border w-2/3 h-screen p-4 flex flex-col">
           <div>
             <button>FILTER</button>
+            <ChevronDownIcon className="w-5 h-5 inline-flex" strokeWidth={3}></ChevronDownIcon>
             <hr />
           </div>
           <div>
             <button>SPECIALITY</button>
+            <ChevronUpIcon className="w-5 h-5 inline-flex" strokeWidth={3}></ChevronUpIcon>
             <hr />
             <div className = "box-border w-42 h-40 flex flex-col">
               <label >
@@ -97,6 +103,7 @@ const TrainerFilter = () => {
           </div>
           <div>
             <button>TRAINING FEE</button>
+            <ChevronDownIcon className="w-5 h-5 inline-flex" strokeWidth={3}></ChevronDownIcon>
             <hr />
           </div>
             <button className="bg-pink-dark w-12 rounded-lg bg-center">
@@ -113,6 +120,7 @@ const TrainerFilter = () => {
           Speciality:
           Rating:
           Training fee:
+          <ChevronRightIcon className="w-10 h-10 items-right" strokeWidth={2}></ChevronRightIcon>
       </div>
       <div className="box-border w-50 border-4 rounded-lg flex flex-row">
       <div className="bg-slate-500 w-20 h-20 rounded-lg">
@@ -122,6 +130,7 @@ const TrainerFilter = () => {
           Speciality:
           Rating:
           Training fee:
+          <ChevronRightIcon className="w-10 h-10 items-right" strokeWidth={2}></ChevronRightIcon>
       </div>
       </div>
       </div>
