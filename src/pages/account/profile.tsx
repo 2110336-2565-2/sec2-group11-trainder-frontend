@@ -30,22 +30,21 @@ const profile = () => {
       "Nov",
       "Dec",
     ];
-    const month = profile?.birthdate.toString().split("T")[0].split("-")[1];
-    const month_str = months[parseInt(month!) - 1];
-    const day = profile?.birthdate.toString().split("T")[0].split("-")[2];
-    const year = profile?.birthdate.toString().split("T")[0].split("-")[0];
+    const date = profile?.birthdate.getDate();
+    const month = months[profile?.birthdate.getMonth()!];
+    const year = profile?.birthdate.getFullYear();
     return (
       <div>
         Birth:{" "}
         <strong>
-          {day}/{month_str}/{year}
+          {date}/{month}/{year}
         </strong>
       </div>
     );
   };
   const getGender = () => {
-    const gender_first = profile?.gender[0].toUpperCase();
-    const gender = gender_first! + profile?.gender.slice(1);
+    const genderFirst = profile?.gender[0].toUpperCase();
+    const gender = genderFirst! + profile?.gender.slice(1);
     return (
       <div>
         Gender: <strong>{gender}</strong>
