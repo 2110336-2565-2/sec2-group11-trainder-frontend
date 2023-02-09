@@ -29,6 +29,21 @@ module.exports = {
         green: "#296D6C",
         brown: "#DDD2C7",
       },
+      keyframes: {
+        fade: {
+          "0%": {
+            transform: "translateY(50%)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0%)",
+            opacity: "1",
+          },
+        },
+      },
+      animation: {
+        fade: "fade 0.5s linear",
+      },
     },
   },
   plugins: [],
