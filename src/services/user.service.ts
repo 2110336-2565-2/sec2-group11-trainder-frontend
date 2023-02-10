@@ -1,5 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import { UpdateTrainerInfo } from "./trainer.service";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
@@ -15,6 +16,7 @@ export type UserProfile = {
   phoneNumber: string;
   address: string;
   subAddress: string;
+  trainerInfo?: UpdateTrainerInfo;
 };
 
 export const getCurrentUserProfile = () => {
