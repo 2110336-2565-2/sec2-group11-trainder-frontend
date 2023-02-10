@@ -1,13 +1,10 @@
-import { logout } from "@/services/auth.service";
 import { getCurrentUserProfile } from "@/services/user.service";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { NavBar } from "@/components/navbar";
 import { UserProfile } from "@/services/user.service";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 const profile = () => {
-  const router = useRouter();
   const default_profile: UserProfile = {
     username: "user",
     firstname: "firstname",
@@ -21,10 +18,7 @@ const profile = () => {
     usertype: "none",
   };
   const [profile, setProfile] = useState<UserProfile>(default_profile);
-  const handleLogout = useCallback(() => {
-    logout();
-    router.push("/");
-  }, []);
+
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);

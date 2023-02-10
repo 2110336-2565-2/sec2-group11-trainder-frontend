@@ -1,15 +1,9 @@
-import { logout } from "@/services/auth.service";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavBar } from "@/components/navbar";
 const profile = () => {
-  const router = useRouter();
   const [profile, setProfile] = useState<UserProfile>();
-  const handleLogout = useCallback(() => {
-    logout();
-    router.push("/");
-  }, []);
+
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
