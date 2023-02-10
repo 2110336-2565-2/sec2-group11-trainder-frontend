@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-type UserProfile = {
+export type UserProfile = {
   username: string;
   firstname: string;
   lastname: string;
@@ -22,7 +22,13 @@ export const getCurrentUserProfile = () => {
     .get(API_URL + "/protected/profile", {
       headers: authHeader(),
     })
-    .then((response) => response.data.user as UserProfile)
+    .then((response) => {
+      // TODO: Dirty hack fix this.
+      const r = response.data.user;
+      const profile = r as UserProfile;
+      profile.birthdate = new Date(r.birthdate);
+      return profile;
+    })
     .catch((error) => {
       throw error;
     });
