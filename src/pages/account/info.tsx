@@ -107,6 +107,7 @@ const renderInfoForm = () => {
                               selectedCertificate ? "" : "hidden"
                             }`}
                             onClick={removeSelectedCertificate}
+                            type="button"
                           >
                             Clear selected file
                           </button>
@@ -195,6 +196,7 @@ const TrainerInfo = () => {
                 selectedProfileImg ? "" : "hidden"
               }`}
               onClick={removeSelectedProfileImg}
+              type="button"
             >
               Clear selected profile image
             </button>
