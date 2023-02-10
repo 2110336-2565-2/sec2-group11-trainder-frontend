@@ -33,3 +33,24 @@ export const getCurrentUserProfile = () => {
       throw error;
     });
 };
+
+export type UpdateData = {
+  userType: string;
+  firstname: string;
+  lastname: string;
+  birthdate: string;
+  citizenId: string;
+  gender: string;
+  phoneNumber: string;
+  address: string;
+  subAddress: string;
+};
+export const updateProfile = (updateData: UpdateData) => {
+  return axios
+    .post(API_URL + "/protected/update-profile", updateData, {
+      headers: authHeader(),
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
