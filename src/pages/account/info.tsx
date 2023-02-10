@@ -7,8 +7,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-const profileImage: string = "";
-
 const info = [
   {
     name: "Speciality",
@@ -135,6 +133,19 @@ const renderInfoForm = () => {
 };
 
 const TrainerInfo = () => {
+  const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
+    null
+  );
+  const handleProfileImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    if (e.target.files[0] == undefined) return;
+    setSelectedProfileImg(e.target.files[0]);
+  };
+
+  const removeSelectedProfileImg = () => {
+    setSelectedProfileImg(null);
+  };
+
   return (
     <main className="min-h-screen h-full bg-backgroundColor">
       <div className="flex flex-1 flex-col p-5 md:p-10">
@@ -149,27 +160,47 @@ const TrainerInfo = () => {
             Your Personal Information
           </h1>
         </div>
-        <div className="flex">
+        <form className="flex">
           {/* Trainer profile image */}
-          <div className="w-1/3 flex justify-center">
+          <div className="w-1/3 flex flex-col items-center">
             <div className="relative h-fit">
-              <div className="h-20 w-20 md:h-40 md:w-40 rounded-full bg-blue p-2">
-                {profileImage && profileImage.trim() !== "" ? (
-                  <img src={profileImage} />
+              <div className="h-20 w-20 md:h-40 md:w-40 rounded-full bg-blue">
+                {selectedProfileImg ? (
+                  <img
+                    src={URL.createObjectURL(selectedProfileImg)}
+                    className="object-contain h-full w-full rounded-full"
+                  />
                 ) : (
-                  <UserIcon className="text-white" strokeWidth={1} />
+                  <UserIcon className="text-white p-2" strokeWidth={1} />
                 )}
               </div>
-              <div className="absolute flex justify-center items-center bg-gray-dark h-6 w-10 md:h-8 md:w-12 bottom-0 rounded-lg hover:bg-black hover:cursor-pointer">
+              <label
+                htmlFor="profile-img"
+                className="absolute flex justify-center items-center bg-gray-dark h-6 w-10 md:h-8 md:w-12 bottom-0 rounded-lg hover:bg-black hover:cursor-pointer"
+              >
                 <ArrowUpTrayIcon
-                  className="text-gray-light h-4 w-4 md:h-6 md:w-6"
+                  className="text-gray-light h-4 w-4 md:h-6 md:w-6 "
                   strokeWidth={2}
                 />
-              </div>
+                <input
+                  id="profile-img"
+                  type="file"
+                  className="hidden"
+                  onChange={handleProfileImg}
+                />
+              </label>
             </div>
+            <button
+              className={`py-3 text-sm text-gray hover:underline hover:text-pink-dark ${
+                selectedProfileImg ? "" : "hidden"
+              }`}
+              onClick={removeSelectedProfileImg}
+            >
+              Clear selected profile image
+            </button>
           </div>
           {/* Information form */}
-          <form className="flex flex-1 flex-col items-start">
+          <div className="flex flex-1 flex-col items-start">
             {renderInfoForm()}
             <button
               className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
@@ -177,8 +208,8 @@ const TrainerInfo = () => {
             >
               Save
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </main>
   );
