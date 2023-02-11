@@ -1,15 +1,9 @@
-import { logout } from "@/services/auth.service";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavBar } from "@/components/navbar";
 const profile = () => {
-  const router = useRouter();
   const [profile, setProfile] = useState<UserProfile>();
-  const handleLogout = useCallback(() => {
-    logout();
-    router.push("/");
-  }, []);
+
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
@@ -84,41 +78,47 @@ const profile = () => {
     );
   };
   return (
-    <>
-      <div className="bg-blue h-screen">
-        <NavBar />
-        <div className="flex justify-center items-center">
-          <div className="container bg-backgroundColor rounded-3xl drop-shadow-lg w-1/2 p-10 mt-20 animate-fade">
-            <div className="text-4xl text-center">
-              <p>
-                Hello,{" "}
-                <strong>
-                  {profile?.firstname} {profile?.lastname}
-                </strong>
-              </p>
-            </div>
-            <div className="py-6">
-              <img
-                src="../trainder_icon.png"
-                alt=""
-                className="w-1/3 mx-auto"
-              />
-            </div>
-            <div className=" container bg-white p-10 rounded-3xl w-5/6 mx-auto">
-              <div className="columns-2 text-xl">
-                {getID()}
-                {getBirthDate()}
-                {getGender()}
-                {getPhone()}
-                {getAddress()}
-                {getSubAddress()}
-              </div>
-            </div>
-            <hr className="w-1/3 h-1 bg-black mx-auto mt-10"></hr>
+    <main className="bg-blue h-screen flex flex-col">
+      <NavBar />
+      <div className="flex flex-1 justify-center items-center">
+        <div className="container bg-backgroundColor rounded-3xl drop-shadow-lg w-1/2 p-8 animate-fade">
+          <div className="text-4xl text-center">
+            <p>
+              Hello,{" "}
+              <strong>
+                {profile?.firstname} {profile?.lastname}
+              </strong>
+            </p>
           </div>
+          <div className="py-6">
+            <img src="../trainder_icon.png" alt="" className="w-1/3 mx-auto" />
+          </div>
+          <div className=" container bg-white p-10 rounded-3xl w-5/6 mx-auto">
+            <div className="columns-2 text-xl">
+              {getID()}
+              {getBirthDate()}
+              {getGender()}
+              {getPhone()}
+              {getAddress()}
+              {getSubAddress()}
+            </div>
+          </div>
+          {profile?.usertype === "Trainer" ? (
+            <div className="container w-full mx-auto flex justify-center mt-6">
+              <a
+                href="/account/info"
+                className=" bg-pink hover:bg-pink-dark text-white shadow rounded-xl px-6 py-2"
+              >
+                Update Trainer Information
+              </a>
+            </div>
+          ) : (
+            <></>
+          )}
+          <hr className="w-1/3 h-1 bg-black mx-auto mt-8"></hr>
         </div>
       </div>
-    </>
+    </main>
   );
 };
 

@@ -19,6 +19,7 @@ module.exports = {
         },
         pink: {
           DEFAULT: "#ECB19F",
+          light: "#F0E0DA",
           dark: "#EC5959",
         },
         blue: {
