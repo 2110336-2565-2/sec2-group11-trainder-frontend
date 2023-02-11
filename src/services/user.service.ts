@@ -1,18 +1,59 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import { UpdateTrainerInfo } from "./trainer.service";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-interface UserProfile {
+export type UserProfile = {
   username: string;
-}
+  firstname: string;
+  lastname: string;
+  birthdate: Date;
+  citizenId: string;
+  gender: string;
+  phoneNumber: string;
+  address: string;
+  subAddress: string;
+  usertype: string;
+  trainerInfo?: UpdateTrainerInfo;
+};
 
 export const getCurrentUserProfile = () => {
   return axios
-    .get<UserProfile>(API_URL + "/protected/profile", {
+    .get(API_URL + "/protected/profile", {
       headers: authHeader(),
     })
-    .then((response) => response.data);
+    .then((response) => {
+      // TODO: Dirty hack fix this.
+      const r = response.data.user;
+      const profile = r as UserProfile;
+      profile.birthdate = new Date(r.birthdate);
+      return profile;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export type UpdateData = {
+  userType: string;
+  firstname: string;
+  lastname: string;
+  birthdate: string;
+  citizenId: string;
+  gender: string;
+  phoneNumber: string;
+  address: string;
+  subAddress: string;
+};
+export const updateProfile = (updateData: UpdateData) => {
+  return axios
+    .post(API_URL + "/protected/update-profile", updateData, {
+      headers: authHeader(),
+    })
+    .catch((error) => {
+      throw error;
+    });
 };

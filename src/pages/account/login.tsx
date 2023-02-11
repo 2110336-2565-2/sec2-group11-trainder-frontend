@@ -4,10 +4,10 @@ import { checkLoggedIn, login } from "@/services/auth.service";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
-interface LoginFormData {
+type LoginFormData = {
   username: { value: string };
   password: { value: string };
-}
+};
 
 export default function Login() {
   const router = useRouter();
