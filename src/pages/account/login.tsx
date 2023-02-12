@@ -28,7 +28,9 @@ export default function Login() {
   );
 
   useEffect(() => {
-    setLoggedIn(checkLoggedIn());
+    checkLoggedIn().then((res) => {
+      setLoggedIn(res);
+    });
   }, []);
 
   useEffect(() => {
