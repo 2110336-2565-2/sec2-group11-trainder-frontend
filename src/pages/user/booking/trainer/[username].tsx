@@ -1,4 +1,3 @@
-import { getCurrentUserProfile } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { NavBar } from "@/components/navbar";
