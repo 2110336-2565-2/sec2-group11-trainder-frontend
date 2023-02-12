@@ -14,10 +14,6 @@ export type UpdateTrainerInfo = {
   certificateUrl: string;
 };
 
-export type GetTrainerInput = {
-  username: string;
-};
-
 export type FilterInput = {
   limit: number;
   specialty: string[];
@@ -53,11 +49,17 @@ export const filterTrainer = (filterInput: FilterInput) => {
     });
 };
 
-export const getTrainerProfile = (getTrainerInput: GetTrainerInput) => {
+export const getTrainerProfile = (username: string) => {
   return axios
-    .post(API_URL + "/protected/trainer", getTrainerInput, {
-      headers: authHeader(),
-    })
+    .post(
+      API_URL + "/protected/trainer",
+      {
+        username: username,
+      },
+      {
+        headers: authHeader(),
+      }
+    )
     .then((response) => {
       const r = response.data.user;
       const profile = r as UserProfile;
