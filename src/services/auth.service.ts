@@ -1,4 +1,5 @@
 import axios from "axios";
+import authHeader from "./auth-header";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
@@ -46,8 +47,17 @@ export type RegistrationData = {
 export const register = (registrationData: RegistrationData) => {
   return axios.post(API_URL + "/register", registrationData);
 };
-export const checkLoggedIn = (): boolean => {
-  return !!localStorage.getItem("user");
+export const checkLoggedIn = (): Promise<boolean> => {
+  if (localStorage.getItem("user")) {
+    return axios
+      .get(API_URL + "/protected/profile", {
+        headers: authHeader(),
+      })
+      .then(() => true)
+      .catch(() => false);
+  } else {
+    return Promise.resolve(false);
+  }
 };
 
 export const getCurrentUser = () => {

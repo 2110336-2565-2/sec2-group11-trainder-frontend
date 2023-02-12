@@ -28,14 +28,17 @@ export default function App({ Component, pageProps }: AppProps) {
   const authCheck = (url: string) => {
     const publicPaths = ["/", "/account/signup"];
     const path = url.split("?")[0];
-    if (!checkLoggedIn() && !publicPaths.includes(path)) {
-      setAuthorized(false);
-      router.push({
-        pathname: "/",
-        query: { returnUrl: router.asPath },
-      });
-    }
-    setAuthorized(true);
+    checkLoggedIn().then((loggedIn) => {
+      console.log(loggedIn);
+      if (!loggedIn && !publicPaths.includes(path)) {
+        setAuthorized(false);
+        router.push({
+          pathname: "/",
+          query: { returnUrl: router.asPath },
+        });
+      }
+      setAuthorized(true);
+    });
   };
 
   return (
