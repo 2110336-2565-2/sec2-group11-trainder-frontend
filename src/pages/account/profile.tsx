@@ -1,6 +1,6 @@
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { useEffect, useState } from "react";
-import { NavBar } from "@/components/navbar";
+import Link from "next/link";
 const profile = () => {
   const [profile, setProfile] = useState<UserProfile>();
 
@@ -104,12 +104,12 @@ const profile = () => {
           </div>
           {profile?.usertype === "Trainer" ? (
             <div className="container w-full mx-auto flex justify-center mt-6">
-              <a
+              <Link
                 href="/account/info"
                 className=" bg-pink hover:bg-pink-dark text-white shadow rounded-xl px-6 py-2"
               >
                 Update Trainer Information
-              </a>
+              </Link>
             </div>
           ) : (
             <></>
