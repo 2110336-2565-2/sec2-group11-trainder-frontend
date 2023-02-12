@@ -6,7 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-export type UpdateTrainerInfo = {
+export type TrainerProfile = {
   specialty: string[];
   rating: number;
   fee: number;
@@ -19,7 +19,7 @@ export type FilterInput = {
   specialty: string[];
 };
 
-export const updateTrainerProfile = (updateTrainerInfo: UpdateTrainerInfo) => {
+export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
   return axios
     .post(API_URL + "/protected/update-trainer", updateTrainerInfo, {
       headers: authHeader(),
@@ -61,11 +61,11 @@ export const getTrainerProfile = (username: string) => {
       }
     )
     .then((response) => {
-      const r = response.data.user;
-      console.log(r);
-      const profile = r as UserProfile;
-      profile.birthdate = new Date(r.birthdate);
-      return profile;
+      const userDataResponse = response.data.user;
+      const userProfile = userDataResponse as UserProfile;
+      userProfile.birthdate = new Date(userDataResponse.birthdate);
+      const trainerProfile = response.data.trainerInfo as TrainerProfile;
+      return { userProfile: userProfile, trainerProfile: trainerProfile };
     })
     .catch((error) => {
       throw error;
