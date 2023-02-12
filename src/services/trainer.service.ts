@@ -62,6 +62,7 @@ export const getTrainerProfile = (username: string) => {
     )
     .then((response) => {
       const r = response.data.user;
+      console.log(r);
       const profile = r as UserProfile;
       profile.birthdate = new Date(r.birthdate);
       return profile;

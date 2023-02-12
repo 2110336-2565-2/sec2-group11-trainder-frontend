@@ -5,7 +5,7 @@ import { UserProfile } from "@/services/user.service";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { getTrainerProfile } from "@/services/trainer.service";
-const profile = () => {
+const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
   const templateProfile: UserProfile = {
@@ -36,9 +36,6 @@ const profile = () => {
       router.back();
     }
   }, []);
-  useEffect(() => {
-    console.log(loading);
-  }, [loading]);
 
   const Image = () => {
     return (
@@ -109,4 +106,4 @@ const profile = () => {
   );
 };
 
-export default profile;
+export default bookTrainerProfile;

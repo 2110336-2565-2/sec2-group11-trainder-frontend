@@ -17,7 +17,6 @@ export type UserProfile = {
   address: string;
   subAddress: string;
   usertype: string;
-  trainerInfo?: UpdateTrainerInfo;
 };
 
 export const getCurrentUserProfile = () => {
