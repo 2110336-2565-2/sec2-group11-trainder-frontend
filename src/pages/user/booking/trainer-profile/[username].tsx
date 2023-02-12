@@ -21,7 +21,7 @@ const profile = () => {
     subAddress: "none",
     usertype: "none",
   };
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(true);
   const [profile, setProfile] = useState<UserProfile>(templateProfile);
 
   useEffect(() => {
@@ -30,13 +30,16 @@ const profile = () => {
         .then((res) => {
           setLoading(true);
           setProfile(res);
+          setLoading(false);
         })
         .catch(() => router.back());
     } else {
       router.back();
     }
-    setLoading(false);
   }, []);
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
 
   const Image = () => {
     return (
