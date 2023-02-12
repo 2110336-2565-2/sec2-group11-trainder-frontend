@@ -1,3 +1,7 @@
+import {
+  getCurrentTrainerInfo,
+  UpdateTrainerInfo,
+} from "@/services/trainer.service";
 import { Listbox } from "@headlessui/react";
 import {
   ArrowLeftIcon,
@@ -5,23 +9,14 @@ import {
   ChevronDownIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const info = [
-  {
-    name: "Speciality",
-    edit: true,
-    type: "select",
-    data: ["None", "Sample1", "Sample2", "Sample3"],
-  },
-  { name: "Rating", edit: false, data: 5 },
-  { name: "Fee", edit: false, data: 100 },
-  { name: "Trainee Count", edit: false, data: 20 },
-  { name: "Certificate", edit: true, type: "file" },
-];
-
-const renderInfoForm = () => {
-  const [selectedSpec, setSelectedSpec] = useState("None");
+const renderInfoForm = (trainerInfo: UpdateTrainerInfo) => {
+  const [selectedSpec, setSelectedSpec] = useState<string>(
+    trainerInfo.specialty !== undefined && trainerInfo.specialty.length == 0
+      ? "None"
+      : trainerInfo.specialty[0]
+  );
   const [selectedCertificate, setSelectedCertificate] = useState<File | null>(
     null
   );
@@ -36,11 +31,24 @@ const renderInfoForm = () => {
     setSelectedCertificate(null);
   };
 
+  const info = [
+    {
+      name: "Speciality",
+      edit: true,
+      type: "select",
+      data: ["None", "Sample1", "Sample2", "Sample3"],
+    },
+    { name: "Rating", edit: false, data: trainerInfo.rating},
+    { name: "Fee", edit: false, data: trainerInfo.fee },
+    { name: "Trainee Count", edit: false, data: trainerInfo.traineeCount },
+    { name: "Certificate", edit: true, type: "file" },
+  ];
+
   return (
     <>
-      {info.map((item) => {
+      {info.map((item, index) => {
         return (
-          <div className="w-full my-2">
+          <div className="w-full my-2" key={index}>
             <div className="py-2 font-bold">{item.name}</div>
             {item.edit ? (
               <>
@@ -60,8 +68,9 @@ const renderInfoForm = () => {
                               </span>
                             </Listbox.Button>
                             <Listbox.Options className="absolute my-2 bg-white w-2/3 md:w-1/3 rounded-lg border border-gray">
-                              {item.data?.map((choice) => (
+                              {item.data?.map((choice: string, index) => (
                                 <Listbox.Option
+                                  key={index}
                                   value={choice}
                                   className="py-2 px-3 hover:bg-blue rounded-md hover:text-white hover:cursor-pointer"
                                 >
@@ -134,9 +143,23 @@ const renderInfoForm = () => {
 };
 
 const TrainerInfo = () => {
+  const [trainerInfo, setTrainerInfo] = useState<UpdateTrainerInfo>({
+    specialty: [],
+    rating: 0,
+    fee: 0,
+    traineeCount: 0,
+    certificateUrl: "",
+  });
   const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
     null
   );
+
+  useEffect(() => {
+    getCurrentTrainerInfo().then((res) => {
+      setTrainerInfo(res);
+    });
+  }, []);
+
   const handleProfileImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     if (e.target.files[0] == undefined) return;
@@ -203,7 +226,7 @@ const TrainerInfo = () => {
           </div>
           {/* Information form */}
           <div className="flex flex-1 flex-col items-start">
-            {renderInfoForm()}
+            {renderInfoForm(trainerInfo)}
             <button
               className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
               type="submit"
