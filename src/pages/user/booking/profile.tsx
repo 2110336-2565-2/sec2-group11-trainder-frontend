@@ -1,7 +1,6 @@
 import { getCurrentUserProfile } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { NavBar } from "@/components/navbar";
 import { UserProfile } from "@/services/user.service";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 const profile = () => {
@@ -59,7 +58,6 @@ const profile = () => {
 
   return (
     <main className="flex flex-col h-screen">
-      <NavBar />
       <div className="flex flex-row h-screen bg-white">
         <div className="w-2/5 h-full bg-backgroundColor md:flex flex-col items-center">
           <div className="w-full md:flex flex-row items-center justify-center mt-10 mb-[10%] m-[5%] ">
