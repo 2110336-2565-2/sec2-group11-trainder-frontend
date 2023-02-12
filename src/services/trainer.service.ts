@@ -75,7 +75,7 @@ export const getCurrentTrainerInfo = () => {
   return axios.get(API_URL + '/protected/trainer-profile', {
     headers: authHeader(),
   }).then((response) => {
-    const info = response.data.trainerInfo as UpdateTrainerInfo;
+    const info = response.data.trainerInfo as TrainerProfile;
     return info;
   }).catch((error) => {
     throw error;

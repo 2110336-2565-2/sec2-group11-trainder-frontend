@@ -1,6 +1,6 @@
 import {
   getCurrentTrainerInfo,
-  UpdateTrainerInfo,
+  TrainerProfile,
 } from "@/services/trainer.service";
 import { Listbox } from "@headlessui/react";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
-const renderInfoForm = (trainerInfo: UpdateTrainerInfo) => {
+const renderInfoForm = (trainerInfo: TrainerProfile) => {
   const [selectedSpec, setSelectedSpec] = useState<string>(
     trainerInfo.specialty !== undefined && trainerInfo.specialty.length == 0
       ? "None"
@@ -143,7 +143,7 @@ const renderInfoForm = (trainerInfo: UpdateTrainerInfo) => {
 };
 
 const TrainerInfo = () => {
-  const [trainerInfo, setTrainerInfo] = useState<UpdateTrainerInfo>({
+  const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
     specialty: [],
     rating: 0,
     fee: 0,
