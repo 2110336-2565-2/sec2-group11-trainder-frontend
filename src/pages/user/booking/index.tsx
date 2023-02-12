@@ -8,11 +8,12 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   ArrowLeftIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavBar } from "@/components/navbar";
-import Rating from "@mui/material/Rating";
+// import Rating from "@mui/material/Rating";
 
 const navLinks = [
   {
@@ -103,13 +104,13 @@ const TrainerFilter = () => {
                 <p>Specialities: </p>
                 <div className="flex flex-row">
                   <p>Rating:</p>
-                  <Rating
+                  {/* <Rating
                     name="half-rating-read"
                     defaultValue={3.5}
                     precision={0.5}
                     readOnly
                     className="mx-2"
-                  />
+                  /> */}
                 </div>
                 <p>Training fee:</p>
               </div>
@@ -127,13 +128,13 @@ const TrainerFilter = () => {
                 <p>Specialities: </p>
                 <div className="flex flex-row">
                   <p>Rating:</p>
-                  <Rating
+                  {/* <Rating
                     name="half-rating-read"
                     defaultValue={3.5}
                     precision={0.5}
                     readOnly
                     className="mx-2"
-                  />
+                  /> */}
                 </div>
                 <p>Training fee:</p>
               </div>
