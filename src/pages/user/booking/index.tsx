@@ -12,6 +12,8 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavBar } from "@/components/navbar";
+import Rating from '@mui/material/Rating';
+
 
 const navLinks = [
   {
@@ -55,6 +57,7 @@ const TrainerFilter = () => {
                 className="w-5 h-5 inline-flex mx-5"
                 strokeWidth={3}
               ></ChevronUpIcon>
+              {/* <Rating></Rating> */}
               <hr className="my-2" />
               <div className="box-border flex flex-row">
                 <label className="mx-1">
@@ -100,7 +103,10 @@ const TrainerFilter = () => {
               <div className="flex flex-col m-2">
                 <p className="text-2xl font-semibold">OATORO</p>
                 <p>Specialities: </p>
+                <div className="flex flex-row">
                 <p>Rating:</p>
+                <Rating name="half-rating-read" defaultValue={3.5} precision={0.5} readOnly className="mx-2"/>
+                </div>
                 <p>Training fee:</p>
               </div>
               <ChevronRightIcon
@@ -114,7 +120,10 @@ const TrainerFilter = () => {
               <div className="flex flex-col m-2">
                 <p className="text-2xl font-semibold">ABCD</p>
                 <p>Specialities: </p>
+                <div className="flex flex-row">
                 <p>Rating:</p>
+                <Rating name="half-rating-read" defaultValue={3.5} precision={0.5} readOnly className="mx-2"/>
+                </div>
                 <p>Training fee:</p>
               </div>
               <ChevronRightIcon
