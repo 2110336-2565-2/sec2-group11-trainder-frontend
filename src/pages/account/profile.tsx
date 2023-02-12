@@ -79,7 +79,6 @@ const profile = () => {
   };
   return (
     <main className="bg-blue h-screen flex flex-col">
-      <NavBar />
       <div className="flex flex-1 justify-center items-center">
         <div className="container bg-backgroundColor rounded-3xl drop-shadow-lg w-1/2 p-8 animate-fade">
           <div className="text-4xl text-center">

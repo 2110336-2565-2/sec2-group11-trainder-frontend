@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { checkLoggedIn } from "@/services/auth.service";
+import { Layout } from "@/components/layout";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -47,7 +48,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Trainder</title>
         <link rel="icon" href="/trainder_icon.png" />
       </Head>
-      {authorized && <Component {...pageProps} />}
+      {authorized && (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )}
     </>
   );
 }
