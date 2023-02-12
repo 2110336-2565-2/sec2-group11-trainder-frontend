@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-export type UpdateTrainerInfo = {
+export type TrainerProfile = {
   specialty: string[];
   rating: number;
   fee: number;
@@ -13,16 +13,12 @@ export type UpdateTrainerInfo = {
   certificateUrl: string;
 };
 
-export type GetTrainerInput = {
-  username: string;
-};
-
 export type FilterInput = {
   limit: number;
   specialty: string[];
 };
 
-export const updateTrainerProfile = (updateTrainerInfo: UpdateTrainerInfo) => {
+export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
   return axios
     .post(API_URL + "/protected/update-trainer", updateTrainerInfo, {
       headers: authHeader(),
@@ -52,16 +48,23 @@ export const filterTrainer = (filterInput: FilterInput) => {
     });
 };
 
-export const getTrainerProfile = (getTrainerInput: GetTrainerInput) => {
+export const getTrainerProfile = (username: string) => {
   return axios
-    .post(API_URL + "/protected/trainer", getTrainerInput, {
-      headers: authHeader(),
-    })
+    .post(
+      API_URL + "/protected/trainer",
+      {
+        username: username,
+      },
+      {
+        headers: authHeader(),
+      }
+    )
     .then((response) => {
-      const r = response.data.user;
-      const profile = r as UserProfile;
-      profile.birthdate = new Date(r.birthdate);
-      return profile;
+      const userDataResponse = response.data.user;
+      const userProfile = userDataResponse as UserProfile;
+      userProfile.birthdate = new Date(userDataResponse.birthdate);
+      const trainerProfile = response.data.trainerInfo as TrainerProfile;
+      return { userProfile: userProfile, trainerProfile: trainerProfile };
     })
     .catch((error) => {
       throw error;
