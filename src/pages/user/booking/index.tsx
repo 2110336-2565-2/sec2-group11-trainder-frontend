@@ -13,27 +13,6 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavBar } from "@/components/navbar";
-// import Rating from "@mui/material/Rating";
-
-const navLinks = [
-  {
-    name: "Home",
-    path: "/",
-    icon: <HomeIcon className="mx-2 h-6 w-6 " strokeWidth={2} />,
-  },
-  {
-    name: "Notification",
-    path: "/user/notification",
-    icon: <BellIcon className="mx-2 h-6 w-6" strokeWidth={2} />,
-  },
-  {
-    name: "Chat",
-    path: "/user/chat",
-    icon: (
-      <ChatBubbleLeftEllipsisIcon className="mx-2 h-6 w-6" strokeWidth={2} />
-    ),
-  },
-];
 
 const TrainerFilter = () => {
   const router = useRouter();
@@ -104,13 +83,13 @@ const TrainerFilter = () => {
                 <p>Specialities: </p>
                 <div className="flex flex-row">
                   <p>Rating:</p>
-                  {/* <Rating
-                    name="half-rating-read"
-                    defaultValue={3.5}
-                    precision={0.5}
-                    readOnly
-                    className="mx-2"
-                  /> */}
+                  <div className="flex flex-row mx-2">
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-none stroke-yellow" strokeWidth={2}></StarIcon>
+                  </div>
                 </div>
                 <p>Training fee:</p>
               </div>
@@ -128,13 +107,13 @@ const TrainerFilter = () => {
                 <p>Specialities: </p>
                 <div className="flex flex-row">
                   <p>Rating:</p>
-                  {/* <Rating
-                    name="half-rating-read"
-                    defaultValue={3.5}
-                    precision={0.5}
-                    readOnly
-                    className="mx-2"
-                  /> */}
+                  <div className="flex flex-row mx-2">
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-yellow stroke-yellow" strokeWidth={2}></StarIcon>
+                  <StarIcon className="h-6 w-6 fill-none stroke-yellow" strokeWidth={2}></StarIcon>
+                  </div>
                 </div>
                 <p>Training fee:</p>
               </div>
