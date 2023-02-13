@@ -66,93 +66,93 @@ const TrainerFilter = () => {
           </div>
           <div className="absolute left-1/3 mx-20">
             <div className="flex flex-row m-8 relative right-9">
-              <button>
+              <Link href="/user/home">
                 <ArrowLeftIcon
                   className="w-8 h-8"
                   strokeWidth={3}
                 ></ArrowLeftIcon>
-              </button>
+              </Link>
               <p className="text-2xl font-semibold mx-3">Choose your trainer</p>
             </div>
-            <div className="bg-white w-auto border-2 border-gray-400 rounded-3xl flex flex-row m-5 p-5 drop-shadow-lg hover:">
-              <div className="bg-gray-300 w-20 h-22 rounded-lg m-3"></div>
-              <div className="flex flex-col m-2">
-                <p className="text-2xl font-semibold">OATORO</p>
-                <p>Specialities: </p>
-                <div className="flex flex-row">
-                  <p>Rating:</p>
-                  <div className="flex flex-row mx-2">
-                    <StarIcon
-                      className="h-6 w-6 fill-yellow stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-yellow stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-yellow stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-yellow stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-none stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
+            <Link href="\user\booking\profile">
+              <div className="bg-white w-auto border-2 border-gray-400 rounded-3xl flex flex-row m-5 p-5 drop-shadow-lg hover:">
+                <div className="bg-gray-300 w-20 h-22 rounded-lg m-3"></div>
+                <div className="flex flex-col m-2">
+                  <p className="text-2xl font-semibold">OATORO</p>
+                  <p>Specialities: </p>
+                  <div className="flex flex-row">
+                    <p>Rating:</p>
+                    <div className="flex flex-row mx-2">
+                      <StarIcon
+                        className="h-6 w-6 fill-yellow stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-yellow stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-yellow stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-yellow stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-none stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                    </div>
                   </div>
+                  <p>Training fee:</p>
                 </div>
-                <p>Training fee:</p>
-              </div>
-              <button>
                 <ChevronRightIcon
                   className="w-10 h-10 mx-20 my-10 stroke-gray-500"
                   strokeWidth={2}
                 ></ChevronRightIcon>
-              </button>
-            </div>
-            <div className=" bg-white w-auto border-2 border-gray-400 rounded-3xl flex flex-row m-5 p-5 drop-shadow-lg">
-              <div className="bg-gray-300 w-20 h-22 rounded-lg m-3"></div>
-              <div className="flex flex-col m-2">
-                <p className="text-2xl font-semibold">ABCD</p>
-                <p>Specialities: </p>
-                <div className="flex flex-row">
-                  <p>Rating:</p>
-                  <div className="flex flex-row mx-2">
-                    <StarIcon
-                      className="h-6 w-6 fill-yellow stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-yellow stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-yellow stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-none  stroke-yellow"
-                      strokeWidth={2}
-                    >
-                    </StarIcon>
-                    <StarIcon
-                      className="h-6 w-6 fill-none stroke-yellow"
-                      strokeWidth={2}
-                    ></StarIcon>
-                  </div>
-                </div>
-                <p>Training fee:</p>
               </div>
-              <button>
+            </Link>
+
+            <Link href="\user\booking\profile">
+              <div className=" bg-white w-auto border-2 border-gray-400 rounded-3xl flex flex-row m-5 p-5 drop-shadow-lg">
+                <div className="bg-gray-300 w-20 h-22 rounded-lg m-3"></div>
+                <div className="flex flex-col m-2">
+                  <p className="text-2xl font-semibold">ABCD</p>
+                  <p>Specialities: </p>
+                  <div className="flex flex-row">
+                    <p>Rating:</p>
+                    <div className="flex flex-row mx-2">
+                      <StarIcon
+                        className="h-6 w-6 fill-yellow stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-yellow stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-yellow stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-none  stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                      <StarIcon
+                        className="h-6 w-6 fill-none stroke-yellow"
+                        strokeWidth={2}
+                      ></StarIcon>
+                    </div>
+                  </div>
+                  <p>Training fee:</p>
+                </div>
                 <ChevronRightIcon
                   className="w-10 h-10 mx-20 my-10 stroke-gray-500"
                   strokeWidth={2}
                 ></ChevronRightIcon>
-              </button>
-            </div>
+              </div>
+            </Link>
           </div>
         </div>
       </main>

@@ -63,7 +63,7 @@ const profile = () => {
       <div className="flex flex-row h-screen bg-white">
         <div className="w-2/5 h-full bg-backgroundColor md:flex flex-col items-center">
           <div className="w-full md:flex flex-row items-center justify-center mt-10 mb-[10%] m-[5%] ">
-            <Link href="/user/booking/filter" className="mr-[5%]">
+            <Link href="/user/booking/" className="mr-[5%]">
               <ArrowLeftIcon className="w-7 h-7"></ArrowLeftIcon>
             </Link>
             <GenName />
