@@ -245,7 +245,9 @@ const TrainerInfo = () => {
       let spec = e.currentTarget.elements.namedItem(
         `specialty[${i}]`
       ) as HTMLInputElement;
-      speciality.push(spec.value);
+      if (spec.value !== "None") {
+        speciality.push(spec.value);
+      }
       i++;
     }
     updateTrainerProfile({
