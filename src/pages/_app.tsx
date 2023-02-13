@@ -30,7 +30,6 @@ export default function App({ Component, pageProps }: AppProps) {
     const publicPaths = ["/", "/account/signup"];
     const path = url.split("?")[0];
     checkLoggedIn().then((loggedIn) => {
-      console.log(loggedIn);
       if (!loggedIn && !publicPaths.includes(path)) {
         setAuthorized(false);
         router.push({
