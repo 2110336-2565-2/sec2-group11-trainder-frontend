@@ -36,10 +36,14 @@ const TrainerFilter = () => {
         setSpecialtiesFilter(specialtiesFilter.concat([filter.name]));
       }
     } else {
-      const idx = specialtiesFilter.findIndex((e) => e === filter.name);
-      setSpecialtiesFilter(
-        specialtiesFilter.slice(0, idx).concat(specialtiesFilter.slice(idx + 1))
-      );
+      const idx = specialtiesFilter.indexOf(filter.name);
+      if (idx !== -1) {
+        setSpecialtiesFilter(
+          specialtiesFilter
+            .slice(0, idx)
+            .concat(specialtiesFilter.slice(idx + 1))
+        );
+      }
     }
   };
 
