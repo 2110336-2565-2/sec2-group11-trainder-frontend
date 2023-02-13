@@ -6,20 +6,46 @@ import { Listbox } from "@headlessui/react";
 import {
   ArrowLeftIcon,
   ArrowUpTrayIcon,
+  CheckIcon,
   ChevronDownIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
-const renderInfoForm = (trainerInfo: TrainerProfile) => {
-  const [selectedSpec, setSelectedSpec] = useState<string>(
-    trainerInfo.specialty !== undefined && trainerInfo.specialty.length == 0
-      ? "None"
-      : trainerInfo.specialty[0]
+const renderInfoForm = () => {
+  const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
+    specialty: [],
+    rating: 0,
+    fee: 0,
+    traineeCount: 0,
+    certificateUrl: "",
+  });
+  const [selectedSpec, setSelectedSpec] = useState<string[]>(
+    trainerInfo.specialty === undefined ||
+      (trainerInfo.specialty !== undefined && trainerInfo.specialty.length == 0)
+      ? ["None"]
+      : trainerInfo.specialty
   );
   const [selectedCertificate, setSelectedCertificate] = useState<File | null>(
     null
   );
+
+  useEffect(() => {
+    getCurrentTrainerInfo().then((res) => {
+      setTrainerInfo(res);
+      setSelectedSpec(res.specialty);
+    });
+  }, []);
+
+  const handelSpecialityChange = (select: string[]) => {
+    if (select.length == 0) {
+      select = ["None"];
+    } else if (select.length > 1 && select.includes("None")) {
+      select = select.slice(1);
+    }
+    console.log(select);
+    setSelectedSpec(select);
+  };
 
   const handleCertificate = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -36,9 +62,15 @@ const renderInfoForm = (trainerInfo: TrainerProfile) => {
       name: "Speciality",
       edit: true,
       type: "select",
-      data: ["None", "Sample1", "Sample2", "Sample3"],
+      data: [
+        "None",
+        "Weight Loss",
+        "Weight Training",
+        "Yoga",
+        "Rehabilitation",
+      ],
     },
-    { name: "Rating", edit: false, data: trainerInfo.rating},
+    { name: "Rating", edit: false, data: trainerInfo.rating },
     { name: "Fee", edit: false, data: trainerInfo.fee },
     { name: "Trainee Count", edit: false, data: trainerInfo.traineeCount },
     { name: "Certificate", edit: true, type: "file" },
@@ -58,11 +90,14 @@ const renderInfoForm = (trainerInfo: TrainerProfile) => {
                       return (
                         <Listbox
                           value={selectedSpec}
-                          onChange={setSelectedSpec}
+                          onChange={handelSpecialityChange}
+                          multiple
                         >
                           <div className="relative">
                             <Listbox.Button className="relative w-2/3 md:w-1/3 bg-white rounded-lg text-left py-2 px-3 border border-gray">
-                              <span className="block">{selectedSpec}</span>
+                              <span className="block">
+                                {selectedSpec.map((spec) => spec).join(", ")}
+                              </span>
                               <span className="absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronDownIcon className="h-6 w-6" />
                               </span>
@@ -72,9 +107,29 @@ const renderInfoForm = (trainerInfo: TrainerProfile) => {
                                 <Listbox.Option
                                   key={index}
                                   value={choice}
+                                  disabled={index == 0 ? true : false}
+                                  hidden={index == 0 ? true : false}
                                   className="py-2 px-3 hover:bg-blue rounded-md hover:text-white hover:cursor-pointer"
                                 >
-                                  {choice}
+                                  {({ selected }) => (
+                                    <div className="inline-flex items-center">
+                                      {selected ? (
+                                        <CheckIcon
+                                          className="h-6 w-6 pr-2"
+                                          strokeWidth={3}
+                                        />
+                                      ) : (
+                                        <div className="h-6 w-6 pr-2"></div>
+                                      )}
+                                      <p
+                                        className={`${
+                                          selected ? "font-bold" : ""
+                                        }`}
+                                      >
+                                        {choice}
+                                      </p>
+                                    </div>
+                                  )}
                                 </Listbox.Option>
                               ))}
                             </Listbox.Options>
@@ -143,22 +198,9 @@ const renderInfoForm = (trainerInfo: TrainerProfile) => {
 };
 
 const TrainerInfo = () => {
-  const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
-    specialty: [],
-    rating: 0,
-    fee: 0,
-    traineeCount: 0,
-    certificateUrl: "",
-  });
   const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
     null
   );
-
-  useEffect(() => {
-    getCurrentTrainerInfo().then((res) => {
-      setTrainerInfo(res);
-    });
-  }, []);
 
   const handleProfileImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -226,7 +268,7 @@ const TrainerInfo = () => {
           </div>
           {/* Information form */}
           <div className="flex flex-1 flex-col items-start">
-            {renderInfoForm(trainerInfo)}
+            {renderInfoForm()}
             <button
               className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
               type="submit"
