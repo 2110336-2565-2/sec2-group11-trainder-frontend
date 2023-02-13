@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   // Check if that path is protected, then check if the user is logged in
   const authCheck = (url: string) => {
-    const publicPaths = ["/", "/account/signup","/user/booking"];
+    const publicPaths = ["/", "/account/signup"];
     const path = url.split("?")[0];
     checkLoggedIn().then((loggedIn) => {
       console.log(loggedIn);
