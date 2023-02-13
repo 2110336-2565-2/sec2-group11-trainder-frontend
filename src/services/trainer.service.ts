@@ -1,5 +1,4 @@
 import axios from "axios";
-import { userInfo } from "os";
 import authHeader from "./auth-header";
 import { UserProfile } from "./user.service";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -71,3 +70,14 @@ export const getTrainerProfile = (username: string) => {
       throw error;
     });
 };
+
+export const getCurrentTrainerInfo = () => {
+  return axios.get(API_URL + '/protected/trainer-profile', {
+    headers: authHeader(),
+  }).then((response) => {
+    const info = response.data.trainerInfo as TrainerProfile;
+    return info;
+  }).catch((error) => {
+    throw error;
+  })
+}
