@@ -28,7 +28,7 @@ export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
     });
 };
 
-type FilteredTrainerProfile = {
+export type FilteredTrainerProfile = {
   address: string;
   avatarUrl: string;
   firstname: string;
@@ -38,7 +38,9 @@ type FilteredTrainerProfile = {
   username: string;
 };
 
-export const filterTrainer = (filterInput: FilterInput) => {
+export const filterTrainer = (
+  filterInput: FilterInput
+): Promise<FilteredTrainerProfile[]> => {
   return axios
     .post(API_URL + "/protected/filter-trainer", filterInput, {
       headers: authHeader(),
@@ -47,9 +49,9 @@ export const filterTrainer = (filterInput: FilterInput) => {
       let filteredTrainerProfiles: FilteredTrainerProfile[] = [];
       response.data.trainers.forEach((trainerUserProfile: any) => {
         const trainer = trainerUserProfile as FilteredTrainerProfile;
-        console.log(trainer);
         filteredTrainerProfiles.push(trainer);
       });
+      return filteredTrainerProfiles;
     })
     .catch((error) => {
       throw error;
