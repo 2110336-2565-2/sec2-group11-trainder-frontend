@@ -31,7 +31,7 @@ const TrainerFilter = () => {
                 strokeWidth={3}
               ></ChevronUpIcon>
             </button>
-            <hr className="my-2 " />
+            <hr className="my-2" />
             <div className="grid grid-cols-2 gap-2">
               <label className="flex">
                 <input type="checkbox" className="mx-1 accent-[#296D6C]" />
@@ -111,7 +111,6 @@ const TrainerFilter = () => {
                 ></ChevronRightIcon>
               </div>
             </Link>
-
             <Link href="">
               <div className=" bg-white w-auto border-2 border-gray-400 rounded-3xl flex flex-row m-5 p-5 drop-shadow-lg">
                 <div className="bg-gray-300 w-20 h-22 rounded-lg m-3"></div>
