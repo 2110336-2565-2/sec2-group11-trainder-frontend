@@ -45,7 +45,6 @@ const renderInfoForm = () => {
     } else if (select.length > 1 && select.includes("None")) {
       select = select.slice(1);
     }
-    console.log(select);
     setSelectedSpec(select);
   };
 
