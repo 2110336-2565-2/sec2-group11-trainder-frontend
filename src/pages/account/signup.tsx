@@ -174,7 +174,6 @@ export default function Signup() {
         phoneNumber: formData.phoneNumber.value,
         gender: formData.gender.value,
         address: formData.address.value,
-        subAddress: formData.postalCode.value,
       } as RegistrationData)
         .then(() => {
           // TODO: Show registration successful, wait a bit, then redirect back to login.

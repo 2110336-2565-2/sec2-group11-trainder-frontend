@@ -15,7 +15,6 @@ export type UserProfile = {
   gender: string;
   phoneNumber: string;
   address: string;
-  subAddress: string;
   usertype: string;
   trainerInfo?: UpdateTrainerInfo;
 };
@@ -46,7 +45,6 @@ export type UpdateData = {
   gender: string;
   phoneNumber: string;
   address: string;
-  subAddress: string;
 };
 export const updateProfile = (updateData: UpdateData) => {
   return axios

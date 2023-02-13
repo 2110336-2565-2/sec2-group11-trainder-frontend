@@ -70,13 +70,6 @@ const profile = () => {
       </div>
     );
   };
-  const getSubAddress = () => {
-    return (
-      <div>
-        Sub-Address: <strong>{profile?.subAddress}</strong>
-      </div>
-    );
-  };
   return (
     <main className="bg-blue h-screen flex flex-col">
       <div className="flex flex-1 justify-center items-center">
@@ -99,7 +92,6 @@ const profile = () => {
               {getGender()}
               {getPhone()}
               {getAddress()}
-              {getSubAddress()}
             </div>
           </div>
           {profile?.usertype === "Trainer" ? (

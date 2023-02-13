@@ -28,8 +28,9 @@ export default function Places() {
         onChange={(e) => setValue(e.target.value)}
         disabled={!ready}
         type="text"
-        placeholder="Sub district, District, Province"
+        placeholder="House No. & Street"
         className="w-full pl-3.5 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl"
+        name="address"
       />
       <div>
         {status === "OK" &&
