@@ -39,7 +39,7 @@ const renderInfoForm = () => {
     });
   }, []);
 
-  const handleSpecialityChange = (select: string[]) => {
+  const handleSpecialtyChange = (select: string[]) => {
     if (select.length == 0) {
       select = ["None"];
     } else if (select.length > 1 && select.includes("None")) {
@@ -60,7 +60,7 @@ const renderInfoForm = () => {
 
   const info = [
     {
-      label: "Speciality",
+      label: "Specialty",
       name: "specialty",
       edit: true,
       type: "select",
@@ -97,7 +97,7 @@ const renderInfoForm = () => {
                       return (
                         <Listbox
                           value={selectedSpec}
-                          onChange={handleSpecialityChange}
+                          onChange={handleSpecialtyChange}
                           multiple
                           name={item.name}
                         >
@@ -239,18 +239,18 @@ const TrainerInfo = () => {
       // certificateUrl: { value: string };
     };
     let i = 0;
-    let speciality: string[] = [];
+    let specialty: string[] = [];
     while (e.currentTarget.elements.namedItem(`specialty[${i}]`) !== null) {
       let spec = e.currentTarget.elements.namedItem(
         `specialty[${i}]`
       ) as HTMLInputElement;
       if (spec.value !== "None") {
-        speciality.push(spec.value);
+        specialty.push(spec.value);
       }
       i++;
     }
     updateTrainerProfile({
-      specialty: speciality,
+      specialty: specialty,
       rating: Number(infoData.rating.value),
       fee: Number(infoData.fee.value),
       traineeCount: Number(infoData.traineeCount.value),
@@ -279,7 +279,7 @@ const TrainerInfo = () => {
   };
 
   const handleOnChange = () => {
-    // This action still not work with speciality field.
+    // This action still not work with specialty field.
     setUpdatedMessage({
       message: "You have unsaved changes",
       color: "text-pink-dark",
