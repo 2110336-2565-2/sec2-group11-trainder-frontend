@@ -32,6 +32,7 @@ const renderInfoForm = () => {
 
   useEffect(() => {
     getCurrentTrainerInfo().then((res) => {
+      if(Object.keys(res).length === 0) return;
       setTrainerInfo(res);
       setSelectedSpec(res.specialty);
     });
