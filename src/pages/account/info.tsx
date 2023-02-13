@@ -1,6 +1,7 @@
 import {
   getCurrentTrainerInfo,
   TrainerProfile,
+  updateTrainerProfile,
 } from "@/services/trainer.service";
 import { Listbox } from "@headlessui/react";
 import {
@@ -32,13 +33,13 @@ const renderInfoForm = () => {
 
   useEffect(() => {
     getCurrentTrainerInfo().then((res) => {
-      if(Object.keys(res).length === 0) return;
+      if (Object.keys(res).length === 0) return;
       setTrainerInfo(res);
       setSelectedSpec(res.specialty);
     });
   }, []);
 
-  const handelSpecialityChange = (select: string[]) => {
+  const handleSpecialityChange = (select: string[]) => {
     if (select.length == 0) {
       select = ["None"];
     } else if (select.length > 1 && select.includes("None")) {
@@ -60,7 +61,8 @@ const renderInfoForm = () => {
 
   const info = [
     {
-      name: "Speciality",
+      label: "Speciality",
+      name: "specialty",
       edit: true,
       type: "select",
       data: [
@@ -71,10 +73,15 @@ const renderInfoForm = () => {
         "Rehabilitation",
       ],
     },
-    { name: "Rating", edit: false, data: trainerInfo.rating },
-    { name: "Fee", edit: false, data: trainerInfo.fee },
-    { name: "Trainee Count", edit: false, data: trainerInfo.traineeCount },
-    { name: "Certificate", edit: true, type: "file" },
+    { label: "Rating", name: "rating", edit: false, data: trainerInfo.rating },
+    { label: "Fee", name: "fee", edit: false, data: trainerInfo.fee },
+    {
+      label: "Trainee Count",
+      name: "traineeCount",
+      edit: false,
+      data: trainerInfo.traineeCount,
+    },
+    { label: "Certificate", name: "certificate", edit: true, type: "file" },
   ];
 
   return (
@@ -82,7 +89,7 @@ const renderInfoForm = () => {
       {info.map((item, index) => {
         return (
           <div className="w-full my-2" key={index}>
-            <div className="py-2 font-bold">{item.name}</div>
+            <div className="py-2 font-bold">{item.label}</div>
             {item.edit ? (
               <>
                 {(() => {
@@ -91,8 +98,9 @@ const renderInfoForm = () => {
                       return (
                         <Listbox
                           value={selectedSpec}
-                          onChange={handelSpecialityChange}
+                          onChange={handleSpecialityChange}
                           multiple
+                          name={item.name}
                         >
                           <div className="relative">
                             <Listbox.Button className="relative w-2/3 md:w-1/3 bg-white rounded-lg text-left py-2 px-3 border border-gray">
@@ -189,7 +197,13 @@ const renderInfoForm = () => {
                 })()}
               </>
             ) : (
-              <div className="px-3">{item.data}</div>
+              <input
+                className="px-3 bg-transparent"
+                type={"number"}
+                value={item.data || 0}
+                name={item.name}
+                disabled
+              ></input>
             )}
           </div>
         );
@@ -199,6 +213,10 @@ const renderInfoForm = () => {
 };
 
 const TrainerInfo = () => {
+  const [updatedMessage, setUpdatedMessage] = useState({
+    message: "",
+    color: "",
+  });
   const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
     null
   );
@@ -211,6 +229,60 @@ const TrainerInfo = () => {
 
   const removeSelectedProfileImg = () => {
     setSelectedProfileImg(null);
+  };
+
+  const handleTrainerInfoForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const infoData = e.target as typeof e.target & {
+      rating: { value: number };
+      fee: { value: number };
+      traineeCount: { value: number };
+      // certificateUrl: { value: string };
+    };
+    let i = 0;
+    let speciality: string[] = [];
+    while (e.currentTarget.elements.namedItem(`specialty[${i}]`) !== null) {
+      let spec = e.currentTarget.elements.namedItem(
+        `specialty[${i}]`
+      ) as HTMLInputElement;
+      speciality.push(spec.value);
+      i++;
+    }
+    updateTrainerProfile({
+      specialty: speciality,
+      rating: Number(infoData.rating.value),
+      fee: Number(infoData.fee.value),
+      traineeCount: Number(infoData.traineeCount.value),
+      certificateUrl: "",
+    } as TrainerProfile)
+      .then(() => {
+        setUpdatedMessage({
+          message: "Your information has been saved",
+          color: "text-green-light",
+        });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status !== 200) {
+          const errorMsg = error.response as typeof error.response & {
+            data: {
+              message: string;
+            };
+          };
+          if (errorMsg.data.message !== undefined) {
+            alert(errorMsg.data.message);
+            return;
+          }
+        }
+        throw error;
+      });
+  };
+
+  const handleOnChange = () => {
+    // This action still not work with speciality field.
+    setUpdatedMessage({
+      message: "You have unsaved changes",
+      color: "text-pink-dark",
+    });
   };
 
   return (
@@ -227,7 +299,11 @@ const TrainerInfo = () => {
             Your Personal Information
           </h1>
         </div>
-        <form className="flex">
+        <form
+          className="flex"
+          onChange={handleOnChange}
+          onSubmit={handleTrainerInfoForm}
+        >
           {/* Trainer profile image */}
           <div className="w-1/3 flex flex-col items-center">
             <div className="relative h-fit">
@@ -270,12 +346,17 @@ const TrainerInfo = () => {
           {/* Information form */}
           <div className="flex flex-1 flex-col items-start">
             {renderInfoForm()}
-            <button
-              className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
-              type="submit"
-            >
-              Save
-            </button>
+            <div className="inline-flex items-center">
+              <button
+                className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
+                type="submit"
+              >
+                Save
+              </button>
+              <p className={`mx-2 mt-5 mb-3 ${updatedMessage.color}`}>
+                {updatedMessage.message}
+              </p>
+            </div>
           </div>
         </form>
       </div>
