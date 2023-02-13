@@ -79,7 +79,6 @@ const bookTrainerProfile = () => {
 
   return (
     <main className="flex flex-col h-screen">
-      <NavBar />
       {!loading && (
         <div className="flex flex-row h-screen bg-white">
           <div className="w-2/5 h-full bg-backgroundColor md:flex flex-col items-center">
