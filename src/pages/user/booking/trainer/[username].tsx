@@ -18,7 +18,6 @@ const bookTrainerProfile = () => {
     gender: "none",
     phoneNumber: "none",
     address: "none",
-    subAddress: "none",
     usertype: "none",
   });
   const [trainerProfile, setTrainerProfile] = useState<TrainerProfile>({
@@ -69,7 +68,7 @@ const bookTrainerProfile = () => {
         Specialties : {trainerProfile.specialty.join(", ")} <br />
         Rating: {trainerProfile.rating} <br />
         Training Fee: {trainerProfile.fee} Baht <br />
-        Area: {userProfile.address} {userProfile.subAddress} <br />
+        Area: {userProfile.address} <br />
         {/* TODO: show these after traineeCount and certificateUrl are implemented */}
         {/* Currently Training: {trainerProfile.traineeCount} people(s)<br /> */}
         {/* <Link href={trainerProfile.certificateUrl}>Certificate</Link> */}
