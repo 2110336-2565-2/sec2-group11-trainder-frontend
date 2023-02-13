@@ -22,10 +22,10 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 - use-places-autocomplete
 
 This package is distributed via [npm](https://www.npmjs.com/package/use-places-autocomplete).
+
+Installation
 ```sh
 $ yarn add use-places-autocomplete
-# or
-$ npm install --save use-places-autocomplete
 ```
 ## Setup APIs
 
