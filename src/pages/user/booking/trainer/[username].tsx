@@ -4,6 +4,8 @@ import { UserProfile } from "@/services/user.service";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
+import { useLoadScript } from "@react-google-maps/api";
+import Map from "@/components/map";
 const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
@@ -74,6 +76,12 @@ const bookTrainerProfile = () => {
       </p>
     );
   };
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      : "",
+  });
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <main className="flex flex-col h-screen">
@@ -87,12 +95,6 @@ const bookTrainerProfile = () => {
               <Name />
             </div>
             <Image />
-          </div>
-
-          <div className="w-3/5 h-full flex flex-col items-start justify-start">
-            <Skill />
-            {/* <div className="p-4">{content}</div> */}
-            <img src="/demo_map.png" className="rounded-lg w-3/4 ml-10"></img>
             <div className="flex flex-row mt-5 ml-10 space-x-[20%] w-3/4">
               {/* TODO: When chat and calendar is ready uncomment the link */}
               {/* <Link href="/user/chat" className="ml-[15%]"> */}
@@ -105,6 +107,14 @@ const bookTrainerProfile = () => {
                 Calendar
               </button>
               {/* </Link> */}
+            </div>
+          </div>
+
+          <div className="w-3/5 h-full flex flex-col items-center justify-start">
+            <Skill />
+            {/* <div className="p-4">{content}</div> */}
+            <div className="w-3/4 h-1/2">
+              <Map />
             </div>
           </div>
         </div>
