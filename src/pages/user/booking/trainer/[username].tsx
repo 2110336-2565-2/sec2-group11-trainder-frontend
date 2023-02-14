@@ -95,15 +95,15 @@ const bookTrainerProfile = () => {
               <Name />
             </div>
             <Image />
-            <div className="flex flex-row mt-5 ml-10 space-x-[20%] w-3/4">
+            <div className="flex flex-row mt-5 mx-auto space-x-[10%] justify-center">
               {/* TODO: When chat and calendar is ready uncomment the link */}
               {/* <Link href="/user/chat" className="ml-[15%]"> */}
-              <button className="bg-pink text-gray-800 py-2 px-12 rounded shadow">
+              <button className="bg-pink text-gray-800 py-2 px-12 rounded shadow whitespace-nowrap">
                 Start Chat
               </button>
               {/* </Link> */}
               {/* <Link href=""> */}
-              <button className="bg-pink text-gray-800  py-2 px-12 rounded shadow ">
+              <button className="bg-pink text-gray-800 py-2 px-12 rounded shadow ">
                 Calendar
               </button>
               {/* </Link> */}
