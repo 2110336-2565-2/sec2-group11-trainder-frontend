@@ -106,12 +106,12 @@ const TrainerFilter = () => {
                 <div className="flex min-h-full items-center justify-center text-center md:justify-start md:items-start p-4 md:p-0">
                   <Transition.Child
                     as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0 scale-95"
-                    enterTo="opacity-100 scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 scale-100"
-                    leaveTo="opacity-0 scale-95"
+                    enter="ease-out duration-300 md:duration-400"
+                    enterFrom="opacity-0 scale-95 md:scale-100 md:-translate-x-full md:opacity-100"
+                    enterTo="opacity-100 scale-100 md:translate-x-0"
+                    leave="ease-in duration-200 md:duration-400"
+                    leaveFrom="opacity-100 scale-100 md:translate-x-0"
+                    leaveTo="opacity-0 scale-95 md:-translate-x-full md:scale-100 md:opacity-100"
                   >
                     <Dialog.Panel className="w-full max-w-md h-full md:min-h-screen transform overflow-hidden bg-white p-6 md:p-8 text-left align-middle shadow-xl transition-all rounded-2xl md:rounded-none">
                       <Dialog.Title
