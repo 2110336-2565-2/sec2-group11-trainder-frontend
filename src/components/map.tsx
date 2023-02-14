@@ -12,14 +12,14 @@ export default function Map() {
 
   const options = useMemo<MapOptions>(
     () => ({
-      mapId: "c01bd34cdeea52b2",
+      mapId: "1fdb010b501188ea",
     }),
     []
   );
 
   return (
     <GoogleMap
-      zoom={16}
+      zoom={14}
       center={center}
       mapContainerStyle={{ width: "100%", height: "100%" }}
       options={options}
