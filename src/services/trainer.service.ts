@@ -28,20 +28,30 @@ export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
     });
 };
 
-export const filterTrainer = (filterInput: FilterInput) => {
+export type FilteredTrainerProfile = {
+  address: string;
+  avatarUrl: string;
+  firstname: string;
+  gender: string;
+  lastname: string;
+  trainerInfo: TrainerProfile;
+  username: string;
+};
+
+export const filterTrainer = (
+  filterInput: FilterInput
+): Promise<FilteredTrainerProfile[]> => {
   return axios
     .post(API_URL + "/protected/filter-trainer", filterInput, {
       headers: authHeader(),
     })
     .then((response) => {
-      const r = response.data.user;
-      var result = [];
-      for (let i = 0; i < r.length; i++) {
-        let trainer = r[i] as UserProfile;
-        trainer.birthdate = new Date(r[i].birthdate);
-        result.push(trainer);
-      }
-      return r;
+      let filteredTrainerProfiles: FilteredTrainerProfile[] = [];
+      response.data.trainers.forEach((trainerUserProfile: any) => {
+        const trainer = trainerUserProfile as FilteredTrainerProfile;
+        filteredTrainerProfiles.push(trainer);
+      });
+      return filteredTrainerProfiles;
     })
     .catch((error) => {
       throw error;
@@ -72,12 +82,15 @@ export const getTrainerProfile = (username: string) => {
 };
 
 export const getCurrentTrainerInfo = () => {
-  return axios.get(API_URL + '/protected/trainer-profile', {
-    headers: authHeader(),
-  }).then((response) => {
-    const info = response.data.trainerInfo as TrainerProfile;
-    return info;
-  }).catch((error) => {
-    throw error;
-  })
-}
+  return axios
+    .get(API_URL + "/protected/trainer-profile", {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      const info = response.data.trainerInfo as TrainerProfile;
+      return info;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
