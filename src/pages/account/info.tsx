@@ -1,30 +1,52 @@
+import {
+  getCurrentTrainerInfo,
+  TrainerProfile,
+  updateTrainerProfile,
+} from "@/services/trainer.service";
 import { Listbox } from "@headlessui/react";
 import {
   ArrowLeftIcon,
   ArrowUpTrayIcon,
+  CheckIcon,
   ChevronDownIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
-
-const info = [
-  {
-    name: "Speciality",
-    edit: true,
-    type: "select",
-    data: ["None", "Sample1", "Sample2", "Sample3"],
-  },
-  { name: "Rating", edit: false, data: 5 },
-  { name: "Fee", edit: false, data: 100 },
-  { name: "Trainee Count", edit: false, data: 20 },
-  { name: "Certificate", edit: true, type: "file" },
-];
+import { useEffect, useState } from "react";
 
 const renderInfoForm = () => {
-  const [selectedSpec, setSelectedSpec] = useState("None");
+  const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
+    specialty: [],
+    rating: 0,
+    fee: 0,
+    traineeCount: 0,
+    certificateUrl: "",
+  });
+  const [selectedSpec, setSelectedSpec] = useState<string[]>(
+    trainerInfo.specialty === undefined ||
+      (trainerInfo.specialty !== undefined && trainerInfo.specialty.length == 0)
+      ? ["None"]
+      : trainerInfo.specialty
+  );
   const [selectedCertificate, setSelectedCertificate] = useState<File | null>(
     null
   );
+
+  useEffect(() => {
+    getCurrentTrainerInfo().then((res) => {
+      if (Object.keys(res).length === 0) return;
+      setTrainerInfo(res);
+      setSelectedSpec(res.specialty);
+    });
+  }, []);
+
+  const handleSpecialtyChange = (select: string[]) => {
+    if (select.length == 0) {
+      select = ["None"];
+    } else if (select.length > 1 && select.includes("None")) {
+      select = select.slice(1);
+    }
+    setSelectedSpec(select);
+  };
 
   const handleCertificate = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -36,12 +58,37 @@ const renderInfoForm = () => {
     setSelectedCertificate(null);
   };
 
+  const info = [
+    {
+      label: "Specialty",
+      name: "specialty",
+      edit: true,
+      type: "select",
+      data: [
+        "None",
+        "Weight Loss",
+        "Weight Training",
+        "Yoga",
+        "Rehabilitation",
+      ],
+    },
+    { label: "Rating", name: "rating", edit: false, data: trainerInfo.rating },
+    { label: "Fee", name: "fee", edit: false, data: trainerInfo.fee },
+    {
+      label: "Trainee Count",
+      name: "traineeCount",
+      edit: false,
+      data: trainerInfo.traineeCount,
+    },
+    { label: "Certificate", name: "certificate", edit: true, type: "file" },
+  ];
+
   return (
     <>
-      {info.map((item) => {
+      {info.map((item, index) => {
         return (
-          <div className="w-full my-2">
-            <div className="py-2 font-bold">{item.name}</div>
+          <div className="w-full my-2" key={index}>
+            <div className="py-2 font-bold">{item.label}</div>
             {item.edit ? (
               <>
                 {(() => {
@@ -50,22 +97,47 @@ const renderInfoForm = () => {
                       return (
                         <Listbox
                           value={selectedSpec}
-                          onChange={setSelectedSpec}
+                          onChange={handleSpecialtyChange}
+                          multiple
+                          name={item.name}
                         >
                           <div className="relative">
                             <Listbox.Button className="relative w-2/3 md:w-1/3 bg-white rounded-lg text-left py-2 px-3 border border-gray">
-                              <span className="block">{selectedSpec}</span>
+                              <span className="block">
+                                {selectedSpec.map((spec) => spec).join(", ")}
+                              </span>
                               <span className="absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronDownIcon className="h-6 w-6" />
                               </span>
                             </Listbox.Button>
                             <Listbox.Options className="absolute my-2 bg-white w-2/3 md:w-1/3 rounded-lg border border-gray">
-                              {item.data?.map((choice) => (
+                              {item.data?.map((choice: string, index) => (
                                 <Listbox.Option
+                                  key={index}
                                   value={choice}
+                                  disabled={index == 0 ? true : false}
+                                  hidden={index == 0 ? true : false}
                                   className="py-2 px-3 hover:bg-blue rounded-md hover:text-white hover:cursor-pointer"
                                 >
-                                  {choice}
+                                  {({ selected }) => (
+                                    <div className="inline-flex items-center">
+                                      {selected ? (
+                                        <CheckIcon
+                                          className="h-6 w-6 pr-2"
+                                          strokeWidth={3}
+                                        />
+                                      ) : (
+                                        <div className="h-6 w-6 pr-2"></div>
+                                      )}
+                                      <p
+                                        className={`${
+                                          selected ? "font-bold" : ""
+                                        }`}
+                                      >
+                                        {choice}
+                                      </p>
+                                    </div>
+                                  )}
                                 </Listbox.Option>
                               ))}
                             </Listbox.Options>
@@ -124,7 +196,13 @@ const renderInfoForm = () => {
                 })()}
               </>
             ) : (
-              <div className="px-3">{item.data}</div>
+              <input
+                className="px-3 bg-transparent"
+                type={"number"}
+                value={item.data || 0}
+                name={item.name}
+                disabled
+              ></input>
             )}
           </div>
         );
@@ -134,9 +212,14 @@ const renderInfoForm = () => {
 };
 
 const TrainerInfo = () => {
+  const [updatedMessage, setUpdatedMessage] = useState({
+    message: "",
+    color: "",
+  });
   const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
     null
   );
+
   const handleProfileImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     if (e.target.files[0] == undefined) return;
@@ -145,6 +228,62 @@ const TrainerInfo = () => {
 
   const removeSelectedProfileImg = () => {
     setSelectedProfileImg(null);
+  };
+
+  const handleTrainerInfoForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const infoData = e.target as typeof e.target & {
+      rating: { value: number };
+      fee: { value: number };
+      traineeCount: { value: number };
+      // certificateUrl: { value: string };
+    };
+    let i = 0;
+    let specialty: string[] = [];
+    while (e.currentTarget.elements.namedItem(`specialty[${i}]`) !== null) {
+      let spec = e.currentTarget.elements.namedItem(
+        `specialty[${i}]`
+      ) as HTMLInputElement;
+      if (spec.value !== "None") {
+        specialty.push(spec.value);
+      }
+      i++;
+    }
+    updateTrainerProfile({
+      specialty: specialty,
+      rating: Number(infoData.rating.value),
+      fee: Number(infoData.fee.value),
+      traineeCount: Number(infoData.traineeCount.value),
+      certificateUrl: "",
+    } as TrainerProfile)
+      .then(() => {
+        setUpdatedMessage({
+          message: "Your information has been saved",
+          color: "text-green-light",
+        });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status !== 200) {
+          const errorMsg = error.response as typeof error.response & {
+            data: {
+              message: string;
+            };
+          };
+          if (errorMsg.data.message !== undefined) {
+            alert(errorMsg.data.message);
+            return;
+          }
+        }
+        throw error;
+      });
+  };
+
+  const handleOnChange = () => {
+    // This action still not work with specialty field.
+    setUpdatedMessage({
+      message: "You have unsaved changes",
+      color: "text-pink-dark",
+    });
   };
 
   return (
@@ -161,7 +300,11 @@ const TrainerInfo = () => {
             Your Personal Information
           </h1>
         </div>
-        <form className="flex">
+        <form
+          className="flex"
+          onChange={handleOnChange}
+          onSubmit={handleTrainerInfoForm}
+        >
           {/* Trainer profile image */}
           <div className="w-1/3 flex flex-col items-center">
             <div className="relative h-fit">
@@ -204,12 +347,17 @@ const TrainerInfo = () => {
           {/* Information form */}
           <div className="flex flex-1 flex-col items-start">
             {renderInfoForm()}
-            <button
-              className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
-              type="submit"
-            >
-              Save
-            </button>
+            <div className="inline-flex items-center">
+              <button
+                className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
+                type="submit"
+              >
+                Save
+              </button>
+              <p className={`mx-2 mt-5 mb-3 ${updatedMessage.color}`}>
+                {updatedMessage.message}
+              </p>
+            </div>
           </div>
         </form>
       </div>

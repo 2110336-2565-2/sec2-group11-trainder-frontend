@@ -132,7 +132,7 @@ export const NavBar = () => {
                       <Menu.Items className="absolute right-5 z-10 mt-10 w-56 px-2 py-1 origin-top-right rounded-xl bg-white shadow-lg">
                         {profileMenu.map((menu, index) => {
                           return (
-                            <Menu.Item>
+                            <Menu.Item key={index}>
                               <button
                                 className={`w-full text-start hover:text-white ${
                                   menu.color != null

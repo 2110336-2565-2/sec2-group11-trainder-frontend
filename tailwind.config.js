@@ -27,7 +27,10 @@ module.exports = {
           dark: "#415F87",
         },
         yellow: "#E7BD44",
-        green: "#296D6C",
+        green: {
+          DEFAULT: "#296D6C",
+          light: "#83A748",
+        },
         brown: "#DDD2C7",
       },
       keyframes: {

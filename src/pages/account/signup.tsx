@@ -114,9 +114,17 @@ export default function Signup() {
                 <>
                   <select
                     className="w-full px-3.5 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl appearance-none hover:cursor-pointer bg-white"
-                    value={selected}
+                    value={
+                      field.name === "userType"
+                        ? selectedUserType
+                        : selectedGender
+                    }
                     defaultValue={""}
-                    onChange={(event: any) => setSelected(event.target.value)}
+                    onChange={(event: any) =>
+                      field.name === "userType"
+                        ? setSelectedUserType(event.target.value)
+                        : setSelectedGender(event.target.value)
+                    }
                     required
                     name={field.name}
                   >
@@ -157,7 +165,9 @@ export default function Signup() {
     );
   };
   const router = useRouter();
-  const [selected, setSelected] = useState<string>();
+  const [selectedUserType, setSelectedUserType] = useState<string>();
+  const [selectedGender, setSelectedGender] = useState<string>();
+
   const handleRegistrationForm = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -174,7 +184,6 @@ export default function Signup() {
         phoneNumber: formData.phoneNumber.value,
         gender: formData.gender.value,
         address: formData.address.value,
-        subAddress: formData.postalCode.value,
       } as RegistrationData)
         .then(() => {
           // TODO: Show registration successful, wait a bit, then redirect back to login.

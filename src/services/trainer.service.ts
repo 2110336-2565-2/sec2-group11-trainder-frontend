@@ -1,12 +1,11 @@
 import axios from "axios";
-import { userInfo } from "os";
 import authHeader from "./auth-header";
 import { UserProfile } from "./user.service";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
-export type UpdateTrainerInfo = {
+export type TrainerProfile = {
   specialty: string[];
   rating: number;
   fee: number;
@@ -14,16 +13,12 @@ export type UpdateTrainerInfo = {
   certificateUrl: string;
 };
 
-export type GetTrainerInput = {
-  username: string;
-};
-
 export type FilterInput = {
   limit: number;
   specialty: string[];
 };
 
-export const updateTrainerProfile = (updateTrainerInfo: UpdateTrainerInfo) => {
+export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
   return axios
     .post(API_URL + "/protected/update-trainer", updateTrainerInfo, {
       headers: authHeader(),
@@ -33,36 +28,67 @@ export const updateTrainerProfile = (updateTrainerInfo: UpdateTrainerInfo) => {
     });
 };
 
-export const filterTrainer = (filterInput: FilterInput) => {
+export type FilteredTrainerProfile = {
+  address: string;
+  avatarUrl: string;
+  firstname: string;
+  gender: string;
+  lastname: string;
+  trainerInfo: TrainerProfile;
+  username: string;
+};
+
+export const filterTrainer = (
+  filterInput: FilterInput
+): Promise<FilteredTrainerProfile[]> => {
   return axios
     .post(API_URL + "/protected/filter-trainer", filterInput, {
       headers: authHeader(),
     })
     .then((response) => {
-      const r = response.data.user;
-      var result = [];
-      for (let i = 0; i < r.length; i++) {
-        let trainer = r[i] as UserProfile;
-        trainer.birthdate = new Date(r[i].birthdate);
-        result.push(trainer);
-      }
-      return r;
+      let filteredTrainerProfiles: FilteredTrainerProfile[] = [];
+      response.data.trainers.forEach((trainerUserProfile: any) => {
+        const trainer = trainerUserProfile as FilteredTrainerProfile;
+        filteredTrainerProfiles.push(trainer);
+      });
+      return filteredTrainerProfiles;
     })
     .catch((error) => {
       throw error;
     });
 };
 
-export const getTrainerProfile = (getTrainerInput: GetTrainerInput) => {
+export const getTrainerProfile = (username: string) => {
   return axios
-    .post(API_URL + "/protected/trainer", getTrainerInput, {
+    .post(
+      API_URL + "/protected/trainer",
+      {
+        username: username,
+      },
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      const userDataResponse = response.data.user;
+      const userProfile = userDataResponse as UserProfile;
+      userProfile.birthdate = new Date(userDataResponse.birthdate);
+      const trainerProfile = response.data.trainerInfo as TrainerProfile;
+      return { userProfile: userProfile, trainerProfile: trainerProfile };
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getCurrentTrainerInfo = () => {
+  return axios
+    .get(API_URL + "/protected/trainer-profile", {
       headers: authHeader(),
     })
     .then((response) => {
-      const r = response.data.user;
-      const profile = r as UserProfile;
-      profile.birthdate = new Date(r.birthdate);
-      return profile;
+      const info = response.data.trainerInfo as TrainerProfile;
+      return info;
     })
     .catch((error) => {
       throw error;
