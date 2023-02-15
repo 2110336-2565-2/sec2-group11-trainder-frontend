@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { DirectionsRenderer, GoogleMap, MarkerF } from "@react-google-maps/api";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { setHttpClientAndAgentOptions } from "next/dist/server/config";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 type MarkerOptions = google.maps.MarkerOptions;
-export type MapProps = {
+type DirectionResult = google.maps.DirectionsResult;
+type MapProps = {
   userAddress: string;
   trainerAddress: string;
 };
@@ -20,8 +22,9 @@ export default function Map({ userAddress, trainerAddress }: MapProps) {
     lat: 0,
     lng: 0,
   });
-  //Set user Geocode
+  const [direction, setDirection] = useState<DirectionResult>();
   useEffect(() => {
+    setLoading(true);
     getGeocode({ address: userAddress }).then((results) => {
       const { lat, lng } = getLatLng(results[0]);
       setUserCoordinate({ lat, lng });
@@ -31,7 +34,21 @@ export default function Map({ userAddress, trainerAddress }: MapProps) {
       setTrainerCoordinate({ lat, lng });
     });
     setLoading(false);
-  }, [userAddress, trainerAddress]);
+  }, [direction,userAddress,trainerAddress]);
+  const service = new google.maps.DirectionsService();
+
+  service.route(
+    {
+      origin: userCoordinate,
+      destination: trainerCoordinate,
+      travelMode: google.maps.TravelMode.DRIVING,
+    },
+    (result, status) => {
+      if (status === "OK" && result) {
+        setDirection(result);
+      }
+    }
+  );
 
   const mapOptions = useMemo<MapOptions>(
     () => ({
@@ -71,6 +88,16 @@ export default function Map({ userAddress, trainerAddress }: MapProps) {
       >
         <MarkerF position={userCoordinate} options={markerOptions} />
         <MarkerF position={trainerCoordinate} />
+          <DirectionsRenderer
+            directions={direction}
+            options={{
+              polylineOptions: {
+                zIndex: 50,
+                strokeColor: "#1976D2",
+                strokeWeight: 5,
+              },
+            }}
+          />
       </GoogleMap>
     </>
   );
