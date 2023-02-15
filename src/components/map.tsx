@@ -9,10 +9,6 @@ export type MapProps = {
   userAddress: string;
   trainerAddress: string;
 };
-type Coordinate = {
-  lat: number;
-  lng: number;
-};
 
 export default function Map({ userAddress, trainerAddress }: MapProps) {
   const [loading, setLoading] = useState<boolean>(true);
