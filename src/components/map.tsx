@@ -5,33 +5,37 @@ import { getGeocode, getLatLng } from "use-places-autocomplete";
 type LatLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 type MarkerOptions = google.maps.MarkerOptions;
-type Maprops = {
+export type MapProps = {
   userAddress: string;
+  trainerAddress: string;
 };
 type Coordinate = {
   lat: number;
   lng: number;
 };
 
-export default function Map({ userAddress }: Maprops) {
+export default function Map({ userAddress, trainerAddress }: MapProps) {
   const [loading, setLoading] = useState<boolean>(true);
-  const [userCoordinate, setUserCoordinate] = useState<Coordinate>({
-    //chula Geocode
-    lat: 13.738481206157571,
-    lng: 100.53241615351133,
+  const [userCoordinate, setUserCoordinate] = useState<LatLngLiteral>({
+    lat: 0,
+    lng: 0,
+  });
+  const [trainerCoordinate, setTrainerCoordinate] = useState<LatLngLiteral>({
+    lat: 0,
+    lng: 0,
   });
   //Set user Geocode
   useEffect(() => {
     getGeocode({ address: userAddress }).then((results) => {
       const { lat, lng } = getLatLng(results[0]);
       setUserCoordinate({ lat, lng });
-      setLoading(false);
     });
-  }, []);
-  const center = useMemo<LatLngLiteral>(
-    () => ({ lat: userCoordinate.lat, lng: userCoordinate.lng }),
-    []
-  );
+    getGeocode({ address: trainerAddress }).then((results) => {
+      const { lat, lng } = getLatLng(results[0]);
+      setTrainerCoordinate({ lat, lng });
+    });
+    setLoading(false);
+  }, [userAddress, trainerAddress]);
 
   const mapOptions = useMemo<MapOptions>(
     () => ({
@@ -60,19 +64,18 @@ export default function Map({ userAddress }: Maprops) {
     }),
     []
   );
-
+  if (loading) return <div>loading</div>;
   return (
     <>
-      {!loading && (
-        <GoogleMap
-          zoom={14}
-          center={center}
-          mapContainerStyle={{ width: "100%", height: "100%" }}
-          options={mapOptions}
-        >
-          <MarkerF position={center} options={markerOptions} />
-        </GoogleMap>
-      )}
+      <GoogleMap
+        zoom={14}
+        center={userCoordinate}
+        mapContainerStyle={{ width: "100%", height: "100%" }}
+        options={mapOptions}
+      >
+        <MarkerF position={userCoordinate} options={markerOptions} />
+        <MarkerF position={trainerCoordinate} />
+      </GoogleMap>
     </>
   );
 }

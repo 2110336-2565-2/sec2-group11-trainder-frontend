@@ -11,6 +11,7 @@ const bookTrainerProfile = () => {
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
   const [userAddress, setUserAddress] = useState<string>("");
+  const [trainerAddress, setTrainerAddress] = useState<string>("");
   const [trainerProfile, setTrainerProfile] = useState<UserProfile>({
     username: "user",
     firstname: "firstname",
@@ -37,12 +38,17 @@ const bookTrainerProfile = () => {
           setLoading(true);
           setTrainerProfile(res.userProfile);
           setTrainerInfo(res.trainerProfile);
+          setTrainerAddress(res.userProfile.address);
+          setLoading(false);
         })
         .catch(() => router.back());
-      getCurrentUserProfile().then((data) => {
-        setUserAddress(data.address);
-        setLoading(false);
-      });
+      getCurrentUserProfile()
+        .then((data) => {
+          setLoading(true);
+          setUserAddress(data.address);
+          setLoading(false);
+        })
+        .catch(() => router.back());
     } else {
       router.back();
     }
@@ -120,7 +126,6 @@ const bookTrainerProfile = () => {
       : "",
   });
   if (!isLoaded) return <div>Loading...</div>;
-
   return (
     <main className="min-h-screen h-full w-full bg-backgroundColor">
       {!loading && (
@@ -144,7 +149,7 @@ const bookTrainerProfile = () => {
           <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
             <Skill />
             <div className="w-3/4 h-[36rem]">
-              <Map userAddress={userAddress} />
+              <Map userAddress={userAddress} trainerAddress={trainerAddress} />
             </div>
             <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
               <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
