@@ -1,13 +1,36 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { getGeocode, getLatLng } from "use-places-autocomplete";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 type MarkerOptions = google.maps.MarkerOptions;
+type Maprops = {
+  userAddress: string;
+};
+type Coordinate = {
+  lat: number;
+  lng: number;
+};
 
-export default function Map() {
+export default function Map({ userAddress }: Maprops) {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [userCoordinate, setUserCoordinate] = useState<Coordinate>({
+    //chula Geocode
+    lat: 13.738481206157571,
+    lng: 100.53241615351133,
+  });
+  //Set user Geocode
+  useEffect(() => {
+    getGeocode({ address: userAddress }).then((results) => {
+      const { lat, lng } = getLatLng(results[0]);
+      setUserCoordinate({ lat, lng });
+      console.log(lat, lng);
+      setLoading(false);
+    });
+  }, []);
   const center = useMemo<LatLngLiteral>(
-    () => ({ lat: 13.738481206157571, lng: 100.53241615351133 }),
+    () => ({ lat: userCoordinate.lat, lng: userCoordinate.lng }),
     []
   );
 
@@ -40,13 +63,17 @@ export default function Map() {
   );
 
   return (
-    <GoogleMap
-      zoom={14}
-      center={center}
-      mapContainerStyle={{ width: "100%", height: "100%" }}
-      options={mapOptions}
-    >
-      <MarkerF position={center} options={markerOptions} />
-    </GoogleMap>
+    <>
+      {!loading && (
+        <GoogleMap
+          zoom={14}
+          center={center}
+          mapContainerStyle={{ width: "100%", height: "100%" }}
+          options={mapOptions}
+        >
+          <MarkerF position={center} options={markerOptions} />
+        </GoogleMap>
+      )}
+    </>
   );
 }

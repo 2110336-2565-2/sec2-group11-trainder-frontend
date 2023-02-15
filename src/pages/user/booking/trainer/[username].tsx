@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { UserProfile } from "@/services/user.service";
+import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useLoadScript } from "@react-google-maps/api";
 import Map from "@/components/map";
+import { getCurrentUser } from "@/services/auth.service";
 const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
+  const [userAddress, setUserAddress] = useState<string>("");
+
   const [userProfile, setUserProfile] = useState<UserProfile>({
     username: "user",
     firstname: "firstname",
@@ -36,9 +39,12 @@ const bookTrainerProfile = () => {
           setLoading(true);
           setUserProfile(res.userProfile);
           setTrainerProfile(res.trainerProfile);
-          setLoading(false);
         })
         .catch(() => router.back());
+      getCurrentUserProfile().then((data) => {
+        setUserAddress(data.address);
+        setLoading(false);
+      });
     } else {
       router.back();
     }
@@ -141,7 +147,7 @@ const bookTrainerProfile = () => {
           <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
             <Skill />
             <div className="w-3/4 h-[36rem]">
-              <Map />
+              <Map userAddress={userAddress} />
             </div>
             <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
               <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
