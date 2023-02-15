@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useLoadScript } from "@react-google-maps/api";
 import Map from "@/components/map";
-import { getCurrentUser } from "@/services/auth.service";
 const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;

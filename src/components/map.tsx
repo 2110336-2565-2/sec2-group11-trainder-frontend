@@ -25,7 +25,6 @@ export default function Map({ userAddress }: Maprops) {
     getGeocode({ address: userAddress }).then((results) => {
       const { lat, lng } = getLatLng(results[0]);
       setUserCoordinate({ lat, lng });
-      console.log(lat, lng);
       setLoading(false);
     });
   }, []);
