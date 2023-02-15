@@ -10,7 +10,7 @@ export default function Map() {
     []
   );
 
-  const options = useMemo<MapOptions>(
+  const mapOptions = useMemo<MapOptions>(
     () => ({
       mapId: "ddb903d68666fa6c",
     }),
@@ -22,9 +22,21 @@ export default function Map() {
       zoom={14}
       center={center}
       mapContainerStyle={{ width: "100%", height: "100%" }}
-      options={options}
+      options={mapOptions}
     >
-      <MarkerF position={center} />
+      <MarkerF
+        position={center}
+        options={{
+          icon: {
+            path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+            scale:8,
+            fillColor: "#EC5959",
+            fillOpacity:1,
+            strokeWeight:2,
+            strokeColor:"pink"
+          },
+        }}
+      />
     </GoogleMap>
   );
 }
