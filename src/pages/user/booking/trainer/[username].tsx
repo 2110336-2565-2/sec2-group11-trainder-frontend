@@ -113,7 +113,7 @@ const bookTrainerProfile = () => {
 
           <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
           {/* Information */}
-          <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20 ">
+          <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
             <Skill />
             <div className="w-3/4 h-[36rem]">
               <Map />
