@@ -47,17 +47,19 @@ const bookTrainerProfile = () => {
 
   const Image = () => {
     return (
-      <img
-        src="/default_profile.jpg"
-        alt=""
-        className="rounded-lg object-fill h-1/2  "
-      />
+      <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
+        <img
+          src="/default_profile.jpg"
+          alt=""
+          className="rounded-2xl object-contain w-28 h-28 sm:w-36 sm:h-36 md:w-fit md:h-fit"
+        />
+      </div>
     );
   };
 
   const Name = () => {
     return (
-      <p className="font-lexend-deca text-left text-4xl text-black ">
+      <p className="text-left text-2xl md:text-3xl font-bold">
         {userProfile.firstname} {userProfile.lastname}
       </p>
     );
@@ -65,11 +67,19 @@ const bookTrainerProfile = () => {
 
   const Skill = () => {
     return (
-      <p className="text-start text-xl mt-10 ml-10 mr-10 mb-5">
-        Specialties : {trainerProfile.specialty.join(", ")} <br />
-        Rating: {trainerProfile.rating} <br />
-        Training Fee: {trainerProfile.fee} Baht <br />
-        Area: {userProfile.address} <br />
+      <p className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
+        Specialties :{" "}
+        <span className="font-normal">
+          {trainerProfile.specialty.join(", ")}
+        </span>{" "}
+        <br />
+        Rating: <span className="font-normal">
+          {trainerProfile.rating}
+        </span>{" "}
+        <br />
+        Training Fee:{" "}
+        <span className="font-normal">{trainerProfile.fee} Baht</span> <br />
+        Area: <span className="font-normal">{userProfile.address}</span> <br />
         {/* TODO: show these after traineeCount and certificateUrl are implemented */}
         {/* Currently Training: {trainerProfile.traineeCount} people(s)<br /> */}
         {/* <Link href={trainerProfile.certificateUrl}>Certificate</Link> */}
@@ -84,37 +94,37 @@ const bookTrainerProfile = () => {
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <main className="flex flex-col h-screen">
+    <main className="min-h-screen h-full w-full bg-backgroundColor">
       {!loading && (
-        <div className="flex flex-row h-screen bg-white">
-          <div className="w-2/5 h-full bg-backgroundColor md:flex flex-col items-center">
-            <div className="w-full md:flex flex-row items-center justify-center mt-10 mb-[10%] m-[5%] ">
-              <Link href="/user/booking" className="mr-[5%]">
-                <ArrowLeftIcon className="w-7 h-7"></ArrowLeftIcon>
+        <div className="min-h-screen h-full flex flex-col md:flex-row">
+          {/* Profile image and name */}
+          <div className="flex flex-col w-full md:w-2/5 px-5 md:px-10 pt-20 pb-10">
+            <div className="flex items-center justify-start">
+              <Link href="/user/booking" className="mr-2 md:mr-5">
+                <ArrowLeftIcon
+                  className="h-10 w-10 md:h-12 md:w-12 hover:bg-pink-light rounded-xl p-2"
+                  strokeWidth={3}
+                />
               </Link>
               <Name />
             </div>
             <Image />
-            <div className="flex flex-row mt-5 mx-auto space-x-[10%] justify-center">
-              {/* TODO: When chat and calendar is ready uncomment the link */}
-              {/* <Link href="/user/chat" className="ml-[15%]"> */}
-              <button className="bg-pink text-gray-800 py-2 px-12 rounded shadow whitespace-nowrap">
-                Start Chat
-              </button>
-              {/* </Link> */}
-              {/* <Link href=""> */}
-              <button className="bg-pink text-gray-800 py-2 px-12 rounded shadow ">
-                Calendar
-              </button>
-              {/* </Link> */}
-            </div>
           </div>
 
-          <div className="w-3/5 h-full flex flex-col items-center justify-start">
+          <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
+          {/* Information */}
+          <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20 ">
             <Skill />
-            {/* <div className="p-4">{content}</div> */}
-            <div className="w-3/4 h-1/2">
+            <div className="w-3/4 h-[36rem]">
               <Map />
+            </div>
+            <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
+              <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
+                Start Chat
+              </button>
+              <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
+                Calendar
+              </button>
             </div>
           </div>
         </div>

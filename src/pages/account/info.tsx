@@ -11,6 +11,7 @@ import {
   ChevronDownIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const renderInfoForm = () => {
@@ -102,7 +103,7 @@ const renderInfoForm = () => {
                           name={item.name}
                         >
                           <div className="relative">
-                            <Listbox.Button className="relative w-2/3 md:w-1/3 bg-white rounded-lg text-left py-2 px-3 border border-gray">
+                            <Listbox.Button className="relative w-2/3 md:w-2/5 bg-white rounded-lg text-left py-2 pl-3 pr-10 border border-gray">
                               <span className="block">
                                 {selectedSpec.map((spec) => spec).join(", ")}
                               </span>
@@ -110,7 +111,7 @@ const renderInfoForm = () => {
                                 <ChevronDownIcon className="h-6 w-6" />
                               </span>
                             </Listbox.Button>
-                            <Listbox.Options className="absolute my-2 bg-white w-2/3 md:w-1/3 rounded-lg border border-gray">
+                            <Listbox.Options className="absolute my-2 bg-white w-2/3 md:w-2/5 rounded-lg border border-gray">
                               {item.data?.map((choice: string, index) => (
                                 <Listbox.Option
                                   key={index}
@@ -149,7 +150,7 @@ const renderInfoForm = () => {
                         <>
                           <label
                             htmlFor="display-file"
-                            className={`flex items-center justify-center w-full md:w-2/3 h-48 md:h-64 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
+                            className={`flex items-center justify-center w-full md:w-5/6 h-48 md:h-64 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
                               selectedCertificate ? "" : "opacity-75"
                             } hover:bg-gray-dark hover:opacity-70`}
                           >
@@ -289,24 +290,24 @@ const TrainerInfo = () => {
   return (
     <main className="min-h-screen h-full bg-backgroundColor">
       <div className="flex flex-1 flex-col p-5 md:p-10">
-        <div className="flex items-center mb-10">
-          <a href="/account/profile">
+        <div className="flex items-center mb-3 md:mb-8">
+          <Link href="/account/profile">
             <ArrowLeftIcon
               className="h-10 w-10 md:h-12 md:w-12 hover:bg-pink-light rounded-xl p-2"
               strokeWidth={3}
             />
-          </a>
+          </Link>
           <h1 className="text-xl md:text-3xl mx-5 md:mx-10">
             Your Personal Information
           </h1>
         </div>
         <form
-          className="flex"
+          className="flex flex-col md:flex-row"
           onChange={handleOnChange}
           onSubmit={handleTrainerInfoForm}
         >
           {/* Trainer profile image */}
-          <div className="w-1/3 flex flex-col items-center">
+          <div className="w-full md:w-1/3 flex flex-col items-center mt-4 justify-center md:justify-start">
             <div className="relative h-fit">
               <div className="h-20 w-20 md:h-40 md:w-40 rounded-full bg-blue">
                 {selectedProfileImg ? (
@@ -345,7 +346,7 @@ const TrainerInfo = () => {
             </button>
           </div>
           {/* Information form */}
-          <div className="flex flex-1 flex-col items-start">
+          <div className="flex flex-1 flex-col items-start px-4">
             {renderInfoForm()}
             <div className="inline-flex items-center">
               <button
