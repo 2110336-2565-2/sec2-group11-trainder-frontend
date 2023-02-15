@@ -25,7 +25,10 @@ const TrainerFilter = () => {
     filterTrainer({
       limit: 10,
       specialty: specialtiesFilter,
-    } as FilterInput).then((res) => setTrainerProfiles(res));
+    } as FilterInput).then((res) => {
+      // console.log(res);
+      setTrainerProfiles(res);
+    });
   }, [specialtiesFilter]);
 
   const handleFormChange = (e: React.FormEvent<HTMLFormElement>) => {
@@ -177,12 +180,18 @@ const TrainerFilter = () => {
                           {trainerProfile.firstname} {trainerProfile.lastname} (
                           {trainerProfile.username})
                         </p>
-                        <p className="text-blue-dark">
-                          Specialties:{" "}
-                          <span className="text-black">
-                            {trainerProfile.trainerInfo.specialty.join(", ")}{" "}
-                          </span>
-                        </p>
+                        {/* Only show specialties in case it exists */}
+                        {trainerProfile.trainerInfo.specialty != null &&
+                          trainerProfile.trainerInfo.specialty.length != 0 && (
+                            <p className="text-blue-dark">
+                              Specialties:{" "}
+                              <span className="text-black">
+                                {trainerProfile.trainerInfo.specialty.join(
+                                  ", "
+                                )}{" "}
+                              </span>
+                            </p>
+                          )}
                         <div className="flex flex-row">
                           <p className="text-blue-dark">
                             Rating:{" "}
