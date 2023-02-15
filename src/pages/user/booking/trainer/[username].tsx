@@ -36,7 +36,6 @@ const bookTrainerProfile = () => {
           setLoading(true);
           setUserProfile(res.userProfile);
           setTrainerProfile(res.trainerProfile);
-          console.log(res.trainerProfile);
           setLoading(false);
         })
         .catch(() => router.back());

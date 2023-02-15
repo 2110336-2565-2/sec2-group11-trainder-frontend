@@ -26,7 +26,6 @@ const TrainerFilter = () => {
       limit: 10,
       specialty: specialtiesFilter,
     } as FilterInput).then((res) => {
-      // console.log(res);
       setTrainerProfiles(res);
     });
   }, [specialtiesFilter]);
