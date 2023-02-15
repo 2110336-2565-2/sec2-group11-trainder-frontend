@@ -28,6 +28,13 @@ export default function Map() {
         strokeWeight: 2,
         strokeColor: "pink",
       },
+      label: {
+        text: "Me",
+        color: "#EC5959",
+        fontFamily: "Lexend Deca",
+        fontSize: "1em",
+        fontWeight: "bold",
+      },
     }),
     []
   );
