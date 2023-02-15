@@ -11,8 +11,7 @@ const bookTrainerProfile = () => {
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
   const [userAddress, setUserAddress] = useState<string>("");
-
-  const [userProfile, setUserProfile] = useState<UserProfile>({
+  const [trainerProfile, setTrainerProfile] = useState<UserProfile>({
     username: "user",
     firstname: "firstname",
     lastname: "lastname",
@@ -23,7 +22,7 @@ const bookTrainerProfile = () => {
     address: "none",
     usertype: "none",
   });
-  const [trainerProfile, setTrainerProfile] = useState<TrainerProfile>({
+  const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
     specialty: [],
     rating: 0,
     fee: 0,
@@ -36,8 +35,8 @@ const bookTrainerProfile = () => {
       getTrainerProfile(username)
         .then((res) => {
           setLoading(true);
-          setUserProfile(res.userProfile);
-          setTrainerProfile(res.trainerProfile);
+          setTrainerProfile(res.userProfile);
+          setTrainerInfo(res.trainerProfile);
         })
         .catch(() => router.back());
       getCurrentUserProfile().then((data) => {
@@ -64,7 +63,7 @@ const bookTrainerProfile = () => {
   const Name = () => {
     return (
       <p className="text-left text-2xl md:text-3xl font-bold">
-        {userProfile.firstname} {userProfile.lastname}
+        {trainerProfile.firstname} {trainerProfile.lastname}
       </p>
     );
   };
@@ -72,35 +71,34 @@ const bookTrainerProfile = () => {
   const Skill = () => {
     return (
       <p className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
-        {trainerProfile.specialty !== null &&
-          trainerProfile.specialty.length > 0 && (
-            <div>
-              Specialties :{" "}
-              <span className="font-normal">
-                {trainerProfile.specialty.join(", ")}
-              </span>{" "}
-              <br />
-            </div>
-          )}
+        {trainerInfo.specialty !== null && trainerInfo.specialty.length > 0 && (
+          <div>
+            Specialties :{" "}
+            <span className="font-normal">
+              {trainerInfo.specialty.join(", ")}
+            </span>{" "}
+            <br />
+          </div>
+        )}
         <div>
-          Rating: <span className="font-normal">{trainerProfile.rating}</span>{" "}
+          Rating: <span className="font-normal">{trainerInfo.rating}</span>{" "}
           <br />
         </div>
         <div>
           Training Fee:{" "}
-          <span className="font-normal">{trainerProfile.fee} Baht</span>
+          <span className="font-normal">{trainerInfo.fee} Baht</span>
           <br />
         </div>
         <div>
-          Area: <span className="font-normal">{userProfile.address}</span>{" "}
+          Area: <span className="font-normal">{trainerProfile.address}</span>{" "}
           <br />
         </div>
         <div>
           Currently Training:{" "}
           <span className="font-normal">
-            {trainerProfile.traineeCount.toString() +
+            {trainerInfo.traineeCount.toString() +
               " Person" +
-              (trainerProfile.traineeCount == 1 ? " " : "s")}
+              (trainerInfo.traineeCount == 1 ? " " : "s")}
             {/* {trainerProfile.traineeCount > 0
               ? trainerProfile.traineeCount.toString() +
                 " Person" +
