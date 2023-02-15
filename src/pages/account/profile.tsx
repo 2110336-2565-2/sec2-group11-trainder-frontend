@@ -37,8 +37,7 @@ const profile = () => {
     );
   };
   const getGender = () => {
-    const genderFirst = profile?.gender[0].toUpperCase();
-    const gender = genderFirst! + profile?.gender.slice(1);
+    const gender = (profile?.gender[0].toUpperCase() ?? "") + (profile?.gender.slice(1) ?? "");
     return (
       <div>
         Gender: <strong>{gender}</strong>
@@ -71,10 +70,10 @@ const profile = () => {
     );
   };
   return (
-    <main className="bg-blue h-screen flex flex-col">
-      <div className="flex flex-1 justify-center items-center">
-        <div className="container bg-backgroundColor rounded-3xl drop-shadow-lg w-1/2 p-8 animate-fade">
-          <div className="text-4xl text-center">
+    <main className="bg-blue min-h-screen h-full flex">
+      <div className="flex flex-1 justify-center items-center mt-10">
+        <div className="flex flex-col items-center bg-backgroundColor rounded-3xl drop-shadow-lg w-5/6 md:w-2/3 xl:w-1/2 py-5 px-6 md:px-10 animate-fade">
+          <div className="text-2xl md:text-3xl lg:text-4xl text-center">
             <p>
               Hello,{" "}
               <strong>
@@ -83,10 +82,10 @@ const profile = () => {
             </p>
           </div>
           <div className="py-6">
-            <img src="../trainder_icon.png" alt="" className="w-1/3 mx-auto" />
+            <img src="../trainder_icon.png" alt="" className="w-1/2 md:w-2/3 mx-auto" />
           </div>
-          <div className=" container bg-white p-10 rounded-3xl w-5/6 mx-auto">
-            <div className="columns-2 text-xl">
+          <div className="bg-white py-8 px-10 rounded-3xl w-fit flex justify-center">
+            <div className="columns-1 sm:columns-2 text-lg md:text-xl">
               {getID()}
               {getBirthDate()}
               {getGender()}
@@ -98,7 +97,7 @@ const profile = () => {
             <div className="container w-full mx-auto flex justify-center mt-6">
               <Link
                 href="/account/info"
-                className=" bg-pink hover:bg-pink-dark text-white shadow rounded-xl px-6 py-2"
+                className=" bg-pink hover:bg-pink-dark text-white text-center shadow rounded-xl px-6 py-2"
               >
                 Update Trainer Information
               </Link>
