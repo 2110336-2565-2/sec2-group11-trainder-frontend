@@ -12,7 +12,7 @@ export default function Map() {
 
   const options = useMemo<MapOptions>(
     () => ({
-      mapId: "1fdb010b501188ea",
+      mapId: "ddb903d68666fa6c",
     }),
     []
   );
