@@ -36,7 +36,6 @@ const bookTrainerProfile = () => {
           setLoading(true);
           setUserProfile(res.userProfile);
           setTrainerProfile(res.trainerProfile);
-          console.log(res.trainerProfile);
           setLoading(false);
         })
         .catch(() => router.back());
@@ -68,24 +67,50 @@ const bookTrainerProfile = () => {
   const Skill = () => {
     return (
       <p className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
-        Specialties :{" "}
-        <span className="font-normal">
-          {trainerProfile.specialty.join(", ")}
-        </span>{" "}
-        <br />
-        Rating: <span className="font-normal">
-          {trainerProfile.rating}
-        </span>{" "}
-        <br />
-        Training Fee:{" "}
-        <span className="font-normal">{trainerProfile.fee} Baht</span> <br />
-        Area: <span className="font-normal">{userProfile.address}</span> <br />
-        {/* TODO: show these after traineeCount and certificateUrl are implemented */}
-        {/* Currently Training: {trainerProfile.traineeCount} people(s)<br /> */}
+        {trainerProfile.specialty !== null &&
+          trainerProfile.specialty.length > 0 && (
+            <div>
+              Specialties :{" "}
+              <span className="font-normal">
+                {trainerProfile.specialty.join(", ")}
+              </span>{" "}
+              <br />
+            </div>
+          )}
+        <div>
+          Rating: <span className="font-normal">{trainerProfile.rating}</span>{" "}
+          <br />
+        </div>
+        <div>
+          Training Fee:{" "}
+          <span className="font-normal">{trainerProfile.fee} Baht</span>
+          <br />
+        </div>
+        <div>
+          Area: <span className="font-normal">{userProfile.address}</span>{" "}
+          <br />
+        </div>
+        <div>
+          Currently Training:{" "}
+          <span className="font-normal">
+            {trainerProfile.traineeCount.toString() +
+              " Person" +
+              (trainerProfile.traineeCount == 1 ? " " : "s")}
+            {/* {trainerProfile.traineeCount > 0
+              ? trainerProfile.traineeCount.toString() +
+                " Person" +
+                (trainerProfile.traineeCount == 1 ? " " : "s")
+              : "Not training anyone"} */}
+          </span>
+          <br />
+        </div>
+
+        {/* TODO: show this after certificateUrl are implemented */}
         {/* <Link href={trainerProfile.certificateUrl}>Certificate</Link> */}
       </p>
     );
   };
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
       ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY

@@ -88,6 +88,9 @@ export const getCurrentTrainerInfo = () => {
     })
     .then((response) => {
       const info = response.data.trainerInfo as TrainerProfile;
+      if (info.specialty === null) {
+        info.specialty = [];
+      }
       return info;
     })
     .catch((error) => {
