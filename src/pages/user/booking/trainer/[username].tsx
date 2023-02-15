@@ -4,6 +4,8 @@ import { UserProfile } from "@/services/user.service";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
+import { useLoadScript } from "@react-google-maps/api";
+import Map from "@/components/map";
 const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
@@ -84,6 +86,12 @@ const bookTrainerProfile = () => {
       </p>
     );
   };
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      : "",
+  });
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <main className="min-h-screen h-full w-full bg-backgroundColor">
@@ -102,26 +110,21 @@ const bookTrainerProfile = () => {
             </div>
             <Image />
           </div>
+
           <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
           {/* Information */}
-          <div className="w-full md:w-3/5 min-h-full md:min-h-screen h-full bg-transparent md:bg-white flex flex-col items-center md:items-stretch pt-0 md:pt-20 pb-10">
+          <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
             <Skill />
-            {/* <div className="p-4">{content}</div> */}
-            <div className="flex w-full justify-center">
-              <img src="/demo_map.png" className="rounded-lg w-5/6"></img>
+            <div className="w-3/4 h-[36rem]">
+              <Map />
             </div>
-            <div className="flex mt-10 justify-around w-full">
-              {/* TODO: When chat and calendar is ready uncomment the link */}
-              {/* <Link href="/user/chat" className="ml-[15%]"> */}
+            <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
               <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
                 Start Chat
               </button>
-              {/* </Link> */}
-              {/* <Link href=""> */}
               <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
                 Calendar
               </button>
-              {/* </Link> */}
             </div>
           </div>
         </div>
