@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { UserProfile } from "@/services/user.service";
+import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useLoadScript } from "@react-google-maps/api";
-import Map from "@/components/map";
+import { getGeocode, getLatLng } from "use-places-autocomplete";
+import Map, { LatLngLiteral } from "@/components/map";
 const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
-  const [userProfile, setUserProfile] = useState<UserProfile>({
+  const [userCoordinate, setUserCoordinate] = useState<LatLngLiteral>({
+    lat: 0,
+    lng: 0,
+  });
+  const [trainerCoordinate, setTrainerCoordinate] = useState<LatLngLiteral>({
+    lat: 0,
+    lng: 0,
+  });
+  const [trainerProfile, setTrainerProfile] = useState<UserProfile>({
     username: "user",
     firstname: "firstname",
     lastname: "lastname",
@@ -21,7 +30,7 @@ const bookTrainerProfile = () => {
     address: "none",
     usertype: "none",
   });
-  const [trainerProfile, setTrainerProfile] = useState<TrainerProfile>({
+  const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
     specialty: [],
     rating: 0,
     fee: 0,
@@ -34,8 +43,22 @@ const bookTrainerProfile = () => {
       getTrainerProfile(username)
         .then((res) => {
           setLoading(true);
-          setUserProfile(res.userProfile);
-          setTrainerProfile(res.trainerProfile);
+          setTrainerProfile(res.userProfile);
+          setTrainerInfo(res.trainerProfile);
+          getGeocode({ address: res.userProfile.address }).then((results) => {
+            const { lat, lng } = getLatLng(results[0]);
+            setTrainerCoordinate({ lat, lng });
+          });
+          setLoading(false);
+        })
+        .catch(() => router.back());
+      getCurrentUserProfile()
+        .then((data) => {
+          setLoading(true);
+          getGeocode({ address: data.address }).then((results) => {
+            const { lat, lng } = getLatLng(results[0]);
+            setUserCoordinate({ lat, lng });
+          });
           setLoading(false);
         })
         .catch(() => router.back());
@@ -59,7 +82,7 @@ const bookTrainerProfile = () => {
   const Name = () => {
     return (
       <p className="text-left text-2xl md:text-3xl font-bold">
-        {userProfile.firstname} {userProfile.lastname}
+        {trainerProfile.firstname} {trainerProfile.lastname}
       </p>
     );
   };
@@ -67,35 +90,34 @@ const bookTrainerProfile = () => {
   const Skill = () => {
     return (
       <p className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
-        {trainerProfile.specialty !== null &&
-          trainerProfile.specialty.length > 0 && (
-            <div>
-              Specialties :{" "}
-              <span className="font-normal">
-                {trainerProfile.specialty.join(", ")}
-              </span>{" "}
-              <br />
-            </div>
-          )}
+        {trainerInfo.specialty !== null && trainerInfo.specialty.length > 0 && (
+          <div>
+            Specialties :{" "}
+            <span className="font-normal">
+              {trainerInfo.specialty.join(", ")}
+            </span>{" "}
+            <br />
+          </div>
+        )}
         <div>
-          Rating: <span className="font-normal">{trainerProfile.rating}</span>{" "}
+          Rating: <span className="font-normal">{trainerInfo.rating}</span>{" "}
           <br />
         </div>
         <div>
           Training Fee:{" "}
-          <span className="font-normal">{trainerProfile.fee} Baht</span>
+          <span className="font-normal">{trainerInfo.fee} Baht</span>
           <br />
         </div>
         <div>
-          Area: <span className="font-normal">{userProfile.address}</span>{" "}
+          Area: <span className="font-normal">{trainerProfile.address}</span>{" "}
           <br />
         </div>
         <div>
           Currently Training:{" "}
           <span className="font-normal">
-            {trainerProfile.traineeCount.toString() +
+            {trainerInfo.traineeCount.toString() +
               " Person" +
-              (trainerProfile.traineeCount == 1 ? " " : "s")}
+              (trainerInfo.traineeCount == 1 ? " " : "s")}
             {/* {trainerProfile.traineeCount > 0
               ? trainerProfile.traineeCount.toString() +
                 " Person" +
@@ -117,7 +139,6 @@ const bookTrainerProfile = () => {
       : "",
   });
   if (!isLoaded) return <div>Loading...</div>;
-
   return (
     <main className="min-h-screen h-full w-full bg-backgroundColor">
       {!loading && (
@@ -141,7 +162,10 @@ const bookTrainerProfile = () => {
           <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
             <Skill />
             <div className="w-3/4 h-[36rem]">
-              <Map />
+              <Map
+                userCoordinate={userCoordinate}
+                trainerCoordinate={trainerCoordinate}
+              />
             </div>
             <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
               <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">

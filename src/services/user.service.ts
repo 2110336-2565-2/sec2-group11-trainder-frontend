@@ -1,6 +1,5 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-import { TrainerProfile } from "./trainer.service";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
