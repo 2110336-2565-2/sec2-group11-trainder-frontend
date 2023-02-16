@@ -4,7 +4,6 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api";
 export type LatLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 type MarkerOptions = google.maps.MarkerOptions;
-type DirectionResult = google.maps.DirectionsResult;
 type MapProps = {
   userCoordinate: LatLngLiteral;
   trainerCoordinate: LatLngLiteral;
@@ -19,7 +18,7 @@ export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
     []
   );
 
-  const markerOptions = useMemo<MarkerOptions>(
+  const userMarkerOptions = useMemo<MarkerOptions>(
     () => ({
       icon: {
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
@@ -39,16 +38,37 @@ export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
     }),
     []
   );
+  const trainerMarkerOptions = useMemo<MarkerOptions>(
+    () => ({
+      icon: {
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        scale: 8,
+        fillColor: "black",
+        fillOpacity: 1,
+        strokeWeight: 2,
+        strokeColor: "pink",
+      },
+      label: {
+        text: "Trainer",
+        color: "#EC5959",
+        fontFamily: "Lexend Deca",
+        fontSize: "1em",
+        fontWeight: "bold",
+      },
+    }),
+    []
+  );
+  console.log(trainerCoordinate);
   return (
     <>
       <GoogleMap
-        zoom={14}
-        center={userCoordinate}
+        zoom={10}
+        center={trainerCoordinate}
         mapContainerStyle={{ width: "100%", height: "100%" }}
         options={mapOptions}
       >
-        <MarkerF position={userCoordinate} options={markerOptions} />
-        <MarkerF position={trainerCoordinate} />
+        <MarkerF position={trainerCoordinate} options={trainerMarkerOptions} />
+        <MarkerF position={userCoordinate} options={userMarkerOptions} />
       </GoogleMap>
     </>
   );
