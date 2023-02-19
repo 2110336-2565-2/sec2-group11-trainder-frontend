@@ -138,46 +138,44 @@ const bookTrainerProfile = () => {
       ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
       : "",
   });
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded || loading) return <div>Loading...</div>;
   return (
     <main className="min-h-screen h-full w-full bg-backgroundColor">
-      {!loading && (
-        <div className="min-h-screen h-full flex flex-col md:flex-row">
-          {/* Profile image and name */}
-          <div className="flex flex-col w-full md:w-2/5 px-5 md:px-10 pt-20 pb-10">
-            <div className="flex items-center justify-start">
-              <Link href="/user/booking" className="mr-2 md:mr-5">
-                <ArrowLeftIcon
-                  className="h-10 w-10 md:h-12 md:w-12 hover:bg-pink-light rounded-xl p-2"
-                  strokeWidth={3}
-                />
-              </Link>
-              <Name />
-            </div>
-            <Image />
-          </div>
-
-          <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
-          {/* Information */}
-          <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
-            <Skill />
-            <div className="w-3/4 h-[36rem]">
-              <Map
-                userCoordinate={userCoordinate}
-                trainerCoordinate={trainerCoordinate}
+      <div className="min-h-screen h-full flex flex-col md:flex-row">
+        {/* Profile image and name */}
+        <div className="flex flex-col w-full md:w-2/5 px-5 md:px-10 pt-20 pb-10">
+          <div className="flex items-center justify-start">
+            <Link href="/user/booking" className="mr-2 md:mr-5">
+              <ArrowLeftIcon
+                className="h-10 w-10 md:h-12 md:w-12 hover:bg-pink-light rounded-xl p-2"
+                strokeWidth={3}
               />
-            </div>
-            <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
-              <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
-                Start Chat
-              </button>
-              <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
-                Calendar
-              </button>
-            </div>
+            </Link>
+            <Name />
+          </div>
+          <Image />
+        </div>
+
+        <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
+        {/* Information */}
+        <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
+          <Skill />
+          <div className="w-3/4 h-[36rem]">
+            <Map
+              userCoordinate={userCoordinate}
+              trainerCoordinate={trainerCoordinate}
+            />
+          </div>
+          <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
+            <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
+              Start Chat
+            </button>
+            <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
+              Calendar
+            </button>
           </div>
         </div>
-      )}
+      </div>
     </main>
   );
 };
