@@ -20,45 +20,30 @@ export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
     []
   );
 
+  const markerOptions = (fillColor: string, label: string) => ({
+    icon: {
+      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+      scale: 8,
+      fillColor,
+      fillOpacity: 1,
+      strokeWeight: 2,
+      strokeColor: "pink",
+    },
+    label: {
+      text: label,
+      color: "#EC5959",
+      fontFamily: "Lexend Deca",
+      fontSize: "1em",
+      fontWeight: "bold",
+    },
+  });
+
   const userMarkerOptions = useMemo<MarkerOptions>(
-    () => ({
-      icon: {
-        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        scale: 8,
-        fillColor: "#EC5959",
-        fillOpacity: 1,
-        strokeWeight: 2,
-        strokeColor: "pink",
-      },
-      label: {
-        text: "Me",
-        color: "#EC5959",
-        fontFamily: "Lexend Deca",
-        fontSize: "1em",
-        fontWeight: "bold",
-      },
-    }),
+    () => markerOptions("#EC5959", "Me"),
     []
   );
-
   const trainerMarkerOptions = useMemo<MarkerOptions>(
-    () => ({
-      icon: {
-        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        scale: 8,
-        fillColor: "black",
-        fillOpacity: 1,
-        strokeWeight: 2,
-        strokeColor: "pink",
-      },
-      label: {
-        text: "Trainer",
-        color: "#EC5959",
-        fontFamily: "Lexend Deca",
-        fontSize: "1em",
-        fontWeight: "bold",
-      },
-    }),
+    () => markerOptions("black", "Trainer"),
     []
   );
 
