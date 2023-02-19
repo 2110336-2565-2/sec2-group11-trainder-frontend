@@ -23,7 +23,7 @@ export default function Places() {
   }, []);
 
   return (
-    <div>
+    <>
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -45,6 +45,6 @@ export default function Places() {
             </div>
           ))}
       </div>
-    </div>
+    </>
   );
 }
