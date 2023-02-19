@@ -1,9 +1,10 @@
-import { useMemo } from "react";
-import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { useEffect, useMemo, useState } from "react";
+import { DirectionsRenderer, GoogleMap, MarkerF } from "@react-google-maps/api";
 
 export type LatLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 type MarkerOptions = google.maps.MarkerOptions;
+type DirectionsResult = google.maps.DirectionsResult;
 type MapProps = {
   userCoordinate: LatLngLiteral;
   trainerCoordinate: LatLngLiteral;
@@ -11,6 +12,8 @@ type MapProps = {
 
 export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
   console.log(userCoordinate, trainerCoordinate);
+  const [directions, setDirections] = useState<DirectionsResult>();
+
   const mapOptions = useMemo<MapOptions>(
     () => ({
       mapId: "ddb903d68666fa6c",
@@ -38,6 +41,7 @@ export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
     }),
     []
   );
+
   const trainerMarkerOptions = useMemo<MarkerOptions>(
     () => ({
       icon: {
@@ -58,7 +62,23 @@ export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
     }),
     []
   );
-  console.log(trainerCoordinate);
+
+  useEffect(() => {
+    const service = new google.maps.DirectionsService();
+    service.route(
+      {
+        origin: userCoordinate,
+        destination: trainerCoordinate,
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirections(result);
+        }
+      }
+    );
+  }, [userCoordinate, trainerCoordinate]);
+
   return (
     <>
       <GoogleMap
@@ -69,6 +89,19 @@ export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
       >
         <MarkerF position={trainerCoordinate} options={trainerMarkerOptions} />
         <MarkerF position={userCoordinate} options={userMarkerOptions} />
+        {directions && (
+          <DirectionsRenderer
+            directions={directions}
+            options={{
+              polylineOptions: {
+                zIndex: 50,
+                strokeColor: "#EC5959",
+                strokeWeight: 5,
+              },
+              suppressMarkers: true,
+            }}
+          />
+        )}
       </GoogleMap>
     </>
   );
