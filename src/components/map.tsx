@@ -11,7 +11,6 @@ type MapProps = {
 };
 
 export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
-  console.log(userCoordinate, trainerCoordinate);
   const [directions, setDirections] = useState<DirectionsResult>();
 
   const mapOptions = useMemo<MapOptions>(
@@ -96,13 +95,23 @@ export default function Map({ userCoordinate, trainerCoordinate }: MapProps) {
               polylineOptions: {
                 zIndex: 50,
                 strokeColor: "#EC5959",
-                strokeWeight: 5,
+                strokeWeight: 3,
               },
               suppressMarkers: true,
             }}
           />
         )}
       </GoogleMap>
+      {directions &&
+        directions.routes[0].legs[0].distance &&
+        directions.routes[0].legs[0].duration && (
+          <>
+            <div>
+              distance: {directions.routes[0].legs[0].distance.text} | duration:{" "}
+              {directions.routes[0].legs[0].duration.text}{" "}
+            </div>
+          </>
+        )}
     </>
   );
 }
