@@ -161,7 +161,6 @@ export default function Signup() {
       const formData = e.target as typeof e.target & RegistrationFormInput;
       const results = await getGeocode({ address: formData.address.value });
       const { lat, lng } = await getLatLng(results[0]);
-      console.log(lat, lng);
       register({
         username: formData.username.value,
         password: formData.password.value,
@@ -173,6 +172,8 @@ export default function Signup() {
         phoneNumber: formData.phoneNumber.value,
         gender: formData.gender.value,
         address: formData.address.value,
+        lat: lat,
+        lng: lng,
       } as RegistrationData)
         .then(() => {
           // TODO: Show registration successful, wait a bit, then redirect back to login.
