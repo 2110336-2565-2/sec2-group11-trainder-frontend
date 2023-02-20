@@ -10,7 +10,6 @@ type MapProps = {
 export default function Map({ trainerCoordinate }: MapProps) {
   const mapOptions = useMemo<MapOptions>(
     () => ({
-      mapId: "ddb903d68666fa6c",
       streetViewControl: false,
       clickableIcons: false,
       disableDefaultUI: true,

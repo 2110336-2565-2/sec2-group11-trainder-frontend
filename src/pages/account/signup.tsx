@@ -160,7 +160,7 @@ export default function Signup() {
       e.preventDefault();
       const formData = e.target as typeof e.target & RegistrationFormInput;
       const results = await getGeocode({ address: formData.address.value });
-      const { lat, lng } = await getLatLng(results[0]);
+      const { lat, lng } = getLatLng(results[0]);
       register({
         username: formData.username.value,
         password: formData.password.value,
