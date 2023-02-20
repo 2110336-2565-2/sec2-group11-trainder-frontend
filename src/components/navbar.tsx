@@ -52,7 +52,7 @@ export const NavBar = () => {
 
   return (
     <>
-      <Disclosure as="nav" className="bg-blue absolute w-full z-10">
+      <Disclosure as="nav" className="bg-blue fixed w-full z-10">
         {({ open }) => (
           <>
             <div className="mx-auto px-2 sm:px-6 lg:px-8">
