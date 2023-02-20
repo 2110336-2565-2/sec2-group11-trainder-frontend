@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 import Places from "@/components/places";
 import { useLoadScript } from "@react-google-maps/api";
 import { Dropdown } from "@/components/dropdown";
+import { getGeocode, getLatLng } from "use-places-autocomplete";
 
 type RegistrationFormInput = {
   username: { value: string };
@@ -19,10 +20,12 @@ type RegistrationFormInput = {
   phoneNumber: { value: string };
   gender: { value: string };
   address: { value: string };
-  postalCode: { value: string };
 };
 
 export default function Signup() {
+  const router = useRouter();
+  const [selectedUserType, setSelectedUserType] = useState<string>("");
+  const [selectedGender, setSelectedGender] = useState<string>("");
   const renderForm = (i: number) => {
     type Fields = {
       placeholder: string;
@@ -87,19 +90,6 @@ export default function Signup() {
           choices: ["Gender", "Male", "Female", "Other"],
         },
       ],
-      [
-        {
-          placeholder: "House No. & Street",
-          name: "address",
-          type: "text",
-        },
-        {
-          placeholder: "Postal code",
-          name: "postalCode",
-          type: "text",
-          pattern: "[0-9]{5}",
-        },
-      ],
     ];
 
     return (
@@ -152,15 +142,13 @@ export default function Signup() {
       </>
     );
   };
-  const router = useRouter();
-  const [selectedUserType, setSelectedUserType] = useState<string>("");
-  const [selectedGender, setSelectedGender] = useState<string>("");
 
   const handleRegistrationForm = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = e.target as typeof e.target & RegistrationFormInput;
-      // TODO: Refactor this I think there is a better way to do this.
+      const results = await getGeocode({ address: formData.address.value });
+      const { lat, lng } = await getLatLng(results[0]);
       register({
         username: formData.username.value,
         password: formData.password.value,
@@ -172,6 +160,8 @@ export default function Signup() {
         phoneNumber: formData.phoneNumber.value,
         gender: formData.gender.value,
         address: formData.address.value,
+        lat: lat,
+        lng: lng,
       } as RegistrationData)
         .then(() => {
           // TODO: Show registration successful, wait a bit, then redirect back to login.
@@ -194,6 +184,7 @@ export default function Signup() {
     },
     []
   );
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
       ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY

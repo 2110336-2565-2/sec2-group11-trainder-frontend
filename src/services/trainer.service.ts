@@ -4,7 +4,6 @@ import { UserProfile } from "./user.service";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
-
 export type TrainerProfile = {
   specialty: string[];
   rating: number;
@@ -12,10 +11,18 @@ export type TrainerProfile = {
   traineeCount: number;
   certificateUrl: string;
 };
-
 export type FilterInput = {
   limit: number;
   specialty: string[];
+};
+export type FilteredTrainerProfile = {
+  address: string;
+  avatarUrl: string;
+  firstname: string;
+  gender: string;
+  lastname: string;
+  trainerInfo: TrainerProfile;
+  username: string;
 };
 
 export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
@@ -26,16 +33,6 @@ export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
     .catch((error) => {
       throw error;
     });
-};
-
-export type FilteredTrainerProfile = {
-  address: string;
-  avatarUrl: string;
-  firstname: string;
-  gender: string;
-  lastname: string;
-  trainerInfo: TrainerProfile;
-  username: string;
 };
 
 export const filterTrainer = (
