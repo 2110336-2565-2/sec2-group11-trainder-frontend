@@ -1,8 +1,5 @@
 import { useCallback } from "react";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
+import usePlacesAutocomplete from "use-places-autocomplete";
 
 export default function Places() {
   const {
@@ -16,10 +13,6 @@ export default function Places() {
   const onSuggestionClick = useCallback((description: string) => {
     setValue(description, false);
     clearSuggestions();
-    getGeocode({ address: description }).then((results) => {
-      const { lat, lng } = getLatLng(results[0]);
-      console.log("📍 Coordinates: ", { lat, lng });
-    });
   }, []);
 
   return (
