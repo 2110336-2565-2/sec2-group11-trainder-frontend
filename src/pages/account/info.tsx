@@ -1,3 +1,4 @@
+import { Dropdown } from "@/components/dropdown";
 import {
   getCurrentTrainerInfo,
   TrainerProfile,
@@ -96,54 +97,14 @@ const renderInfoForm = () => {
                   switch (item.type) {
                     case "select":
                       return (
-                        <Listbox
+                        <Dropdown
+                          name={item.name}
                           value={selectedSpec}
                           onChange={handleSpecialtyChange}
-                          multiple
-                          name={item.name}
-                        >
-                          <div className="relative">
-                            <Listbox.Button className="relative w-2/3 md:w-2/5 bg-white rounded-lg text-left py-2 pl-3 pr-10 border border-gray">
-                              <span className="block">
-                                {selectedSpec.map((spec) => spec).join(", ")}
-                              </span>
-                              <span className="absolute inset-y-0 right-0 flex items-center pr-2">
-                                <ChevronDownIcon className="h-6 w-6" />
-                              </span>
-                            </Listbox.Button>
-                            <Listbox.Options className="absolute my-2 bg-white w-2/3 md:w-2/5 rounded-lg border border-gray">
-                              {item.data?.map((choice: string, index) => (
-                                <Listbox.Option
-                                  key={index}
-                                  value={choice}
-                                  disabled={index == 0 ? true : false}
-                                  hidden={index == 0 ? true : false}
-                                  className="py-2 px-3 hover:bg-blue rounded-md hover:text-white hover:cursor-pointer"
-                                >
-                                  {({ selected }) => (
-                                    <div className="inline-flex items-center">
-                                      {selected ? (
-                                        <CheckIcon
-                                          className="h-6 w-6 pr-2"
-                                          strokeWidth={3}
-                                        />
-                                      ) : (
-                                        <div className="h-6 w-6 pr-2"></div>
-                                      )}
-                                      <p
-                                        className={`${
-                                          selected ? "font-bold" : ""
-                                        }`}
-                                      >
-                                        {choice}
-                                      </p>
-                                    </div>
-                                  )}
-                                </Listbox.Option>
-                              ))}
-                            </Listbox.Options>
-                          </div>
-                        </Listbox>
+                          options={item.data ?? []}
+                          multiple={true}
+                          width="w-full lg:w-2/5 md:w-3/5"
+                        />
                       );
                     case "file":
                       return (
