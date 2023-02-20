@@ -44,7 +44,7 @@ export const Dropdown = (props: DropdownProps) => {
           <Listbox.Options
             className={`absolute my-2 bg-white ${
               props.width ?? "w-full"
-            } rounded-xl border border-gray`}
+            } rounded-xl border border-gray shadow-xl z-10`}
           >
             {props.options.map((choice: string, index) => (
               <Listbox.Option
