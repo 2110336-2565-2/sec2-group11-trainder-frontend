@@ -15,6 +15,8 @@ export type UserProfile = {
   phoneNumber: string;
   address: string;
   usertype: string;
+  lat: number;
+  lng: number;
 };
 
 export const getCurrentUserProfile = () => {

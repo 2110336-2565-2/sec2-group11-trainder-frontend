@@ -25,6 +25,8 @@ const bookTrainerProfile = () => {
     phoneNumber: "none",
     address: "none",
     usertype: "none",
+    lat: 0,
+    lng: 0,
   });
   const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
     specialty: [],
@@ -41,9 +43,9 @@ const bookTrainerProfile = () => {
           setLoading(true);
           setTrainerProfile(res.userProfile);
           setTrainerInfo(res.trainerProfile);
-          getGeocode({ address: res.userProfile.address }).then((results) => {
-            const { lat, lng } = getLatLng(results[0]);
-            setTrainerCoordinate({ lat, lng });
+          setTrainerCoordinate({
+            lat: res.userProfile.lat,
+            lng: res.userProfile.lng,
           });
           setLoading(false);
         })
