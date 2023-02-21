@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import React, { useState } from "react";
 import { generateDate, months } from "@/util/calendar";
 import cn from "@/util/cn";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 export default function Calendar() {
   const days = ["S", "M", "T", "W", "T", "F", "S"];
@@ -17,12 +16,24 @@ export default function Calendar() {
             {months[today.month()]}, {today.year()}
           </h1>
           <div className="flex gap-10 items-center ">
-            <GrFormPrevious
-              className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              className="w-6 h-6 hover:cursor-pointer hover:scale-105 transition-all"
+              stroke="currentColor"
               onClick={() => {
                 setToday(today.month(today.month() - 1));
               }}
-            />
+            >
+              {" "}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
             <h1
               className=" cursor-pointer hover:scale-105 transition-all"
               onClick={() => {
@@ -31,12 +42,23 @@ export default function Calendar() {
             >
               Today
             </h1>
-            <GrFormNext
-              className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 hover:cursor-pointer hover:scale-105 transition-all"
               onClick={() => {
                 setToday(today.month(today.month() + 1));
               }}
-            />
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
           </div>
         </div>
         <div className="grid grid-cols-7 ">
