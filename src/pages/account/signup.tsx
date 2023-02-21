@@ -1,15 +1,12 @@
 import { register } from "@/services/auth.service";
 import type { RegistrationData } from "@/services/auth.service";
-import {
-  ChevronDownIcon,
-  LockClosedIcon,
-  UserCircleIcon,
-} from "@heroicons/react/24/outline";
+import { LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import Places from "@/components/places";
 import { useLoadScript } from "@react-google-maps/api";
+import { Dropdown } from "@/components/dropdown";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 
 type RegistrationFormInput = {
@@ -27,8 +24,8 @@ type RegistrationFormInput = {
 
 export default function Signup() {
   const router = useRouter();
-  const [selectedUserType, setSelectedUserType] = useState<string>();
-  const [selectedGender, setSelectedGender] = useState<string>();
+  const [selectedUserType, setSelectedUserType] = useState<string>("");
+  const [selectedGender, setSelectedGender] = useState<string>("");
   const renderForm = (i: number) => {
     type Fields = {
       placeholder: string;
@@ -67,7 +64,7 @@ export default function Signup() {
           placeholder: "User Type",
           name: "userType",
           type: "select",
-          choices: ["Trainer", "Trainee"],
+          choices: ["User Type", "Trainer", "Trainee"],
         },
       ],
       [
@@ -90,64 +87,55 @@ export default function Signup() {
           placeholder: "Gender",
           name: "gender",
           type: "select",
-          choices: ["Male", "Female", "Other"],
+          choices: ["Gender", "Male", "Female", "Other"],
         },
       ],
     ];
 
     return (
       <>
-        {fields[i].map((field) => {
+        {fields[i].map((field, index) => {
           return (
-            <div className="relative flex items-center">
+            <div key={index}>
               {field.type == "select" ? (
-                <>
-                  <select
-                    className="w-full px-3.5 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl appearance-none hover:cursor-pointer bg-white"
+                <div className="py-2 px-2 w-full h-full">
+                  <Dropdown
+                    name={field.name}
                     value={
                       field.name === "userType"
                         ? selectedUserType
                         : selectedGender
                     }
-                    defaultValue={""}
-                    onChange={(event: any) =>
+                    onChange={
                       field.name === "userType"
-                        ? setSelectedUserType(event.target.value)
-                        : setSelectedGender(event.target.value)
+                        ? setSelectedUserType
+                        : setSelectedGender
                     }
+                    options={field.choices ?? []}
+                    multiple={false}
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              ) : (
+                <div
+                  className={`${
+                    field.icon ? "relative" : ""
+                  } flex items-center`}
+                >
+                  <input
+                    className={
+                      "w-full py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl" +
+                      (field.icon != null ? " pl-3.5 pr-12" : " px-3.5")
+                    }
+                    placeholder={field.placeholder}
+                    type={field.type}
+                    pattern={field.pattern}
                     required
                     name={field.name}
-                  >
-                    <option disabled value="" hidden key="default">
-                      {field.placeholder}
-                    </option>
-                    {field.choices?.map((choice) => {
-                      return (
-                        <option value={choice} key={choice}>
-                          {choice}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <ChevronDownIcon
-                    className=" absolute h-7 w-7 mr-5 right-0"
-                    strokeWidth="2"
                   />
-                </>
-              ) : (
-                <input
-                  className={
-                    "w-full py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl" +
-                    (field.icon != null ? " pl-3.5 pr-12" : " px-3.5")
-                  }
-                  placeholder={field.placeholder}
-                  type={field.type}
-                  pattern={field.pattern ?? "*"}
-                  required
-                  name={field.name}
-                />
+                  {field.icon != null ? <>{field.icon}</> : <></>}
+                </div>
               )}
-              {field.icon != null ? <>{field.icon}</> : <></>}
             </div>
           );
         })}
@@ -160,7 +148,7 @@ export default function Signup() {
       e.preventDefault();
       const formData = e.target as typeof e.target & RegistrationFormInput;
       const results = await getGeocode({ address: formData.address.value });
-      const { lat, lng } = await getLatLng(results[0]);
+      const { lat, lng } = getLatLng(results[0]);
       register({
         username: formData.username.value,
         password: formData.password.value,
