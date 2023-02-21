@@ -3,6 +3,7 @@ import Link from "next/link";
 import { checkLoggedIn, login } from "@/services/auth.service";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/button";
 
 type LoginFormData = {
   username: { value: string };
@@ -82,12 +83,7 @@ export default function Login() {
               strokeWidth="2"
             />
           </div>
-          <button
-            className="w-full py-2.5 px-3 mt-10 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
-            type="submit"
-          >
-            Login
-          </button>
+          <Button name="Login" margin="mt-10 mb-3" type="submit" />
         </form>
         <div className="absolute bottom-5 text-sm">
           Don't have an account?{" "}

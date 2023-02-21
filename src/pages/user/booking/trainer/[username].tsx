@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { UserProfile } from "@/services/user.service";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useLoadScript } from "@react-google-maps/api";
-import { getGeocode, getLatLng } from "use-places-autocomplete";
 import Map, { LatLngLiteral } from "@/components/map";
+import { BackButton } from "@/components/backbutton";
+import { Button } from "@/components/button";
 const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
@@ -133,12 +132,7 @@ const bookTrainerProfile = () => {
         {/* Profile image and name */}
         <div className="flex flex-col w-full md:w-2/5 px-5 md:px-10 pt-20 pb-10">
           <div className="flex items-center justify-start">
-            <Link href="/user/booking" className="mr-2 md:mr-5">
-              <ArrowLeftIcon
-                className="h-10 w-10 md:h-12 md:w-12 hover:bg-pink-light rounded-xl p-2"
-                strokeWidth={3}
-              />
-            </Link>
+            <BackButton href="/user/booking" mx="mr-2 md:mr-5" />
             <Name />
           </div>
           <Image />
@@ -151,13 +145,9 @@ const bookTrainerProfile = () => {
           <div className="w-3/4 h-[36rem]">
             <Map trainerCoordinate={trainerCoordinate} />
           </div>
-          <div className="flex flex-row justify-center mt-10 mx-auto space-x-20">
-            <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
-              Start Chat
-            </button>
-            <button className="px-5 py-2 md:px-16 md:py-3 bg-pink hover:bg-pink-dark text-white shadow rounded-xl">
-              Calendar
-            </button>
+          <div className="flex w-full mt-10 px-16 lg:px-24 justify-around space-x-10 sm:space-x-16 md:space-x-20">
+            <Button name="Start Chat" />
+            <Button name="Calendar" />
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import { AxiosError } from "axios";
 import Places from "@/components/places";
 import { useLoadScript } from "@react-google-maps/api";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { Button } from "@/components/button";
 
 type RegistrationFormInput = {
   username: { value: string };
@@ -239,12 +240,12 @@ export default function Signup() {
             </div>
           </div>
           <div className="flex justify-center">
-            <button
-              className="w-1/2 py-2.5 px-3 mt-10 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
+            <Button
+              name="Create Account"
+              margin="mt-10 mb-3"
+              width="w-1/2"
               type="submit"
-            >
-              Create Account
-            </button>
+            />
           </div>
         </form>
       </div>

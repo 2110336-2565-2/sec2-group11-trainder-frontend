@@ -1,9 +1,10 @@
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Button } from "@/components/button";
+import { useRouter } from "next/router";
 const profile = () => {
   const [profile, setProfile] = useState<UserProfile>();
-
+  const router = useRouter();
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
@@ -37,7 +38,9 @@ const profile = () => {
     );
   };
   const getGender = () => {
-    const gender = (profile?.gender[0].toUpperCase() ?? "") + (profile?.gender.slice(1) ?? "");
+    const gender =
+      (profile?.gender[0].toUpperCase() ?? "") +
+      (profile?.gender.slice(1) ?? "");
     return (
       <div>
         Gender: <strong>{gender}</strong>
@@ -82,7 +85,11 @@ const profile = () => {
             </p>
           </div>
           <div className="py-6">
-            <img src="../trainder_icon.png" alt="" className="w-1/2 md:w-2/3 mx-auto" />
+            <img
+              src="../trainder_icon.png"
+              alt=""
+              className="w-1/2 md:w-2/3 mx-auto"
+            />
           </div>
           <div className="bg-white py-8 px-10 rounded-3xl w-fit flex justify-center">
             <div className="columns-1 sm:columns-2 text-lg md:text-xl">
@@ -95,12 +102,11 @@ const profile = () => {
           </div>
           {profile?.usertype === "Trainer" ? (
             <div className="container w-full mx-auto flex justify-center mt-6">
-              <Link
-                href="/account/info"
-                className=" bg-pink hover:bg-pink-dark text-white text-center shadow rounded-xl px-6 py-2"
-              >
-                Update Trainer Information
-              </Link>
+              <Button
+                name="Update Trainer Information"
+                width="w-fit"
+                onClick={() => router.push("/account/info")}
+              />
             </div>
           ) : (
             <></>
