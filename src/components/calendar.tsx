@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import { generateDate, months } from "@/util/calendar";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import cn from "@/util/cn";
 
 export default function Calendar() {
@@ -16,24 +17,13 @@ export default function Calendar() {
             {months[today.month()]}, {today.year()}
           </h1>
           <div className="flex gap-10 items-center ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              className="w-6 h-6 hover:cursor-pointer hover:scale-105 transition-all"
-              stroke="currentColor"
+            <ChevronLeftIcon
+              className="h-6 w-6 cursor-pointer hover:scale-110 transition-all"
+              strokeWidth={2}
               onClick={() => {
                 setToday(today.month(today.month() - 1));
               }}
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
+            />
             <h1
               className=" cursor-pointer hover:scale-105 transition-all"
               onClick={() => {
@@ -42,23 +32,13 @@ export default function Calendar() {
             >
               Today
             </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
+            <ChevronRightIcon
               className="w-6 h-6 hover:cursor-pointer hover:scale-105 transition-all"
+              strokeWidth={2}
               onClick={() => {
                 setToday(today.month(today.month() + 1));
               }}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
+            />
           </div>
         </div>
         <div className="grid grid-cols-7 ">
