@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Home = () => {
   return (
-    <main className="h-full w-full bg-backgroundColor">
+    <main className="h-screen w-full bg-backgroundColor">
       <Calendar />
       <div className="bg-gray h-1 mx-10 rounded-full"></div>
       <div className="flex m-5 items-center">
