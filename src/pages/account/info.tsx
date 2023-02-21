@@ -1,18 +1,11 @@
+import { BackButton } from "@/components/backbutton";
 import { Dropdown } from "@/components/dropdown";
 import {
   getCurrentTrainerInfo,
   TrainerProfile,
   updateTrainerProfile,
 } from "@/services/trainer.service";
-import { Listbox } from "@headlessui/react";
-import {
-  ArrowLeftIcon,
-  ArrowUpTrayIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { ArrowUpTrayIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
 const renderInfoForm = () => {
@@ -252,12 +245,7 @@ const TrainerInfo = () => {
     <main className="min-h-screen h-full bg-backgroundColor">
       <div className="flex flex-1 flex-col p-5 md:p-10">
         <div className="flex items-center mb-3 md:mb-8">
-          <Link href="/account/profile">
-            <ArrowLeftIcon
-              className="h-10 w-10 md:h-12 md:w-12 hover:bg-pink-light rounded-xl p-2"
-              strokeWidth={3}
-            />
-          </Link>
+          <BackButton href="/account/profile" />
           <h1 className="text-xl md:text-3xl mx-5 md:mx-10">
             Your Personal Information
           </h1>

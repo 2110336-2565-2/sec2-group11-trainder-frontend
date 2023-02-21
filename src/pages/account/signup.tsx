@@ -8,6 +8,8 @@ import Places from "@/components/places";
 import { useLoadScript } from "@react-google-maps/api";
 import { Dropdown } from "@/components/dropdown";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { Button } from "@/components/button";
+import { InputBox } from "@/components/inputBox";
 
 type RegistrationFormInput = {
   username: { value: string };
@@ -117,24 +119,14 @@ export default function Signup() {
                   />
                 </div>
               ) : (
-                <div
-                  className={`${
-                    field.icon ? "relative" : ""
-                  } flex items-center`}
-                >
-                  <input
-                    className={
-                      "w-full py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl" +
-                      (field.icon != null ? " pl-3.5 pr-12" : " px-3.5")
-                    }
-                    placeholder={field.placeholder}
-                    type={field.type}
-                    pattern={field.pattern}
-                    required
-                    name={field.name}
-                  />
-                  {field.icon != null ? <>{field.icon}</> : <></>}
-                </div>
+                <InputBox
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  name={field.name}
+                  required={true}
+                  pattern={field.pattern}
+                  icon={field.icon}
+                />
               )}
             </div>
           );
@@ -227,12 +219,12 @@ export default function Signup() {
             </div>
           </div>
           <div className="flex justify-center">
-            <button
-              className="w-1/2 py-2.5 px-3 mt-10 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
+            <Button
+              name="Create Account"
+              margin="mt-10 mb-3"
+              width="w-1/2"
               type="submit"
-            >
-              Create Account
-            </button>
+            />
           </div>
         </form>
       </div>

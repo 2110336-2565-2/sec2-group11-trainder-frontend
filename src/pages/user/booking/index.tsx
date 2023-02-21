@@ -1,3 +1,5 @@
+import { BackButton } from "@/components/backbutton";
+import { Button } from "@/components/button";
 import {
   FilteredTrainerProfile,
   FilterInput,
@@ -5,10 +7,7 @@ import {
 } from "@/services/trainer.service";
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  ChevronUpIcon,
-  ChevronDownIcon,
   ChevronRightIcon,
-  ArrowLeftIcon,
   StarIcon,
   FunnelIcon,
 } from "@heroicons/react/24/outline";
@@ -70,12 +69,7 @@ const TrainerFilter = () => {
     <main className="w-full min-h-screen h-full bg-backgroundColor">
       <div className="w-full flex flex-col pt-20">
         <div className="flex items-center justify-start px-2 md:px-5">
-          <Link href="/user/home">
-            <ArrowLeftIcon
-              className="h-10 w-10 md:h-12 md:w-12 hover:bg-pink-light rounded-xl p-2"
-              strokeWidth={3}
-            ></ArrowLeftIcon>
-          </Link>
+          <BackButton href="/user/home" />
           <p className="ml-5 text-xl md:text-3xl">Choose your trainer</p>
         </div>
 
@@ -147,13 +141,12 @@ const TrainerFilter = () => {
                       </div>
 
                       <div className="flex justify-end md:justify-center mt-10">
-                        <button
-                          type="button"
-                          className="inline-flex justify-center rounded-xl border border-transparent bg-pink px-4 md:px-12 py-2 text-white font-medium hover:bg-pink-dark"
+                        <Button
+                          name="Apply"
+                          width="w-fit md:w-1/2"
                           onClick={closeFliter}
-                        >
-                          Apply
-                        </button>
+                          type="button"
+                        />
                       </div>
                     </Dialog.Panel>
                   </Transition.Child>
