@@ -10,6 +10,7 @@ import { Dropdown } from "@/components/dropdown";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { Button } from "@/components/button";
 import { InputBox } from "@/components/inputBox";
+import Link from "next/link";
 
 type RegistrationFormInput = {
   username: { value: string };
@@ -297,6 +298,12 @@ export default function Signup() {
             />
           </div>
         </form>
+        <div className="absolute bottom-5 text-sm">
+          Already have an account?{" "}
+          <Link href="/" className="text-blue hover:underline">
+            Login
+          </Link>
+        </div>
       </div>
     </main>
   );
