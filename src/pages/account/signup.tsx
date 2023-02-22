@@ -28,72 +28,86 @@ export default function Signup() {
   const router = useRouter();
   const [selectedUserType, setSelectedUserType] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<string>("");
+  const [isFormCompleted, setFormCompleted] = useState<boolean>(false);
+  const [isPasswordMatched, setPasswordMatch] = useState<boolean>(true);
+
+  type Field = {
+    placeholder: string;
+    name: string;
+    type: string;
+    icon?: object | undefined;
+    pattern?: string | undefined;
+    choices?: string[] | undefined;
+  };
+
+  const fields: Field[][] = [
+    [
+      {
+        placeholder: "Username",
+        name: "username",
+        type: "text",
+        icon: (
+          <UserCircleIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
+      },
+      {
+        placeholder: "User Type",
+        name: "userType",
+        type: "select",
+        choices: ["User Type", "Trainer", "Trainee"],
+      },
+      {
+        placeholder: "Password",
+        name: "password",
+        type: "password",
+        icon: (
+          <LockClosedIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
+      },
+      {
+        placeholder: "Confirm Password",
+        name: "confirmPassword",
+        type: "password",
+        icon: (
+          <LockClosedIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
+      },
+    ],
+    [
+      { placeholder: "First Name", name: "firstname", type: "text" },
+      { placeholder: "Last Name", name: "lastname", type: "text" },
+      { placeholder: "Birth date", name: "birthdate", type: "date" },
+      {
+        placeholder: "Citizen ID",
+        name: "citizenId",
+        type: "text",
+        pattern: "[0-9]{13}",
+      },
+      {
+        placeholder: "Phone number",
+        name: "phoneNumber",
+        type: "text",
+        pattern: "[0-9]{10}",
+      },
+      {
+        placeholder: "Gender",
+        name: "gender",
+        type: "select",
+        choices: ["Gender", "Male", "Female", "Other"],
+      },
+    ],
+  ];
+
   const renderForm = (i: number) => {
-    type Fields = {
-      placeholder: string;
-      name: string;
-      type: string;
-      icon?: object | undefined;
-      pattern?: string | undefined;
-      choices?: string[] | undefined;
-    };
-
-    const fields: Fields[][] = [
-      [
-        {
-          placeholder: "Username",
-          name: "username",
-          type: "text",
-          icon: (
-            <UserCircleIcon
-              className="absolute h-8 w-8 mr-4 right-0 text-gray"
-              strokeWidth="2"
-            />
-          ),
-        },
-        {
-          placeholder: "Password",
-          name: "password",
-          type: "password",
-          icon: (
-            <LockClosedIcon
-              className="absolute h-8 w-8 mr-4 right-0 text-gray"
-              strokeWidth="2"
-            />
-          ),
-        },
-        {
-          placeholder: "User Type",
-          name: "userType",
-          type: "select",
-          choices: ["User Type", "Trainer", "Trainee"],
-        },
-      ],
-      [
-        { placeholder: "First Name", name: "firstname", type: "text" },
-        { placeholder: "Last Name", name: "lastname", type: "text" },
-        { placeholder: "Birth date", name: "birthdate", type: "date" },
-        {
-          placeholder: "Citizen ID",
-          name: "citizenId",
-          type: "text",
-          pattern: "[0-9]{13}",
-        },
-        {
-          placeholder: "Phone number",
-          name: "phoneNumber",
-          type: "text",
-          pattern: "[0-9]{10}",
-        },
-        {
-          placeholder: "Gender",
-          name: "gender",
-          type: "select",
-          choices: ["Gender", "Male", "Female", "Other"],
-        },
-      ],
-    ];
-
     return (
       <>
         {fields[i].map((field, index) => {
@@ -119,20 +133,74 @@ export default function Signup() {
                   />
                 </div>
               ) : (
-                <InputBox
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  name={field.name}
-                  required={true}
-                  pattern={field.pattern}
-                  icon={field.icon}
-                />
+                <>
+                  <InputBox
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    name={field.name}
+                    required={true}
+                    pattern={field.pattern}
+                    icon={field.icon}
+                    borderColor={
+                      field.type === "password"
+                        ? isPasswordMatched
+                          ? undefined
+                          : "border-pink-dark"
+                        : undefined
+                    }
+                  />
+                  {field.type === "password" && !isPasswordMatched && (
+                    <div className="text-sm mx-4 mb-2 text-pink-dark">
+                      Password does not match.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           );
         })}
       </>
     );
+  };
+
+  const handleFormCompletion = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // check all field is filled
+    let isCompleted = true;
+    fields.map((part) => {
+      part.map((field) => {
+        const data = e.currentTarget.elements.namedItem(
+          field.name
+        ) as HTMLInputElement;
+        if (data.value === undefined || data.value === "") {
+          isCompleted = false;
+          setFormCompleted(false);
+          return;
+        }
+      });
+      if (!isCompleted) return;
+    });
+
+    // check password is matched
+    const password = e.currentTarget.elements.namedItem(
+      "password"
+    ) as HTMLInputElement;
+    const confirmPassword = e.currentTarget.elements.namedItem(
+      "confirmPassword"
+    ) as HTMLInputElement;
+    if (
+      confirmPassword.value !== "" &&
+      password.value !== confirmPassword.value
+    ) {
+      setPasswordMatch(false);
+      setFormCompleted(false);
+      return;
+    } else {
+      setPasswordMatch(true);
+    }
+
+    setFormCompleted(isCompleted);
   };
 
   const handleRegistrationForm = useCallback(
@@ -202,6 +270,7 @@ export default function Signup() {
           className="w-4/5 mt-3 flex flex-col"
           action=""
           onSubmit={handleRegistrationForm}
+          onChange={handleFormCompletion}
         >
           <div className="grid grid-cols-2 justify-items-stretch">
             {renderForm(0)}
@@ -224,6 +293,7 @@ export default function Signup() {
               margin="mt-10 mb-3"
               width="w-1/2"
               type="submit"
+              disabled={!isFormCompleted}
             />
           </div>
         </form>
