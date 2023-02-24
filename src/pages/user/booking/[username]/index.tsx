@@ -6,6 +6,8 @@ import { useLoadScript } from "@react-google-maps/api";
 import Map, { LatLngLiteral } from "@/components/map";
 import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
+import Link from "next/link";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
 const bookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
@@ -135,6 +137,15 @@ const bookTrainerProfile = () => {
             <BackButton href="/user/booking" mx="mr-2 md:mr-5" />
             <Name />
           </div>
+          <Link
+            className="w-full flex justify-end mt-5 pr-10 md:pr-6 lg:pr-10"
+            href={"/user/review/" + username}
+          >
+            <div className="px-3 py-2 flex text-sm md:text-base items-center bg-pink-light hover:bg-pink rounded-xl">
+              <DocumentTextIcon className="h-6 w-6 mr-2" />
+              <span>View All Reviews</span>
+            </div>
+          </Link>
           <Image />
         </div>
 
@@ -147,7 +158,21 @@ const bookTrainerProfile = () => {
           </div>
           <div className="flex w-full mt-10 px-16 lg:px-24 justify-around space-x-10 sm:space-x-16 md:space-x-20">
             <Button name="Start Chat" />
-            <Button name="Calendar" />
+            <Button
+              name="Calendar"
+              onClick={() =>
+                router.push(
+                  {
+                    pathname: "/user/booking/" + username + "/calendar",
+                    query: {
+                      firstname: trainerProfile.firstname,
+                      lastname: trainerProfile.lastname,
+                    },
+                  },
+                  "/user/booking/" + username + "/calendar"
+                )
+              }
+            />
           </div>
         </div>
       </div>
