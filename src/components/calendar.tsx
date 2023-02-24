@@ -10,7 +10,7 @@ export default function Calendar() {
   const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
   return (
-    <div className="flex flex-col gap-10 mx-auto pt-20 pb-16 sm:divide-x sm:w-1/2 sm:flex-row  justify-center items-center ">
+    <div className="flex flex-col gap-16 pt-20 pb-10 px-16 md:divide-x w-full md:flex-row justify-center md:justify-evenly items-center">
       <div className="w-96 h-100 ">
         <div className="flex justify-between items-center">
           <h1 className="font-semibold">
