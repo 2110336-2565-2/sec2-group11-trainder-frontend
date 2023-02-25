@@ -2,7 +2,7 @@ import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import { useRouter } from "next/router";
-const profile = () => {
+const Profile = () => {
   const [profile, setProfile] = useState<UserProfile>();
   const router = useRouter();
   useEffect(() => {
@@ -118,4 +118,4 @@ const profile = () => {
   );
 };
 
-export default profile;
+export default Profile;

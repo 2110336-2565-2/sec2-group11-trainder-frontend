@@ -87,7 +87,7 @@ export default function Login() {
           <Button name="Login" margin="mt-10 mb-3" type="submit" />
         </form>
         <div className="absolute bottom-5 text-sm">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/account/signup" className="text-blue hover:underline">
             Sign up
           </Link>

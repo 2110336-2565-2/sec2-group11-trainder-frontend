@@ -6,7 +6,7 @@ import { useLoadScript } from "@react-google-maps/api";
 import Map, { LatLngLiteral } from "@/components/map";
 import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
-const bookTrainerProfile = () => {
+const BookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
@@ -155,4 +155,4 @@ const bookTrainerProfile = () => {
   );
 };
 
-export default bookTrainerProfile;
+export default BookTrainerProfile;
