@@ -9,6 +9,7 @@ import {
   UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback } from "react";
 
@@ -88,7 +89,7 @@ export const NavBar = () => {
                   <div className="hidden md:block">
                     {navLinks.map((link, index) => {
                       return (
-                        <a
+                        <Link
                           key={index}
                           href={link.path}
                           className={
@@ -100,7 +101,7 @@ export const NavBar = () => {
                         >
                           {link.icon}
                           {link.name}
-                        </a>
+                        </Link>
                       );
                     })}
                   </div>
@@ -166,7 +167,7 @@ export const NavBar = () => {
                   {navLinks.map((link) => (
                     <Disclosure.Button
                       key={link.name}
-                      as="a"
+                      as={Link}
                       href={link.path}
                       className={
                         "flex items-center text-lg mx-2 p-2 rounded-xl hover:bg-blue-dark " +
