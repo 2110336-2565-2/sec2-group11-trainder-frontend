@@ -8,7 +8,7 @@ import {
 import { ArrowUpTrayIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
-const renderInfoForm = () => {
+const RenderInfoForm = () => {
   const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
     specialty: [],
     rating: 0,
@@ -296,7 +296,7 @@ const TrainerInfo = () => {
           </div>
           {/* Information form */}
           <div className="flex flex-1 flex-col items-start px-4">
-            {renderInfoForm()}
+            {RenderInfoForm()}
             <div className="inline-flex items-center">
               <button
                 className="py-2.5 px-5 mt-5 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"

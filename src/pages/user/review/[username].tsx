@@ -27,7 +27,9 @@ const Review = () => {
           <div className="mt-[20%]"></div>
           <div className="flex items-center justify-start px-2 md:px-5">
             <BackButton href="/user/booking" />
-            <p className="text-left text-2xl md:text-3xl font-bold display: inline-flex">Rating and Review</p>
+            <p className="text-left text-2xl md:text-3xl font-bold display: inline-flex">
+              Rating and Review
+            </p>
           </div>
           <div className="mt-[15%] flex flex-col items-center justify-start px-2 md:px-5">
             Trainer Name
