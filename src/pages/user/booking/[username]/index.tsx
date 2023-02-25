@@ -8,7 +8,8 @@ import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
 import Link from "next/link";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
-const bookTrainerProfile = () => {
+import Image from "next/image";
+const BookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,12 +55,12 @@ const bookTrainerProfile = () => {
     } else {
       router.back();
     }
-  }, []);
+  });
 
-  const Image = () => {
+  const ProfileImage = () => {
     return (
       <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
-        <img
+        <Image
           src="/default_profile.jpg"
           alt=""
           className="rounded-2xl object-contain w-28 h-28 sm:w-36 sm:h-36 md:w-fit md:h-fit"
@@ -146,7 +147,7 @@ const bookTrainerProfile = () => {
               <span>View All Reviews</span>
             </div>
           </Link>
-          <Image />
+          <ProfileImage />
         </div>
 
         <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
@@ -180,4 +181,4 @@ const bookTrainerProfile = () => {
   );
 };
 
-export default bookTrainerProfile;
+export default BookTrainerProfile;
