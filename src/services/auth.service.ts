@@ -59,6 +59,10 @@ export const checkLoggedIn = (): Promise<boolean> => {
   }
 };
 export const getCurrentUser = () => {
-  const userData = localStorage.getItem("user");
-  return userData ? JSON.parse(userData) : {};
+  if (typeof window !== "undefined") {
+    const userData = localStorage.getItem("user");
+    return userData ? JSON.parse(userData) : {};
+  } else {
+    return {};
+  }
 };
