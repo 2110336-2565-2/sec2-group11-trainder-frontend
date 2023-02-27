@@ -36,7 +36,6 @@ const navLinks = [
 
 export const NavBar = () => {
   const router = useRouter();
-  const [username, setUsername] = useState<string>("Username");
   const profileMenu = [
     {
       name: "profile",
@@ -52,8 +51,10 @@ export const NavBar = () => {
       color: "pink-dark",
     },
   ];
-
-  useEffect(() => setUsername(getCurrentUser().username), []);
+  const [username, setUsername] = useState<string>("");
+  useEffect(() => {
+    setUsername(getCurrentUser().username);
+  }, [router]);
 
   return (
     <>

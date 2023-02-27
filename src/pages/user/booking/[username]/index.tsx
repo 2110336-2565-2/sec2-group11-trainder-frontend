@@ -55,7 +55,7 @@ const BookTrainerProfile = () => {
     } else {
       router.back();
     }
-  });
+  }, [router, username]);
 
   const Name = () => {
     return (
