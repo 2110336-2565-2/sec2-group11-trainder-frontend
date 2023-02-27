@@ -6,6 +6,9 @@ import { useLoadScript } from "@react-google-maps/api";
 import Map, { LatLngLiteral } from "@/components/map";
 import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
+import Link from "next/link";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 const BookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
@@ -54,18 +57,6 @@ const BookTrainerProfile = () => {
     }
   }, [router, username]);
 
-  const Image = () => {
-    return (
-      <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
-        <img
-          src="/default_profile.jpg"
-          alt=""
-          className="rounded-2xl object-contain w-28 h-28 sm:w-36 sm:h-36 md:w-fit md:h-fit"
-        />
-      </div>
-    );
-  };
-
   const Name = () => {
     return (
       <p className="text-left text-2xl md:text-3xl font-bold">
@@ -76,7 +67,7 @@ const BookTrainerProfile = () => {
 
   const Skill = () => {
     return (
-      <p className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
+      <div className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
         {trainerInfo.specialty !== null && trainerInfo.specialty.length > 0 && (
           <div>
             Specialties :{" "}
@@ -116,7 +107,7 @@ const BookTrainerProfile = () => {
 
         {/* TODO: show this after certificateUrl are implemented */}
         {/* <Link href={trainerProfile.certificateUrl}>Certificate</Link> */}
-      </p>
+      </div>
     );
   };
 
@@ -135,7 +126,28 @@ const BookTrainerProfile = () => {
             <BackButton href="/user/booking" mx="mr-2 md:mr-5" />
             <Name />
           </div>
-          <Image />
+          <Link
+            className="w-full flex justify-end mt-5 pr-10 md:pr-6 lg:pr-10"
+            href={{
+              pathname: "user/review/[username]",
+              query: { username: username },
+            }}
+          >
+            <div className="px-3 py-2 flex text-sm md:text-base items-center bg-pink-light hover:bg-pink rounded-xl">
+              <DocumentTextIcon className="h-6 w-6 mr-2" />
+              <span>View All Reviews</span>
+            </div>
+          </Link>
+          <div className=" mt-6 md:mt-10 flex justify-center h-full">
+            <div className="object-cover overflow-hidden rounded-2xl relative w-28 h-28 sm:w-36 sm:h-36 md:w-72 md:h-72">
+              <Image
+                src="/default_profile.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw"
+              />
+            </div>
+          </div>
         </div>
 
         <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
@@ -147,7 +159,21 @@ const BookTrainerProfile = () => {
           </div>
           <div className="flex w-full mt-10 px-16 lg:px-24 justify-around space-x-10 sm:space-x-16 md:space-x-20">
             <Button name="Start Chat" />
-            <Button name="Calendar" />
+            <Button
+              name="Calendar"
+              onClick={() =>
+                router.push(
+                  {
+                    pathname: "/user/booking/[username]/calendar",
+                    query: {
+                      username: username,
+                      firstname: trainerProfile.firstname,
+                      lastname: trainerProfile.lastname,
+                    },
+                  },
+                )
+              }
+            />
           </div>
         </div>
       </div>

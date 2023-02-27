@@ -161,7 +161,7 @@ const TrainerFilter = () => {
           {trainerProfiles.map((trainerProfile, idx) => {
             return (
               <div key={idx}>
-                <Link href={"/user/booking/trainer/" + trainerProfile.username}>
+                <Link href={`/user/booking/${encodeURIComponent(trainerProfile.username)}`}>
                   <div className="bg-white w-auto border-2 border-gray rounded-3xl flex flex-row items-center justify-between my-5 p-2 drop-shadow-lg hover:bg-gray-light">
                     <div className="flex items-center w-5/6">
                       {/* Profile image */}
