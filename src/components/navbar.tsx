@@ -11,7 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useCallback } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
 const navLinks = [
   {
@@ -50,6 +50,10 @@ export const NavBar = () => {
       color: "pink-dark",
     },
   ];
+  const [username, setUsername] = useState<string>("");
+  useEffect(() => {
+    setUsername(getCurrentUser().username);
+  }, [router]);
 
   return (
     <>
@@ -114,7 +118,7 @@ export const NavBar = () => {
                           className="h-6 w-6 mx-2"
                           strokeWidth={2}
                         />
-                        {getCurrentUser().username ?? "Username"}
+                        {username}
                         <ChevronDownIcon
                           className="h-6 w-6 mx-2"
                           strokeWidth={2}
