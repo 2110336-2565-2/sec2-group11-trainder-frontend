@@ -1,8 +1,9 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { UrlObject } from "url";
 
 type ButtonProps = {
-  href: string;
+  href: string | UrlObject;
   mx?: string;
 };
 

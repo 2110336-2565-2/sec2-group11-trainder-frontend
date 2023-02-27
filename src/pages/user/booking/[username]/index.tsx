@@ -128,7 +128,10 @@ const BookTrainerProfile = () => {
           </div>
           <Link
             className="w-full flex justify-end mt-5 pr-10 md:pr-6 lg:pr-10"
-            href={"/user/review/" + username}
+            href={{
+              pathname: "user/review/[username]",
+              query: { username: username },
+            }}
           >
             <div className="px-3 py-2 flex text-sm md:text-base items-center bg-pink-light hover:bg-pink rounded-xl">
               <DocumentTextIcon className="h-6 w-6 mr-2" />
@@ -161,13 +164,13 @@ const BookTrainerProfile = () => {
               onClick={() =>
                 router.push(
                   {
-                    pathname: "/user/booking/" + username + "/calendar",
+                    pathname: "/user/booking/[username]/calendar",
                     query: {
+                      username: username,
                       firstname: trainerProfile.firstname,
                       lastname: trainerProfile.lastname,
                     },
                   },
-                  "/user/booking/" + username + "/calendar"
                 )
               }
             />

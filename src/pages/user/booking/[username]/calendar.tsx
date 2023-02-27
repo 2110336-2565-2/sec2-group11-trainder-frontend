@@ -20,7 +20,7 @@ const Calendar = () => {
     return (
       <div className="px-5 h-full">
         <div className="flex w-full items-center justify-center my-2 font-bold text-xl sm:text-2xl">
-          <a
+          <button
             className="hover:cursor-pointer hover:bg-pink-light rounded-xl p-2"
             onClick={() =>
               setSelectedDate(
@@ -29,11 +29,11 @@ const Calendar = () => {
             }
           >
             <ChevronLeftIcon className="h-6 w-6" strokeWidth={3} />
-          </a>
+          </button>
           <div className="w-3/5 sm:w-2/5 text-center">
             {selectedDate.format("MMMM YYYY")}
           </div>
-          <a
+          <button
             className="hover:cursor-pointer hover:bg-pink-light rounded-xl p-2"
             onClick={() =>
               setSelectedDate(
@@ -42,7 +42,7 @@ const Calendar = () => {
             }
           >
             <ChevronRightIcon className="h-6 w-6" strokeWidth={3} />
-          </a>
+          </button>
         </div>
 
         <div className="grid grid-cols-7 gap-1 h-5/6">
@@ -133,7 +133,13 @@ const Calendar = () => {
       <div className="flex flex-grow flex-col md:flex-row gap-8">
         <div className="w-full md:w-2/3 h-2/3 md:h-full flex flex-col bg-backgroundColor p-5">
           <div className="flex items-center text-2xl md:text-3xl font-bold">
-            <BackButton href={"/user/booking/" + username} mx="mx-4" />
+            <BackButton
+              href={{
+                pathname: "/user/booking/[username]",
+                query: { username: username },
+              }}
+              mx="mx-4"
+            />
             {firstname} {lastname}
           </div>
           <div className="flex-1">
