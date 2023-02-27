@@ -243,7 +243,7 @@ export default function Signup() {
           throw error;
         });
     },
-    []
+    [router]
   );
 
   const { isLoaded } = useLoadScript({
