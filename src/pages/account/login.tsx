@@ -39,7 +39,7 @@ export default function Login() {
     if (loggedIn) {
       router.push("/account/profile");
     }
-  }, [loggedIn]);
+  }, [loggedIn, router]);
 
   return (
     <main className="flex h-screen bg-backgroundColor">

@@ -10,10 +10,13 @@ export default function Places() {
     clearSuggestions,
   } = usePlacesAutocomplete();
 
-  const onSuggestionClick = useCallback((description: string) => {
-    setValue(description, false);
-    clearSuggestions();
-  }, []);
+  const onSuggestionClick = useCallback(
+    (description: string) => {
+      setValue(description, false);
+      clearSuggestions();
+    },
+    [clearSuggestions, setValue]
+  );
 
   return (
     <>
