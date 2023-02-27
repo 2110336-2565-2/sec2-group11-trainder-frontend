@@ -142,7 +142,6 @@ const BookTrainerProfile = () => {
                 alt=""
                 fill
                 sizes="(max-width: 768px) 100vw"
-                priority
               />
             </div>
           </div>

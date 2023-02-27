@@ -80,17 +80,16 @@ export const NavBar = () => {
                   </Disclosure.Button>
                 </div>
                 <div className="flex flex-1 items-center">
-                  <div className="flex items-center mr-5">
+                  <div className="flex items-center mr-0 md:mr-5">
                     <p className="text-backgroundColor text-2xl mx-0 font-lexend-exa block lg:block md:hidden md:text-3xl md-2">
                       Trainder
                     </p>
-                    <div className="h-12 w-12 md:h-16 md:w-16 relative">
+                    <div className="h-12 w-12 md:h-16 md:w-16 relative hidden sm:block">
                       <Image
                         src="/trainder.png"
                         alt=""
                         fill
                         sizes="(max-width: 768px) 100vw"
-                        priority
                       />
                     </div>
                   </div>
