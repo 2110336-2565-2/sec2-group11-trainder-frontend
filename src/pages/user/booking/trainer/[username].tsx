@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { UserProfile } from "@/services/user.service";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
-const bookTrainerProfile = () => {
+import { useLoadScript } from "@react-google-maps/api";
+import Map, { LatLngLiteral } from "@/components/map";
+import { BackButton } from "@/components/backbutton";
+import { Button } from "@/components/button";
+const BookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
-  const [userProfile, setUserProfile] = useState<UserProfile>({
+  const [trainerCoordinate, setTrainerCoordinate] = useState<LatLngLiteral>({
+    lat: 0,
+    lng: 0,
+  });
+  const [trainerProfile, setTrainerProfile] = useState<UserProfile>({
     username: "user",
     firstname: "firstname",
     lastname: "lastname",
@@ -17,10 +23,11 @@ const bookTrainerProfile = () => {
     gender: "none",
     phoneNumber: "none",
     address: "none",
-    subAddress: "none",
     usertype: "none",
+    lat: 0,
+    lng: 0,
   });
-  const [trainerProfile, setTrainerProfile] = useState<TrainerProfile>({
+  const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
     specialty: [],
     rating: 0,
     fee: 0,
@@ -33,9 +40,12 @@ const bookTrainerProfile = () => {
       getTrainerProfile(username)
         .then((res) => {
           setLoading(true);
-          setUserProfile(res.userProfile);
-          setTrainerProfile(res.trainerProfile);
-          console.log(res.trainerProfile);
+          setTrainerProfile(res.userProfile);
+          setTrainerInfo(res.trainerProfile);
+          setTrainerCoordinate({
+            lat: res.userProfile.lat,
+            lng: res.userProfile.lng,
+          });
           setLoading(false);
         })
         .catch(() => router.back());
@@ -46,72 +56,103 @@ const bookTrainerProfile = () => {
 
   const Image = () => {
     return (
-      <img
-        src="/default_profile.jpg"
-        alt=""
-        className="rounded-lg object-fill h-1/2  "
-      />
+      <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
+        <img
+          src="/default_profile.jpg"
+          alt=""
+          className="rounded-2xl object-contain w-28 h-28 sm:w-36 sm:h-36 md:w-fit md:h-fit"
+        />
+      </div>
     );
   };
 
   const Name = () => {
     return (
-      <p className="font-lexend-deca text-left text-4xl text-black ">
-        {userProfile.firstname} {userProfile.lastname}
+      <p className="text-left text-2xl md:text-3xl font-bold">
+        {trainerProfile.firstname} {trainerProfile.lastname}
       </p>
     );
   };
 
   const Skill = () => {
     return (
-      <p className="text-start text-xl mt-10 ml-10 mr-10 mb-5">
-        Specialties : {trainerProfile.specialty.join(", ")} <br />
-        Rating: {trainerProfile.rating} <br />
-        Training Fee: {trainerProfile.fee} Baht <br />
-        Area: {userProfile.address} {userProfile.subAddress} <br />
-        {/* TODO: show these after traineeCount and certificateUrl are implemented */}
-        {/* Currently Training: {trainerProfile.traineeCount} people(s)<br /> */}
+      <p className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
+        {trainerInfo.specialty !== null && trainerInfo.specialty.length > 0 && (
+          <div>
+            Specialties :{" "}
+            <span className="font-normal">
+              {trainerInfo.specialty.join(", ")}
+            </span>{" "}
+            <br />
+          </div>
+        )}
+        <div>
+          Rating: <span className="font-normal">{trainerInfo.rating}</span>{" "}
+          <br />
+        </div>
+        <div>
+          Training Fee:{" "}
+          <span className="font-normal">{trainerInfo.fee} Baht</span>
+          <br />
+        </div>
+        <div>
+          Area: <span className="font-normal">{trainerProfile.address}</span>{" "}
+          <br />
+        </div>
+        <div>
+          Currently Training:{" "}
+          <span className="font-normal">
+            {trainerInfo.traineeCount.toString() +
+              " Person" +
+              (trainerInfo.traineeCount == 1 ? " " : "s")}
+            {/* {trainerProfile.traineeCount > 0
+              ? trainerProfile.traineeCount.toString() +
+                " Person" +
+                (trainerProfile.traineeCount == 1 ? " " : "s")
+              : "Not training anyone"} */}
+          </span>
+          <br />
+        </div>
+
+        {/* TODO: show this after certificateUrl are implemented */}
         {/* <Link href={trainerProfile.certificateUrl}>Certificate</Link> */}
       </p>
     );
   };
 
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      : "",
+  });
+  if (!isLoaded || loading) return <div>Loading...</div>;
   return (
-    <main className="flex flex-col h-screen">
-      {!loading && (
-        <div className="flex flex-row h-screen bg-white">
-          <div className="w-2/5 h-full bg-backgroundColor md:flex flex-col items-center">
-            <div className="w-full md:flex flex-row items-center justify-center mt-10 mb-[10%] m-[5%] ">
-              <Link href="/user/booking" className="mr-[5%]">
-                <ArrowLeftIcon className="w-7 h-7"></ArrowLeftIcon>
-              </Link>
-              <Name />
-            </div>
-            <Image />
+    <main className="min-h-screen h-full w-full bg-backgroundColor">
+      <div className="min-h-screen h-full flex flex-col md:flex-row">
+        {/* Profile image and name */}
+        <div className="flex flex-col w-full md:w-2/5 px-5 md:px-10 pt-20 pb-10">
+          <div className="flex items-center justify-start">
+            <BackButton href="/user/booking" mx="mr-2 md:mr-5" />
+            <Name />
           </div>
+          <Image />
+        </div>
 
-          <div className="w-3/5 h-full flex flex-col items-start justify-start">
-            <Skill />
-            {/* <div className="p-4">{content}</div> */}
-            <img src="/demo_map.png" className="rounded-lg w-3/4 ml-10"></img>
-            <div className="flex flex-row mt-5 ml-10 space-x-[20%] w-3/4">
-              {/* TODO: When chat and calendar is ready uncomment the link */}
-              {/* <Link href="/user/chat" className="ml-[15%]"> */}
-              <button className="bg-pink text-gray-800 py-2 px-12 rounded shadow">
-                Start Chat
-              </button>
-              {/* </Link> */}
-              {/* <Link href=""> */}
-              <button className="bg-pink text-gray-800  py-2 px-12 rounded shadow ">
-                Calendar
-              </button>
-              {/* </Link> */}
-            </div>
+        <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>
+        {/* Information */}
+        <div className="flex flex-col items-center w-full h-full bg-transparent pb-10 md:w-3/5 md:min-h-screen md:bg-white md:pt-20">
+          <Skill />
+          <div className="w-3/4 h-[36rem]">
+            <Map trainerCoordinate={trainerCoordinate} />
+          </div>
+          <div className="flex w-full mt-10 px-16 lg:px-24 justify-around space-x-10 sm:space-x-16 md:space-x-20">
+            <Button name="Start Chat" />
+            <Button name="Calendar" />
           </div>
         </div>
-      )}
+      </div>
     </main>
   );
 };
 
-export default bookTrainerProfile;
+export default BookTrainerProfile;

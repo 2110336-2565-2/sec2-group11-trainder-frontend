@@ -9,6 +9,7 @@ import {
   UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback } from "react";
 
@@ -52,7 +53,7 @@ export const NavBar = () => {
 
   return (
     <>
-      <Disclosure as="nav" className="bg-blue">
+      <Disclosure as="nav" className="bg-blue fixed w-full z-10">
         {({ open }) => (
           <>
             <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -88,7 +89,7 @@ export const NavBar = () => {
                   <div className="hidden md:block">
                     {navLinks.map((link, index) => {
                       return (
-                        <a
+                        <Link
                           key={index}
                           href={link.path}
                           className={
@@ -100,12 +101,12 @@ export const NavBar = () => {
                         >
                           {link.icon}
                           {link.name}
-                        </a>
+                        </Link>
                       );
                     })}
                   </div>
                 </div>
-                <div className="absolute right-0 flex flex-col items-center">
+                <div className="right-0 flex flex-col items-center">
                   <Menu>
                     <Menu.Button>
                       <div className="inline-flex items-center text-lg text-white rounded-xl p-2 hover:bg-blue-dark">
@@ -129,7 +130,7 @@ export const NavBar = () => {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-5 z-10 mt-10 w-56 px-2 py-1 origin-top-right rounded-xl bg-white shadow-lg">
+                      <Menu.Items className="absolute right-5 z-20 mt-10 w-56 px-2 py-1 origin-top-right rounded-xl bg-white shadow-lg">
                         {profileMenu.map((menu, index) => {
                           return (
                             <Menu.Item key={index}>
@@ -166,7 +167,7 @@ export const NavBar = () => {
                   {navLinks.map((link) => (
                     <Disclosure.Button
                       key={link.name}
-                      as="a"
+                      as={Link}
                       href={link.path}
                       className={
                         "flex items-center text-lg mx-2 p-2 rounded-xl hover:bg-blue-dark " +

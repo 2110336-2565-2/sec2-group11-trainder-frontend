@@ -3,6 +3,8 @@ import Link from "next/link";
 import { checkLoggedIn, login } from "@/services/auth.service";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/button";
+import { InputBox } from "@/components/inputBox";
 
 type LoginFormData = {
   username: { value: string };
@@ -56,41 +58,36 @@ export default function Login() {
         </p>
         <p className="text-center text-gray">Please login to your account</p>
         <form className="w-1/2 p-3 mt-2" onSubmit={handleLogin} method="post">
-          <div className="relative flex items-center">
-            <input
-              className="w-full pl-3.5 pr-12 py-2.5 mt-4 mb-2 block border border-gray rounded-xl"
-              type="text"
-              placeholder="Username"
-              required
-              name="username"
-            ></input>
-            <UserCircleIcon
-              className=" absolute h-8 w-8 mt-2 mr-2 right-0 text-gray"
-              strokeWidth="2"
-            />
-          </div>
-          <div className="relative flex items-center">
-            <input
-              className="w-full pl-3.5 pr-12 py-2.5 mt-4 mb-2 block border border-gray rounded-xl"
-              type="password"
-              placeholder="Password"
-              required
-              name="password"
-            />
-            <LockClosedIcon
-              className="absolute h-8 w-8 mt-2 mr-2 right-0 text-gray"
-              strokeWidth="2"
-            />
-          </div>
-          <button
-            className="w-full py-2.5 px-3 mt-10 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
-            type="submit"
-          >
-            Login
-          </button>
+          <InputBox
+            type="text"
+            placeholder="Username"
+            name="username"
+            required={true}
+            margin="my-2"
+            icon={
+              <UserCircleIcon
+                className="absolute h-8 w-8 mr-2 right-0 text-gray"
+                strokeWidth="2"
+              />
+            }
+          />
+          <InputBox
+            type="password"
+            placeholder="Password"
+            name="password"
+            required={true}
+            margin="my-2"
+            icon={
+              <LockClosedIcon
+                className="absolute h-8 w-8 mr-2 right-0 text-gray"
+                strokeWidth="2"
+              />
+            }
+          />
+          <Button name="Login" margin="mt-10 mb-3" type="submit" />
         </form>
         <div className="absolute bottom-5 text-sm">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/account/signup" className="text-blue hover:underline">
             Sign up
           </Link>

@@ -1,11 +1,9 @@
 import axios from "axios";
-import { userInfo } from "os";
 import authHeader from "./auth-header";
 import { UserProfile } from "./user.service";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
-
 export type TrainerProfile = {
   specialty: string[];
   rating: number;
@@ -13,10 +11,18 @@ export type TrainerProfile = {
   traineeCount: number;
   certificateUrl: string;
 };
-
 export type FilterInput = {
   limit: number;
   specialty: string[];
+};
+export type FilteredTrainerProfile = {
+  address: string;
+  avatarUrl: string;
+  firstname: string;
+  gender: string;
+  lastname: string;
+  trainerInfo: TrainerProfile;
+  username: string;
 };
 
 export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
@@ -29,20 +35,20 @@ export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
     });
 };
 
-export const filterTrainer = (filterInput: FilterInput) => {
+export const filterTrainer = (
+  filterInput: FilterInput
+): Promise<FilteredTrainerProfile[]> => {
   return axios
     .post(API_URL + "/protected/filter-trainer", filterInput, {
       headers: authHeader(),
     })
     .then((response) => {
-      const r = response.data.user;
-      var result = [];
-      for (let i = 0; i < r.length; i++) {
-        let trainer = r[i] as UserProfile;
-        trainer.birthdate = new Date(r[i].birthdate);
-        result.push(trainer);
-      }
-      return r;
+      let filteredTrainerProfiles: FilteredTrainerProfile[] = [];
+      response.data.trainers.forEach((trainerUserProfile: any) => {
+        const trainer = trainerUserProfile as FilteredTrainerProfile;
+        filteredTrainerProfiles.push(trainer);
+      });
+      return filteredTrainerProfiles;
     })
     .catch((error) => {
       throw error;
@@ -66,6 +72,23 @@ export const getTrainerProfile = (username: string) => {
       userProfile.birthdate = new Date(userDataResponse.birthdate);
       const trainerProfile = response.data.trainerInfo as TrainerProfile;
       return { userProfile: userProfile, trainerProfile: trainerProfile };
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getCurrentTrainerInfo = () => {
+  return axios
+    .get(API_URL + "/protected/trainer-profile", {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      const info = response.data.trainerInfo as TrainerProfile;
+      if (info.specialty === null) {
+        info.specialty = [];
+      }
+      return info;
     })
     .catch((error) => {
       throw error;

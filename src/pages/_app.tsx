@@ -47,11 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Trainder</title>
         <link rel="icon" href="/trainder_icon.png" />
       </Head>
-      {authorized && (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      )}
+      <Layout>{authorized && <Component {...pageProps} />}</Layout>
     </>
   );
 }

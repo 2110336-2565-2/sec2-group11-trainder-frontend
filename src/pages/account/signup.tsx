@@ -1,16 +1,38 @@
 import { register } from "@/services/auth.service";
 import type { RegistrationData } from "@/services/auth.service";
-import {
-  ChevronDownIcon,
-  LockClosedIcon,
-  UserCircleIcon,
-} from "@heroicons/react/24/outline";
+import { LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useCallback, useState } from "react";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { AxiosError } from "axios";
+import Places from "@/components/places";
+import { useLoadScript } from "@react-google-maps/api";
+import { Dropdown } from "@/components/dropdown";
+import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { Button } from "@/components/button";
+import { InputBox } from "@/components/inputBox";
+import Link from "next/link";
 
-const renderForm = (i: number) => {
-  type Fields = {
+type RegistrationFormInput = {
+  username: { value: string };
+  password: { value: string };
+  userType: { value: string };
+  firstname: { value: string };
+  lastname: { value: string };
+  birthdate: { value: string };
+  citizenId: { value: string };
+  phoneNumber: { value: string };
+  gender: { value: string };
+  address: { value: string };
+};
+
+export default function Signup() {
+  const router = useRouter();
+  const [selectedUserType, setSelectedUserType] = useState<string>("");
+  const [selectedGender, setSelectedGender] = useState<string>("");
+  const [isFormCompleted, setFormCompleted] = useState<boolean>(false);
+  const [isPasswordMatched, setPasswordMatch] = useState<boolean>(true);
+
+  type Field = {
     placeholder: string;
     name: string;
     type: string;
@@ -19,7 +41,7 @@ const renderForm = (i: number) => {
     choices?: string[] | undefined;
   };
 
-  const fields: Fields[][] = [
+  const fields: Field[][] = [
     [
       {
         placeholder: "Username",
@@ -33,6 +55,12 @@ const renderForm = (i: number) => {
         ),
       },
       {
+        placeholder: "User Type",
+        name: "userType",
+        type: "select",
+        choices: ["User Type", "Trainer", "Trainee"],
+      },
+      {
         placeholder: "Password",
         name: "password",
         type: "password",
@@ -44,10 +72,15 @@ const renderForm = (i: number) => {
         ),
       },
       {
-        placeholder: "User Type",
-        name: "userType",
-        type: "select",
-        choices: ["Trainer", "Trainee"],
+        placeholder: "Confirm Password",
+        name: "confirmPassword",
+        type: "password",
+        icon: (
+          <LockClosedIcon
+            className="absolute h-8 w-8 mr-4 right-0 text-gray"
+            strokeWidth="2"
+          />
+        ),
       },
     ],
     [
@@ -70,99 +103,113 @@ const renderForm = (i: number) => {
         placeholder: "Gender",
         name: "gender",
         type: "select",
-        choices: ["Male", "Female", "Other"],
-      },
-    ],
-    [
-      {
-        placeholder: "House No. & Street",
-        name: "address",
-        type: "text",
-      },
-      {
-        placeholder: "Postal code",
-        name: "postalCode",
-        type: "text",
-        pattern: "[0-9]{5}",
+        choices: ["Gender", "Male", "Female", "Other"],
       },
     ],
   ];
 
-  const [selected, setSelected] = useState<string>();
+  const renderForm = (i: number) => {
+    return (
+      <>
+        {fields[i].map((field, index) => {
+          return (
+            <div key={index}>
+              {field.type == "select" ? (
+                <div className="py-2 px-2 w-full h-full">
+                  <Dropdown
+                    name={field.name}
+                    value={
+                      field.name === "userType"
+                        ? selectedUserType
+                        : selectedGender
+                    }
+                    onChange={
+                      field.name === "userType"
+                        ? setSelectedUserType
+                        : setSelectedGender
+                    }
+                    options={field.choices ?? []}
+                    multiple={false}
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              ) : (
+                <>
+                  <InputBox
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    name={field.name}
+                    required={true}
+                    pattern={field.pattern}
+                    icon={field.icon}
+                    borderColor={
+                      field.type === "password"
+                        ? isPasswordMatched
+                          ? undefined
+                          : "border-pink-dark"
+                        : undefined
+                    }
+                  />
+                  {field.type === "password" && !isPasswordMatched && (
+                    <div className="text-sm mx-4 mb-2 text-pink-dark">
+                      Password does not match.
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          );
+        })}
+      </>
+    );
+  };
 
-  return (
-    <>
-      {fields[i].map((field) => {
-        return (
-          <div className="relative flex items-center">
-            {field.type == "select" ? (
-              <>
-                <select
-                  className="w-full px-3.5 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl appearance-none hover:cursor-pointer bg-white"
-                  value={selected}
-                  defaultValue={""}
-                  onChange={(event) => setSelected(event.target.value)}
-                  required
-                  name={field.name}
-                >
-                  <option disabled value="" hidden key="default">
-                    {field.placeholder}
-                  </option>
-                  {field.choices?.map((choice) => {
-                    return (
-                      <option value={choice} key={choice}>
-                        {choice}
-                      </option>
-                    );
-                  })}
-                </select>
-                <ChevronDownIcon
-                  className=" absolute h-7 w-7 mr-5 right-0"
-                  strokeWidth="2"
-                />
-              </>
-            ) : (
-              <input
-                className={
-                  "w-full py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl" +
-                  (field.icon != null ? " pl-3.5 pr-12" : " px-3.5")
-                }
-                placeholder={field.placeholder}
-                type={field.type}
-                pattern={field.pattern ?? "*"}
-                required
-                name={field.name}
-              />
-            )}
-            {field.icon != null ? <>{field.icon}</> : <></>}
-          </div>
-        );
-      })}
-    </>
-  );
-};
+  const handleFormCompletion = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-type RegistrationFormInput = {
-  username: { value: string };
-  password: { value: string };
-  userType: { value: string };
-  firstname: { value: string };
-  lastname: { value: string };
-  birthdate: { value: string };
-  citizenId: { value: string };
-  phoneNumber: { value: string };
-  gender: { value: string };
-  address: { value: string };
-  postalCode: { value: string };
-};
+    // check all field is filled
+    let isCompleted = true;
+    fields.map((part) => {
+      part.map((field) => {
+        const data = e.currentTarget.elements.namedItem(
+          field.name
+        ) as HTMLInputElement;
+        if (data.value === undefined || data.value === "") {
+          isCompleted = false;
+          setFormCompleted(false);
+          return;
+        }
+      });
+      if (!isCompleted) return;
+    });
 
-export default function Signup() {
-  const router = useRouter();
+    // check password is matched
+    const password = e.currentTarget.elements.namedItem(
+      "password"
+    ) as HTMLInputElement;
+    const confirmPassword = e.currentTarget.elements.namedItem(
+      "confirmPassword"
+    ) as HTMLInputElement;
+    if (
+      confirmPassword.value !== "" &&
+      password.value !== confirmPassword.value
+    ) {
+      setPasswordMatch(false);
+      setFormCompleted(false);
+      return;
+    } else {
+      setPasswordMatch(true);
+    }
+
+    setFormCompleted(isCompleted);
+  };
+
   const handleRegistrationForm = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = e.target as typeof e.target & RegistrationFormInput;
-      // TODO: Refactor this I think there is a better way to do this.
+      const results = await getGeocode({ address: formData.address.value });
+      const { lat, lng } = getLatLng(results[0]);
       register({
         username: formData.username.value,
         password: formData.password.value,
@@ -174,7 +221,8 @@ export default function Signup() {
         phoneNumber: formData.phoneNumber.value,
         gender: formData.gender.value,
         address: formData.address.value,
-        subAddress: formData.postalCode.value,
+        lat: lat,
+        lng: lng,
       } as RegistrationData)
         .then(() => {
           // TODO: Show registration successful, wait a bit, then redirect back to login.
@@ -197,6 +245,15 @@ export default function Signup() {
     },
     []
   );
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      : "",
+    libraries: ["places"],
+  });
+  if (!isLoaded) return <div>Loading...</div>;
+
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
@@ -214,6 +271,7 @@ export default function Signup() {
           className="w-4/5 mt-3 flex flex-col"
           action=""
           onSubmit={handleRegistrationForm}
+          onChange={handleFormCompletion}
         >
           <div className="grid grid-cols-2 justify-items-stretch">
             {renderForm(0)}
@@ -226,25 +284,26 @@ export default function Signup() {
           </div>
           <div className="w-full flex flex-col">
             <h1>Address</h1>
-            <div className="grid grid-cols-2 justify-items-stretch">
-              {renderForm(2)}
+            <div className="w-full pr-3.5">
+              <Places />
             </div>
-            <input
-              className="pl-3.5 pr-12 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl"
-              placeholder="Sub district, District, Province"
-              type="text"
-              disabled
-            />
           </div>
           <div className="flex justify-center">
-            <button
-              className="w-1/2 py-2.5 px-3 mt-10 mb-3 bg-pink hover:bg-pink-dark shadow rounded-xl text-white"
+            <Button
+              name="Create Account"
+              margin="mt-10 mb-3"
+              width="w-1/2"
               type="submit"
-            >
-              Create Account
-            </button>
+              disabled={!isFormCompleted}
+            />
           </div>
         </form>
+        <div className="absolute bottom-5 text-sm">
+          Already have an account?{" "}
+          <Link href="/" className="text-blue hover:underline">
+            Login
+          </Link>
+        </div>
       </div>
     </main>
   );

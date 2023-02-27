@@ -11,6 +11,20 @@ type LoginResponse = {
   token?: string;
   username?: string;
 };
+export type RegistrationData = {
+  username: string;
+  password: string;
+  userType: string;
+  firstname: string;
+  lastname: string;
+  birthdate: string;
+  citizenId: string;
+  gender: string;
+  phoneNumber: string;
+  address: string;
+  lat: number;
+  lng: number;
+};
 
 export const login = (username: string, password: string) => {
   return axios
@@ -29,21 +43,6 @@ export const login = (username: string, password: string) => {
     });
 };
 export const logout = () => localStorage.removeItem("user");
-
-export type RegistrationData = {
-  username: string;
-  password: string;
-  userType: string;
-  firstname: string;
-  lastname: string;
-  birthdate: string;
-  citizenId: string;
-  gender: string;
-  phoneNumber: string;
-  address: string;
-  subAddress: string;
-};
-
 export const register = (registrationData: RegistrationData) => {
   return axios.post(API_URL + "/register", registrationData);
 };
@@ -59,8 +58,11 @@ export const checkLoggedIn = (): Promise<boolean> => {
     return Promise.resolve(false);
   }
 };
-
 export const getCurrentUser = () => {
-  const userData = localStorage.getItem("user");
-  return userData ? JSON.parse(userData) : {};
+  if (typeof window !== "undefined") {
+    const userData = localStorage.getItem("user");
+    return userData ? JSON.parse(userData) : {};
+  } else {
+    return {};
+  }
 };
