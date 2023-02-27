@@ -52,7 +52,7 @@ const BookTrainerProfile = () => {
     } else {
       router.back();
     }
-  }, []);
+  }, [router, username]);
 
   const Image = () => {
     return (

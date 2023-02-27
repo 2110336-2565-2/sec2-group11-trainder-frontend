@@ -46,7 +46,7 @@ export const NavBar = () => {
       onclick: useCallback(() => {
         logout();
         router.push("/");
-      }, []),
+      }, [router]),
       color: "pink-dark",
     },
   ];
