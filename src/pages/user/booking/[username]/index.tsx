@@ -57,18 +57,6 @@ const BookTrainerProfile = () => {
     }
   });
 
-  const ProfileImage = () => {
-    return (
-      <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
-        <Image
-          src="/default_profile.jpg"
-          alt=""
-          className="rounded-2xl object-contain w-28 h-28 sm:w-36 sm:h-36 md:w-fit md:h-fit"
-        />
-      </div>
-    );
-  };
-
   const Name = () => {
     return (
       <p className="text-left text-2xl md:text-3xl font-bold">
@@ -79,7 +67,7 @@ const BookTrainerProfile = () => {
 
   const Skill = () => {
     return (
-      <p className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
+      <div className="text-start text-lg md:text-xl mt-5 ml-10 mr-10 mb-5 leading-loose font-semibold">
         {trainerInfo.specialty !== null && trainerInfo.specialty.length > 0 && (
           <div>
             Specialties :{" "}
@@ -119,7 +107,7 @@ const BookTrainerProfile = () => {
 
         {/* TODO: show this after certificateUrl are implemented */}
         {/* <Link href={trainerProfile.certificateUrl}>Certificate</Link> */}
-      </p>
+      </div>
     );
   };
 
@@ -147,7 +135,17 @@ const BookTrainerProfile = () => {
               <span>View All Reviews</span>
             </div>
           </Link>
-          <ProfileImage />
+          <div className=" mt-6 md:mt-10 flex justify-center h-full">
+            <div className="object-cover overflow-hidden rounded-2xl relative w-28 h-28 sm:w-36 sm:h-36 md:w-72 md:h-72">
+              <Image
+                src="/default_profile.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw"
+                priority
+              />
+            </div>
+          </div>
         </div>
 
         <span className="flex md:hidden w-auto h-0.5 bg-gray-dark opacity-50 rounded-3xl mx-16"></span>

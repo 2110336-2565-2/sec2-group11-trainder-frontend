@@ -10,8 +10,9 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { Fragment, useCallback } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
 const navLinks = [
   {
@@ -35,6 +36,7 @@ const navLinks = [
 
 export const NavBar = () => {
   const router = useRouter();
+  const [username, setUsername] = useState<string>("Username");
   const profileMenu = [
     {
       name: "profile",
@@ -46,10 +48,12 @@ export const NavBar = () => {
       onclick: useCallback(() => {
         logout();
         router.push("/");
-      }, []),
+      }, [router]),
       color: "pink-dark",
     },
   ];
+
+  useEffect(() => setUsername(getCurrentUser().username), []);
 
   return (
     <>
@@ -80,11 +84,15 @@ export const NavBar = () => {
                     <p className="text-backgroundColor text-2xl mx-0 font-lexend-exa block lg:block md:hidden md:text-3xl md-2">
                       Trainder
                     </p>
-                    <img
-                      src="/trainder.png"
-                      alt=""
-                      className="object-contain h-12 w-12 md:h-16 md:w-16"
-                    />
+                    <div className="h-12 w-12 md:h-16 md:w-16 relative">
+                      <Image
+                        src="/trainder.png"
+                        alt=""
+                        fill
+                        sizes="(max-width: 768px) 100vw"
+                        priority
+                      />
+                    </div>
                   </div>
                   <div className="hidden md:block">
                     {navLinks.map((link, index) => {
@@ -114,7 +122,7 @@ export const NavBar = () => {
                           className="h-6 w-6 mx-2"
                           strokeWidth={2}
                         />
-                        {getCurrentUser().username ?? "Username"}
+                        {username}
                         <ChevronDownIcon
                           className="h-6 w-6 mx-2"
                           strokeWidth={2}
