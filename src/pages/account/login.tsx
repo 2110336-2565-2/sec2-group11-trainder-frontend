@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import { InputBox } from "@/components/inputBox";
+import Image from "next/image";
 
 type LoginFormData = {
   username: { value: string };
@@ -44,7 +45,15 @@ export default function Login() {
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-1/2 h-full bg-blue hidden md:flex flex-col items-center justify-center">
-        <img src="/login.png" alt="" className="object-center scale-75" />
+        <div className="relative object-center h-3/5 w-4/5">
+          <Image
+            src="/login.png"
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw"
+            style={{ objectFit: "contain" }}
+          />
+        </div>
         <p className="text-center text-xl text-white">
           Be fit together with <span className="text-4xl">TRAINDER</span>
         </p>
