@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
+import { UserProfile } from "@/services/user.service";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useLoadScript } from "@react-google-maps/api";
@@ -12,14 +12,6 @@ import Image from "next/image";
 const BookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
-  const [profile, setProfile] = useState<UserProfile>();
-  useEffect(() => {
-    setLoading(true);
-    getCurrentUserProfile().then((data) => {
-      setProfile(data);
-    });
-  }, []);
-
   const [loading, setLoading] = useState<boolean>(true);
   const [trainerCoordinate, setTrainerCoordinate] = useState<LatLngLiteral>({
     lat: 0,
@@ -165,26 +157,24 @@ const BookTrainerProfile = () => {
           <div className="w-3/4 h-[36rem]">
             <Map trainerCoordinate={trainerCoordinate} />
           </div>
-          {profile?.usertype === "Trainer" ? (
-            <></>
-          ) : (
-            <div className="flex w-full mt-10 px-16 lg:px-24 justify-around space-x-10 sm:space-x-16 md:space-x-20">
-              <Button name="Start Chat" />
-              <Button
-                name="Calendar"
-                onClick={() =>
-                  router.push({
+          <div className="flex w-full mt-10 px-16 lg:px-24 justify-around space-x-10 sm:space-x-16 md:space-x-20">
+            <Button name="Start Chat" />
+            <Button
+              name="Calendar"
+              onClick={() =>
+                router.push(
+                  {
                     pathname: "/user/booking/[username]/calendar",
                     query: {
                       username: username,
                       firstname: trainerProfile.firstname,
                       lastname: trainerProfile.lastname,
                     },
-                  })
-                }
-              />
-            </div>
-          )}
+                  },
+                )
+              }
+            />
+          </div>
         </div>
       </div>
     </main>
