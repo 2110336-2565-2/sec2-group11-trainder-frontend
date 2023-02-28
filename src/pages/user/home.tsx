@@ -34,7 +34,7 @@ const Home = () => {
             {profile?.usertype === "Trainer" && (
               <MenuItem
                 text="View All Reviews"
-                href={"/user/review/" + profile.username}
+                href={`/user/review/${encodeURIComponent(profile.username)}`}
                 icon={
                   <DocumentTextIcon
                     className="h-11 w-11 text-blue"
