@@ -17,6 +17,7 @@ const BookTrainerProfile = () => {
     setLoading(true);
     getCurrentUserProfile().then((data) => {
       setProfile(data);
+      setLoading(false);
     });
   }, []);
 
