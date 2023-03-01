@@ -138,7 +138,7 @@ const BookTrainerProfile = () => {
           <Link
             className="w-full flex justify-end mt-5 pr-10 md:pr-6 lg:pr-10"
             href={{
-              pathname: "user/review/[username]",
+              pathname: "/user/review/[username]",
               query: { username: username },
             }}
           >
