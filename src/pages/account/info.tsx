@@ -6,6 +6,7 @@ import {
   updateTrainerProfile,
 } from "@/services/trainer.service";
 import { ArrowUpTrayIcon, UserIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const RenderInfoForm = () => {
@@ -104,19 +105,20 @@ const RenderInfoForm = () => {
                         <>
                           <label
                             htmlFor="display-file"
-                            className={`flex items-center justify-center w-full md:w-5/6 h-48 md:h-64 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
+                            className={`flex items-center justify-center w-full md:w-5/6 h-48 md:h-64 p-4 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
                               selectedCertificate ? "" : "opacity-75"
                             } hover:bg-gray-dark hover:opacity-70`}
                           >
                             {selectedCertificate ? (
-                              <img
-                                src={
-                                  selectedCertificate
-                                    ? URL.createObjectURL(selectedCertificate)
-                                    : undefined
-                                }
-                                className="object-contain h-full w-full p-4"
-                              />
+                              <div className="relative object-contain h-full w-full">
+                                <Image
+                                  src={URL.createObjectURL(selectedCertificate)}
+                                  alt=""
+                                  fill
+                                  sizes="(max-width: 768px) 100vw"
+                                  style={{ objectFit: "contain" }}
+                                />
+                              </div>
                             ) : (
                               <p className="text-gray font-bold">
                                 Click to upload file
@@ -260,10 +262,15 @@ const TrainerInfo = () => {
             <div className="relative h-fit">
               <div className="h-20 w-20 md:h-40 md:w-40 rounded-full bg-blue">
                 {selectedProfileImg ? (
-                  <img
-                    src={URL.createObjectURL(selectedProfileImg)}
-                    className="object-contain h-full w-full rounded-full"
-                  />
+                  <div className="relative object-contain h-full w-full rounded-full overflow-hidden">
+                    <Image
+                      src={URL.createObjectURL(selectedProfileImg)}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw"
+                      style={{ objectFit: "contain" }}
+                    />
+                  </div>
                 ) : (
                   <UserIcon className="text-white p-2" strokeWidth={1} />
                 )}

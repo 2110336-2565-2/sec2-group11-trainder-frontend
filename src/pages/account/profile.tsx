@@ -2,6 +2,8 @@ import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import { useRouter } from "next/router";
+import Image from "next/image";
+
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile>();
   const router = useRouter();
@@ -84,12 +86,16 @@ const Profile = () => {
               </strong>
             </p>
           </div>
-          <div className="py-6">
-            <img
-              src="../trainder_icon.png"
-              alt=""
-              className="w-1/2 md:w-2/3 mx-auto"
-            />
+          <div className="py-6 h-full w-full">
+            <div className="relative w-full h-40 md:h-48">
+              <Image
+                src="/trainder_icon.png"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
           </div>
           <div className="bg-white py-8 px-10 rounded-3xl w-fit flex justify-center">
             <div className="columns-1 sm:columns-2 text-lg md:text-xl">

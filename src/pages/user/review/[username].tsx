@@ -1,19 +1,8 @@
 import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
+import Image from "next/image";
 
 const Review = () => {
-  const Image = () => {
-    return (
-      <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
-        <img
-          src="/default_profile.jpg"
-          alt=""
-          className="rounded-2xl object-contain w-28 h-28 sm:w-36 sm:h-36 md:w-fit md:h-fit"
-        />
-      </div>
-    );
-  };
-
   const ReviewBox = () => {
     return (
       <div className="h-[20%] w-[80%] bg-white mb-[5%] border-2 border-gray rounded-3xl items-center justify-between drop-shadow-lg hover:bg-gray-light"></div>
@@ -21,23 +10,29 @@ const Review = () => {
   };
 
   return (
-    <>
-      <div className="w-full h-screen flex flex-row items-center justify-center text-3xl bg-backgroundColor">
-        <div className="w-2/5 h-screen flex-col">
-          <div className="mt-[20%]"></div>
-          <div className="flex items-center justify-start px-2 md:px-5">
-            <BackButton href="/user/booking" />
-            <p className="text-left text-2xl md:text-3xl font-bold display: inline-flex">
-              Rating and Review
-            </p>
-          </div>
-          <div className="mt-[15%] flex flex-col items-center justify-start px-2 md:px-5">
+    <main className="w-full h-screen pt-20 pl-6 flex flex-col bg-backgroundColor">
+      <div className="flex items-center mb-3 md:mb-8">
+        <BackButton href="/user/booking" />
+        <p className="text-xl md:text-3xl mx-5 md:mx-10 font-bold display: inline-flex">
+          Rating and Review
+        </p>
+      </div>
+      <div className="flex h-full">
+        <div className="w-2/5 flex-col mr-10">
+          <div className="flex flex-col items-center justify-start px-2 md:px-5 h-full text-2xl">
             Trainer Name
-            <Image />
+            <div className="relative w-52 h-52 md:w-60 md:h-60 lg:w-80 lg:h-80 mt-6 md:mt-10 rounded-2xl overflow-hidden">
+              <Image
+                src="/default_profile.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw"
+                style={{ objectFit: "contain"}}
+              />
+            </div>
           </div>
         </div>
-        <div className="w-3/5 flex flex-col h-screen">
-          <div className="mt-[15%]"></div>
+        <div className="w-3/5 flex flex-col mb-10">
           <div className="flex-grow overflow-auto">
             <div className="h-full overflow-auto scrollbar-thin scrollbar-thumb-white-300 scrollbar-track-transparent">
               <ReviewBox />
@@ -56,7 +51,7 @@ const Review = () => {
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 };
 export default Review;
