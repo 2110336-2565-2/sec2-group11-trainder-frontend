@@ -1,6 +1,5 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-import { Simulate } from "react-dom/test-utils";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL

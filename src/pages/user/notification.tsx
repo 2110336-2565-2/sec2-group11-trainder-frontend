@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  BookingInput,
-  BookingList,
-  getBooking,
-} from "@/services/booking.service";
+import { BookingList, getBooking } from "@/services/booking.service";
 import { Button } from "@/components/button";
 
 const Notification = () => {
