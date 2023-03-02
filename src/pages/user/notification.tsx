@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { BookingList, getBooking } from "@/services/booking.service";
 import { Button } from "@/components/button";
+import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
+  const [profile, setProfile] = useState<UserProfile>();
   useEffect(() => {
+    getCurrentUserProfile().then((data) => {
+      setProfile(data);
+    });
     getBooking().then((data) => {
       console.log(data);
       setBooking(data!!);
@@ -31,6 +36,35 @@ const Notification = () => {
       </div>
     );
   };
+  const getName = (booking: BookingList) => {
+    let name;
+    if (profile?.usertype === "Trainee") {
+      name = booking.trainer;
+    } else {
+      name = booking.trainee;
+    }
+    return <div className="text-xl font-500">{name}</div>;
+  };
+  const getBottomRow = (booking: BookingList) => {
+    if (booking.status === "confirm") {
+      return <div className="pt-5 flex">Confirmed.</div>;
+    } else {
+      if (profile?.usertype === "Trainee") {
+        return <div className="pt-5 flex">Waiting for confirmation.</div>;
+      } else {
+        return (
+          <div className="flex justify-between pt-5">
+            <div className="px-2">
+              <Button name="Confirm" onClick={() => {}}></Button>
+            </div>
+            <div className="px-2">
+              <Button name="Cancel" onClick={() => {}}></Button>
+            </div>
+          </div>
+        );
+      }
+    }
+  };
   return (
     <>
       <main className="w-full h-screen flex bg-backgroundColor pt-24 h-full min-h-screen flex-col">
@@ -38,28 +72,23 @@ const Notification = () => {
         <div className="flex-col flex justify-center w-full">
           <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center p-5">
             {booking?.map((booking) => {
-              return (
+              return booking.status !== "complete" ? (
                 <div
                   key={booking._id}
                   className="flex flex-col items-center text-center h-full break-words p-5 duration-300
                                     bg-white w-auto border-2 border-gray rounded-3xl drop-shadow-lg"
                 >
-                  <div className="text-xl font-500">{booking.trainer}</div>
+                  {getName(booking)}
                   <div className="text-gray-500">
                     {booking.startDateTime.getDate()}/
                     {booking.startDateTime.getMonth()}/
                     {booking.startDateTime.getFullYear()}
                   </div>
                   {getTime(booking)}
-                  <div className="flex justify-between pt-5">
-                    <div className="px-2">
-                      <Button name="Confirm" onClick={() => {}}></Button>
-                    </div>
-                    <div className="px-2">
-                      <Button name="Cancel" onClick={() => {}}></Button>
-                    </div>
-                  </div>
+                  {getBottomRow(booking)}
                 </div>
+              ) : (
+                <></>
               );
             })}
           </div>
@@ -68,5 +97,4 @@ const Notification = () => {
     </>
   );
 };
-
 export default Notification;

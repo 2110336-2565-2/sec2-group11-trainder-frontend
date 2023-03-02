@@ -17,6 +17,7 @@ export type BookingList = {
   startDateTime: Date;
   status: string;
   trainer: string;
+  trainee: string;
 };
 export const getBooking = () => {
   return axios
