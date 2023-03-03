@@ -1,20 +1,33 @@
 import { useEffect, useState } from "react";
-import { BookingList, getBooking } from "@/services/booking.service";
+import {
+  BookingList,
+  deleteBooking,
+  getBooking,
+  updateBooking,
+} from "@/services/booking.service";
 import { Button } from "@/components/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
   const [profile, setProfile] = useState<UserProfile>();
+  const [status, setStatus] = useState(Array(booking?.length).fill("pending"));
+  const [visible, setVisible] = useState(Array(booking?.length).fill(true));
+  const setVisibleArr = (i: number, v: boolean) => {
+    setVisible(Object.assign([...visible], { [i]: v }));
+  };
+  const setStatusArr = (i: number, v: string) => {
+    setStatus(Object.assign([...status], { [i]: v }));
+  };
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
     });
     getBooking().then((data) => {
       console.log(data);
-      setBooking(data!!);
+      setBooking(data);
     });
-  }, []);
+  });
   const getTime = (booking: BookingList) => {
     let hourOfStart, hourOfEnd, minutesOfStart, minutesOfEnd;
     const startHour = booking.startDateTime.getUTCHours();
@@ -45,24 +58,74 @@ const Notification = () => {
     }
     return <div className="text-xl font-500">{name}</div>;
   };
-  const getBottomRow = (booking: BookingList) => {
-    if (booking.status === "confirm") {
+  const getBottomRow = (booking: BookingList, i: number) => {
+    if (status[i] === "confirm" || booking.status === "confirm") {
       return <div className="pt-5 flex">Confirmed.</div>;
+    }
+    if (profile?.usertype === "Trainee") {
+      return <div className="pt-5 flex">Waiting for confirmation.</div>;
     } else {
-      if (profile?.usertype === "Trainee") {
-        return <div className="pt-5 flex">Waiting for confirmation.</div>;
-      } else {
-        return (
-          <div className="flex justify-between pt-5">
-            <div className="px-2">
-              <Button name="Confirm" onClick={() => {}}></Button>
-            </div>
-            <div className="px-2">
-              <Button name="Cancel" onClick={() => {}}></Button>
-            </div>
+      return (
+        <div className="flex justify-between pt-5">
+          <div className="px-2">
+            <Button
+              name="Confirm"
+              onClick={async () => {
+                await updateBooking({
+                  bookingId: booking._id,
+                  paymentStatus: booking.status,
+                  status: "confirm",
+                });
+                setStatusArr(i, "confirm");
+              }}
+            ></Button>
           </div>
-        );
-      }
+          <div className="px-2">
+            <Button
+              name="Cancel"
+              onClick={async () => {
+                await deleteBooking({ bookingId: booking._id });
+                setStatusArr(i, "complete");
+                setVisibleArr(i, false);
+              }}
+            ></Button>
+          </div>
+        </div>
+      );
+    }
+  };
+  const getBookingList = () => {
+    if (booking?.length > 0) {
+      return (
+        <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center p-5">
+          {booking?.map((booking, i) => {
+            return booking.status !== "complete" ? (
+              <div
+                key={booking._id}
+                className="flex flex-col items-center text-center h-full break-words p-5 duration-300
+                                    bg-white w-auto border-2 border-gray rounded-3xl drop-shadow-lg"
+              >
+                {getName(booking)}
+                <div className="text-gray-500">
+                  {booking.startDateTime.getDate()}/
+                  {booking.startDateTime.getMonth()}/
+                  {booking.startDateTime.getFullYear()}
+                </div>
+                {getTime(booking)}
+                {getBottomRow(booking, i)}
+              </div>
+            ) : (
+              <></>
+            );
+          })}
+        </div>
+      );
+    } else {
+      return (
+        <div className="text-gray-400 mt-5 p-5 text-center text-2xl">
+          There is currently no upcoming training appointment scheduled.
+        </div>
+      );
     }
   };
   return (
@@ -70,28 +133,7 @@ const Notification = () => {
       <main className="w-full h-screen flex bg-backgroundColor pt-24 h-full min-h-screen flex-col">
         <div className="text-3xl mx-8">Training session appointments</div>
         <div className="flex-col flex justify-center w-full">
-          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center p-5">
-            {booking?.map((booking) => {
-              return booking.status !== "complete" ? (
-                <div
-                  key={booking._id}
-                  className="flex flex-col items-center text-center h-full break-words p-5 duration-300
-                                    bg-white w-auto border-2 border-gray rounded-3xl drop-shadow-lg"
-                >
-                  {getName(booking)}
-                  <div className="text-gray-500">
-                    {booking.startDateTime.getDate()}/
-                    {booking.startDateTime.getMonth()}/
-                    {booking.startDateTime.getFullYear()}
-                  </div>
-                  {getTime(booking)}
-                  {getBottomRow(booking)}
-                </div>
-              ) : (
-                <></>
-              );
-            })}
-          </div>
+          {getBookingList()}
         </div>
       </main>
     </>
