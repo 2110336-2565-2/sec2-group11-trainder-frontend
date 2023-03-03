@@ -95,7 +95,7 @@ const Notification = () => {
     }
   };
   const getBookingList = () => {
-    if (booking?.length > 0) {
+    if (booking !== undefined && booking.length > 0) {
       return (
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center p-5">
           {booking?.map((booking, i) => {

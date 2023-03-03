@@ -48,7 +48,7 @@ export const getBooking = () => {
     .get(API_URL + "/protected/bookings", { headers: authHeader() })
     .then((response) => {
       if (response.data.bookings === undefined) {
-        return [];
+        return Object.create(Array());
       } else {
         let booking = response.data.bookings as [BookingList];
         booking.map((elem) => {
