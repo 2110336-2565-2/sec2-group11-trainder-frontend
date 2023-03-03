@@ -15,11 +15,12 @@ const Notification = () => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
     });
+  }, []);
+  useEffect(() => {
     getBooking().then((data) => {
-      console.log(data);
       setBooking(data);
     });
-  }, [booking]);
+  });
   const getTime = (booking: BookingList) => {
     let hourOfStart, hourOfEnd, minutesOfStart, minutesOfEnd;
     const startHour = booking.startDateTime.getUTCHours();
@@ -115,7 +116,7 @@ const Notification = () => {
   };
   return (
     <>
-      <main className="w-full h-screen flex bg-backgroundColor pt-24 h-full min-h-screen flex-col">
+      <main className="w-full flex bg-backgroundColor pt-24 h-full min-h-screen flex-col">
         <div className="text-3xl mx-8">Training session appointments</div>
         <div className="flex-col flex justify-center w-full">
           {getBookingList()}
