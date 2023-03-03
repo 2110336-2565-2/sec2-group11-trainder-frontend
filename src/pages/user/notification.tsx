@@ -11,14 +11,6 @@ import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
   const [profile, setProfile] = useState<UserProfile>();
-  const [status, setStatus] = useState(Array(booking?.length).fill("pending"));
-  const [visible, setVisible] = useState(Array(booking?.length).fill(true));
-  const setVisibleArr = (i: number, v: boolean) => {
-    setVisible(Object.assign([...visible], { [i]: v }));
-  };
-  const setStatusArr = (i: number, v: string) => {
-    setStatus(Object.assign([...status], { [i]: v }));
-  };
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
@@ -27,7 +19,7 @@ const Notification = () => {
       console.log(data);
       setBooking(data);
     });
-  });
+  }, [booking]);
   const getTime = (booking: BookingList) => {
     let hourOfStart, hourOfEnd, minutesOfStart, minutesOfEnd;
     const startHour = booking.startDateTime.getUTCHours();
@@ -50,16 +42,12 @@ const Notification = () => {
     );
   };
   const getName = (booking: BookingList) => {
-    let name;
-    if (profile?.usertype === "Trainee") {
-      name = booking.trainer;
-    } else {
-      name = booking.trainee;
-    }
+    const name =
+      profile?.usertype === "Trainee" ? booking.trainer : booking.trainee;
     return <div className="text-xl font-500">{name}</div>;
   };
-  const getBottomRow = (booking: BookingList, i: number) => {
-    if (status[i] === "confirm" || booking.status === "confirm") {
+  const getBottomRow = (booking: BookingList) => {
+    if (booking.status === "confirm") {
       return <div className="pt-5 flex">Confirmed.</div>;
     }
     if (profile?.usertype === "Trainee") {
@@ -76,7 +64,6 @@ const Notification = () => {
                   paymentStatus: booking.status,
                   status: "confirm",
                 });
-                setStatusArr(i, "confirm");
               }}
             ></Button>
           </div>
@@ -85,8 +72,6 @@ const Notification = () => {
               name="Cancel"
               onClick={async () => {
                 await deleteBooking({ bookingId: booking._id });
-                setStatusArr(i, "complete");
-                setVisibleArr(i, false);
               }}
             ></Button>
           </div>
@@ -98,7 +83,7 @@ const Notification = () => {
     if (booking !== undefined && booking.length > 0) {
       return (
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center p-5">
-          {booking?.map((booking, i) => {
+          {booking?.map((booking) => {
             return booking.status !== "complete" ? (
               <div
                 key={booking._id}
@@ -112,7 +97,7 @@ const Notification = () => {
                   {booking.startDateTime.getFullYear()}
                 </div>
                 {getTime(booking)}
-                {getBottomRow(booking, i)}
+                {getBottomRow(booking)}
               </div>
             ) : (
               <></>
