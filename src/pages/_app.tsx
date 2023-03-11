@@ -2,13 +2,32 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { checkLoggedIn } from "@/services/auth.service";
 import { Layout } from "@/components/layout";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState<boolean>(false);
+
+  // Check if that path is protected, then check if the user is logged in
+  const authCheck = useCallback(
+    (url: string) => {
+      const publicPaths = ["/", "/account/signup"];
+      const path = url.split("?")[0];
+      checkLoggedIn().then((loggedIn) => {
+        if (!loggedIn && !publicPaths.includes(path)) {
+          setAuthorized(false);
+          router.push({
+            pathname: "/",
+            query: { returnUrl: router.asPath },
+          });
+        }
+        setAuthorized(true);
+      });
+    },
+    [router]
+  );
 
   useEffect(() => {
     authCheck(router.asPath);
@@ -23,23 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
       router.events.off("routeChangeStart", hideContent);
       router.events.off("routeChangeComplete", authCheck);
     };
-  }, []);
-
-  // Check if that path is protected, then check if the user is logged in
-  const authCheck = (url: string) => {
-    const publicPaths = ["/", "/account/signup"];
-    const path = url.split("?")[0];
-    checkLoggedIn().then((loggedIn) => {
-      if (!loggedIn && !publicPaths.includes(path)) {
-        setAuthorized(false);
-        router.push({
-          pathname: "/",
-          query: { returnUrl: router.asPath },
-        });
-      }
-      setAuthorized(true);
-    });
-  };
+  }, [authCheck, router.asPath, router.events]);
 
   return (
     <>

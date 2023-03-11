@@ -11,6 +11,7 @@ import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { Button } from "@/components/button";
 import { InputBox } from "@/components/inputBox";
 import Link from "next/link";
+import Image from "next/image";
 
 type RegistrationFormInput = {
   username: { value: string };
@@ -243,7 +244,7 @@ export default function Signup() {
           throw error;
         });
     },
-    []
+    [router]
   );
 
   const { isLoaded } = useLoadScript({
@@ -257,7 +258,15 @@ export default function Signup() {
   return (
     <main className="flex h-screen bg-backgroundColor">
       <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
-        <img src="/signup.png" alt="" className="object-contain h-3/5 my-12" />
+        <div className="relative object-contain w-full h-3/5 my-12">
+          <Image
+            src="/signup.png"
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw"
+            style={{ objectFit: "contain" }}
+          />
+        </div>
         <p className="text-center text-white text-xl">
           Make an appointment then start workout!
         </p>
