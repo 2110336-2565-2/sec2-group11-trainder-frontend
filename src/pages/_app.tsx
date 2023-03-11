@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     router.events.on("routeChangeStart", hideContent);
     // On route change complete auth check
     router.events.on("routeChangeComplete", authCheck);
-
+    
     // Unsubscribe
     return () => {
       router.events.off("routeChangeStart", hideContent);
