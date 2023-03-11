@@ -44,7 +44,9 @@ const Notification = () => {
   };
   const getName = (booking: BookingList) => {
     const name =
-      profile?.usertype === "Trainee" ? booking.trainer : booking.trainee;
+      profile?.usertype === "Trainee"
+        ? booking.trainerFirstName + " " + booking.trainerLastName
+        : booking.traineeFirstName + " " + booking.traineeLastName;
     return <div className="text-xl font-500">{name}</div>;
   };
   const getBottomRow = (booking: BookingList) => {
