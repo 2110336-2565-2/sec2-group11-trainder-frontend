@@ -17,7 +17,11 @@ export type BookingList = {
   startDateTime: Date;
   status: string;
   trainer: string;
+  trainerFirstName: string;
+  trainerLastName: string;
   trainee: string;
+  traineeFirstName: string;
+  traineeLastName: string;
 };
 
 export const updateBooking = (updateBookingInfo: {
