@@ -36,14 +36,18 @@ const Review = () => {
   if (typeof username == "string") {
     getTrainerProfile(username)
       .then((res1) => {
+        setLoading(true);
         setTrainerProfile(res1.userProfile);
+        setLoading(false);
       })
       .catch(() => router.back())
-    // getTrainerReviews(username)
-    //   .then((res2) => {
-    //     setTrainerReviews(res2.reviewList);
-    //   })
-    // .catch(() => router.back())
+    getTrainerReviews(username)
+      .then((res2) => {
+        setLoading(true);
+        setTrainerReviews(res2.reviewList);
+        setLoading(false);
+      })
+    .catch(() => router.back())
   } else {
     router.back();
   }
@@ -130,6 +134,18 @@ const Review = () => {
               <ReviewBox comment="default comment" createdAt="default address" rating={3} username="default name"/>
               <ReviewBox comment="default comment" createdAt="default address" rating={2.5} username="default name"/>
               <ReviewBox comment="default comment" createdAt="default address" rating={2} username="default name"/>
+
+              {/*this section error because trainerReviews is empty so comment and other element is undefined*/}
+              {/* {trainerReviews[0].createdAt} */}
+              {/* {trainerReviews.map((review,idx) => {
+              return (
+                <div key={idx}>
+                  <ReviewBox comment={review.comment} createdAt={review.createdAt} rating={review.rating} username={review.username}/>
+                </div>
+              );
+              })} */}
+
+
             </div>
           </div>
           <div className="flex justify-end w-full space-x-10 text-start text-lg md:text-xl ">

@@ -75,11 +75,8 @@ export const getTrainerReviews = (username: string) => {
       }
     )
     .then((response) => {
-      let reviewList: ReviewDetail[] = [];
-      response.data.reviews.forEach((trainerReview: any) => {
-        const review = trainerReview as ReviewDetail;
-        reviewList.push(review);
-      });
+      const reviewData = response.data.review;
+      const reviewList = reviewData as ReviewDetail[];
       return {reviewList:reviewList};
     })
     .catch((error) => {
