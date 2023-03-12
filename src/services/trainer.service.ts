@@ -25,6 +25,13 @@ export type FilteredTrainerProfile = {
   username: string;
 };
 
+export type ReviewDetail = {
+  comment: string;
+  createdAt: string;
+  rating: number;
+  username : string;
+};
+
 export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
   return axios
     .post(API_URL + "/protected/update-trainer", updateTrainerInfo, {
@@ -49,6 +56,28 @@ export const filterTrainer = (
         filteredTrainerProfiles.push(trainer);
       });
       return filteredTrainerProfiles;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getTrainerReviews = (username: string) => {
+  return axios
+    .post(
+      API_URL + "/protected/reviews",
+      {
+        limit:10,
+        trainerusername: username,
+      },
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      const reviewData = response.data.review;
+      const reviewList = reviewData as ReviewDetail[];
+      return {reviewList:reviewList};
     })
     .catch((error) => {
       throw error;
