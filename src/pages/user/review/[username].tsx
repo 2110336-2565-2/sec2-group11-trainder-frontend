@@ -134,7 +134,6 @@ const Review = () => {
               <ReviewBox comment="default comment" createdAt="default address" rating={3} username="default name"/>
               <ReviewBox comment="default comment" createdAt="default address" rating={2.5} username="default name"/>
               <ReviewBox comment="default comment" createdAt="default address" rating={2} username="default name"/>
-
               {/*this section error because trainerReviews is empty so comment and other element is undefined*/}
               {/* {trainerReviews[0].createdAt} */}
               {/* {trainerReviews.map((review,idx) => {
