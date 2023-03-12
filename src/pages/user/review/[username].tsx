@@ -6,6 +6,7 @@ import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useRouter } from "next/router";
 import { getTrainerReviews, ReviewDetail } from "@/services/trainer.service";
 import { StarIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 const Review = () => {
   const [showModal, setShowModal] = useState(false);
@@ -51,17 +52,6 @@ const Review = () => {
     }
   }, [username]);
 
-  const Image = () => {
-    return (
-      <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
-        <img
-          src="/default_profile.jpg"
-          alt=""
-          className="rounded-2xl object-contain w-28 h-28 sm:w-36 sm:h-36 md:w-fit md:h-fit"
-        />
-      </div>
-    );
-  };
   const StarRating = (rating: { rating: number }) => {
     return (
       <div className="flex flex-row">
@@ -95,18 +85,19 @@ const Review = () => {
         {[...Array(5)].map((e, index) => {
           index += 1;
           return (
-            <button key={index}>
+         
               <StarIcon
+              key={index}
                 className={
                   index <= (hover || rating)
-                    ? "fill-yellow h-10 w-10 stroke-yellow"
-                    : "fill-none h-10 w-10 stroke-slate-300"
+                    ? "cursor-pointer  fill-yellow h-10 w-10 stroke-yellow"
+                    : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
                 }
                 onClick={() => setRating(index)}
                 onMouseEnter={() => setHover(index)}
                 onMouseLeave={() => setHover(rating)}
               />
-            </button>
+
           );
         })}
       </div>
@@ -139,7 +130,15 @@ const Review = () => {
           </div>
           <div className="mt-[15%] flex flex-col items-center justify-start px-2 md:px-5">
             {trainerProfile.firstname} {trainerProfile.lastname}
-            <Image />
+            <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
+              <Image
+                src="/default_profile.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw"
+                style={{ objectFit: "contain"}}
+              />
+      </div>
           </div>
         </div>
         <div className="w-3/5 flex flex-col h-screen">
