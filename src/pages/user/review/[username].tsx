@@ -1,15 +1,15 @@
 import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { UserProfile } from "@/services/user.service";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useRouter } from "next/router";
 import { getTrainerReviews, ReviewDetail } from "@/services/trainer.service";
-import {StarIcon} from "@heroicons/react/24/outline";
+import { StarIcon } from "@heroicons/react/24/outline";
 
 const Review = () => {
   const [showModal, setShowModal] = useState(false);
-
+  // const [rating, setRating] = useState(0);
   const [trainerProfile, setTrainerProfile] = useState<UserProfile>({
     username: "user",
     firstname: "firstname",
@@ -24,8 +24,6 @@ const Review = () => {
     lng: 0,
   });
 
-  
-
   const [trainerReviews, setTrainerReviews] = useState<ReviewDetail[]>([]);
 
   const router = useRouter();
@@ -33,25 +31,25 @@ const Review = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-  if (typeof username == "string") {
-    getTrainerProfile(username)
-      .then((res1) => {
-        setLoading(true);
-        setTrainerProfile(res1.userProfile);
-        setLoading(false);
-      })
-      .catch(() => router.back())
-    getTrainerReviews(username)
-      .then((res2) => {
-        setLoading(true);
-        setTrainerReviews(res2.reviewList);
-        setLoading(false);
-      })
-    .catch(() => router.back())
-  } else {
-    router.back();
-  }
-}, [username]);
+    if (typeof username == "string") {
+      getTrainerProfile(username)
+        .then((res1) => {
+          setLoading(true);
+          setTrainerProfile(res1.userProfile);
+          setLoading(false);
+        })
+        .catch(() => router.back());
+      getTrainerReviews(username)
+        .then((res2) => {
+          setLoading(true);
+          setTrainerReviews(res2.reviewList);
+          setLoading(false);
+        })
+        .catch(() => router.back());
+    } else {
+      router.back();
+    }
+  }, [username]);
 
   const Image = () => {
     return (
@@ -64,10 +62,10 @@ const Review = () => {
       </div>
     );
   };
-  const StarRating = (rating:{ rating: number; }) => {
-    return(
+  const StarRating = (rating: { rating: number }) => {
+    return (
       <div className="flex flex-row">
-        {[...Array<Number>(Math.round(rating.rating)),].map((e, idx) => {
+        {[...Array<Number>(Math.round(rating.rating))].map((e, idx) => {
           return (
             <StarIcon
               key={idx}
@@ -76,7 +74,7 @@ const Review = () => {
             ></StarIcon>
           );
         })}
-        {[...Array<Number>(5 -Math.round(rating.rating)),].map((e, idx) => {
+        {[...Array<Number>(5 - Math.round(rating.rating))].map((e, idx) => {
           return (
             <StarIcon
               key={idx}
@@ -84,49 +82,49 @@ const Review = () => {
               strokeWidth={2}
             ></StarIcon>
           );
-          })}
-      </div>
-    )
-  }
-
-  const EmptyStar = () => {
-    return (
-      <div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          aria-hidden="true"
-          className="h-10 w-10 none-yellow stroke-slate-300"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-          ></path>
-        </svg>
+        })}
       </div>
     );
   };
 
-  const ReviewBox = (review:ReviewDetail) => {
+  const ReviewRating = () => {
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(0);
+    return (
+      <div className="flex justify-center flex-row gap-2 my-2">
+        {[...Array(5)].map((e, index) => {
+          index += 1;
+          return (
+            <button key={index}>
+              <StarIcon
+                className={
+                  index <= (hover || rating)
+                    ? "fill-yellow h-10 w-10 stroke-yellow"
+                    : "fill-none h-10 w-10 stroke-slate-300"
+                }
+                onClick={() => setRating(index)}
+                onMouseEnter={() => setHover(index)}
+                onMouseLeave={() => setHover(rating)}
+              />
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const ReviewBox = (review: ReviewDetail) => {
     return (
       <div className="h-[20%] w-[80%] bg-white mb-[5%] border-2 border-gray rounded-3xl items-center justify-between drop-shadow-lg hover:bg-gray-light">
         <div className="m-5">
           <div className="text-lg">
             <StarRating rating={review.rating}></StarRating>
           </div>
-          <div className="text-lg">
-            comment : {review.comment}
-          </div>
-        </div>  
+          <div className="text-lg">comment : {review.comment}</div>
+        </div>
       </div>
     );
   };
-
-  
 
   return (
     <>
@@ -148,13 +146,48 @@ const Review = () => {
           <div className="mt-[15%]"></div>
           <div className="flex-grow overflow-auto">
             <div className="h-full overflow-auto scrollbar-thin scrollbar-thumb-white-300 scrollbar-track-transparent">
-              <ReviewBox comment="default comment" createdAt="default address" rating={5} username="default name"/>
-              <ReviewBox comment="default comment" createdAt="default address" rating={4.5} username="default name"/>
-              <ReviewBox comment="default comment" createdAt="default address" rating={4} username="default name"/>
-              <ReviewBox comment="default comment" createdAt="default address" rating={3.5} username="default name"/>
-              <ReviewBox comment="default comment" createdAt="default address" rating={3} username="default name"/>
-              <ReviewBox comment="default comment" createdAt="default address" rating={2.5} username="default name"/>
-              <ReviewBox comment="default comment" createdAt="default address" rating={2} username="default name"/>
+              <ReviewBox
+                comment="default comment"
+                createdAt="default address"
+                rating={5}
+                username="default name"
+              />
+              <ReviewBox
+                comment="default comment"
+                createdAt="default address"
+                rating={4.5}
+                username="default name"
+              />
+              <ReviewBox
+                comment="default comment"
+                createdAt="default address"
+                rating={4}
+                username="default name"
+              />
+              <ReviewBox
+                comment="default comment"
+                createdAt="default address"
+                rating={3.5}
+                username="default name"
+              />
+              <ReviewBox
+                comment="default comment"
+                createdAt="default address"
+                rating={3}
+                username="default name"
+              />
+              <ReviewBox
+                comment="default comment"
+                createdAt="default address"
+                rating={2.5}
+                username="default name"
+              />
+              <ReviewBox
+                comment="default comment"
+                createdAt="default address"
+                rating={2}
+                username="default name"
+              />
 
               {/*this section error because trainerReviews is empty so comment and other element is undefined*/}
               {/* {trainerReviews[0].createdAt} */}
@@ -165,8 +198,6 @@ const Review = () => {
                 </div>
               );
               })} */}
-
-
             </div>
           </div>
           <div className="flex justify-end w-full space-x-10 text-start text-lg md:text-xl ">
@@ -185,28 +216,21 @@ const Review = () => {
                             <p className="text-xl text-black text-center">
                               What is your rate ?
                             </p>
-                            <div className="flex justify-center flex-row gap-2 my-2">
-                              <EmptyStar />
-                              <EmptyStar />
-                              <EmptyStar />
-                              <EmptyStar />
-                              <EmptyStar />
-                            </div>
+                            <ReviewRating />
                             <p className="text-xl text-black my-2">
                               Add your review
                             </p>
                             <textarea className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"></textarea>
                             <div className="flex items-center justify-end  border-solid border-slate-200 rounded-b">
-                          <div className="w-1/3">
-                            <Button
-                              name="submit"
-                              onClick={() => setShowModal(false)}
-                            />
+                              <div className="w-1/3">
+                                <Button
+                                  name="submit"
+                                  onClick={() => setShowModal(false)}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
-                          </div>
-                        </div>
-
                       </div>
                     </div>
                   </div>
