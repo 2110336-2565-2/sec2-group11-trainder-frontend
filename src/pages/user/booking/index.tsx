@@ -69,7 +69,7 @@ const TrainerFilter = () => {
     <main className="w-full min-h-screen h-full bg-backgroundColor">
       <div className="w-full flex flex-col pt-20">
         <div className="flex items-center justify-start px-2 md:px-5">
-          <BackButton href="/user/home" />
+          <BackButton />
           <p className="ml-5 text-xl md:text-3xl">Choose your trainer</p>
         </div>
 

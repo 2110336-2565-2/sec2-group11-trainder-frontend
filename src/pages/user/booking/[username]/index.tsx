@@ -132,7 +132,7 @@ const BookTrainerProfile = () => {
         {/* Profile image and name */}
         <div className="flex flex-col w-full md:w-2/5 px-5 md:px-10 pt-20 pb-10">
           <div className="flex items-center justify-start">
-            <BackButton href="/user/booking" mx="mr-2 md:mr-5" />
+            <BackButton mx="mr-2 md:mr-5" />
             <Name />
           </div>
           <Link

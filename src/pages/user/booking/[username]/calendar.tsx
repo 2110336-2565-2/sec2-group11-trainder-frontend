@@ -222,10 +222,6 @@ const Calendar = () => {
         <div className="w-full md:w-2/3 h-2/3 md:h-full flex flex-col bg-backgroundColor p-5">
           <div className="flex items-center text-2xl md:text-3xl font-bold">
             <BackButton
-              href={{
-                pathname: "/user/booking/[username]",
-                query: { username: username },
-              }}
               mx="mx-4"
             />
             {firstname} {lastname}

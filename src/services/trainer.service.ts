@@ -25,11 +25,11 @@ export type FilteredTrainerProfile = {
   username: string;
 };
 
-export type ReviewDetail = {
-  comment: string;
-  createdAt: string;
-  rating: number;
-  username : string;
+export type Review = {
+  Comment: string;
+  CreatedAt: string;
+  Rating: number;
+  Username : string;
 };
 
 export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
@@ -56,52 +56,6 @@ export const filterTrainer = (
         filteredTrainerProfiles.push(trainer);
       });
       return filteredTrainerProfiles;
-    })
-    .catch((error) => {
-      throw error;
-    });
-};
-
-
-
-export const getTrainerReviews = (username: string) => {
-  return axios
-    .post(
-      API_URL + "/protected/reviews",
-      {
-        limit:10,
-        trainerusername: username,
-      },
-      {
-        headers: authHeader(),
-      }
-    )
-    .then((response) => {
-      const reviewData = response.data.review;
-      const reviewList = reviewData as ReviewDetail[];
-      return reviewList;
-    })
-    .catch((error) => {
-      throw error;
-    });
-};
-
-export const addTrainerReviews = (username: string) => {
-  return axios
-    .post(
-      API_URL + "/protected/reviews",
-      {
-        limit:10,
-        trainerusername: username,
-      },
-      {
-        headers: authHeader(),
-      }
-    )
-    .then((response) => {
-      const reviewData = response.data.review;
-      const reviewList = reviewData as ReviewDetail[];
-      return reviewList;
     })
     .catch((error) => {
       throw error;
@@ -142,6 +96,50 @@ export const getCurrentTrainerInfo = () => {
         info.specialty = [];
       }
       return info;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getTrainerReviews = (username: string) => {
+  return axios
+    .post(
+      API_URL + "/protected/reviews",
+      {
+        limit:10,
+        trainerUsername: username,
+      },
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      const reviews = response.data.reviews as Review[];
+      return reviews;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+
+export const addTrainerReviews = (username: string) => {
+  return axios
+    .post(
+      API_URL + "/protected/reviews",
+      {
+        limit:10,
+        trainerusername: username,
+      },
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((response) => {
+      const reviewData = response.data.review;
+      const reviewList = reviewData as Review[];
+      return reviewList;
     })
     .catch((error) => {
       throw error;
