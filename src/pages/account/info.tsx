@@ -247,7 +247,7 @@ const TrainerInfo = () => {
     <main className="min-h-screen h-full bg-backgroundColor">
       <div className="flex flex-1 flex-col p-5 md:p-10">
         <div className="flex items-center mb-3 md:mb-8">
-          <BackButton href="/account/profile" />
+          <BackButton />
           <h1 className="text-xl md:text-3xl mx-5 md:mx-10">
             Your Personal Information
           </h1>
