@@ -41,7 +41,10 @@ const Review = () => {
       username
     }
 
-    // console.log("submit addingReview", addingReview);
+    setRating(0)
+    setComment("")
+
+    console.log("submit addingReview", addingReview);
 
   };
 
