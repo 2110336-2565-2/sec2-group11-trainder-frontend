@@ -29,8 +29,14 @@ export type Review = {
   Comment: string;
   CreatedAt: string;
   Rating: number;
-  Username : string;
+  Username: string;
 };
+
+export type ReviewInput = {
+  comment: string;
+  rating: number;
+  trainerUsername: string;
+}
 
 export const updateTrainerProfile = (updateTrainerInfo: TrainerProfile) => {
   return axios
@@ -107,7 +113,7 @@ export const getTrainerReviews = (username: string) => {
     .post(
       API_URL + "/protected/reviews",
       {
-        limit:10,
+        limit: 10,
         trainerUsername: username,
       },
       {
@@ -117,6 +123,35 @@ export const getTrainerReviews = (username: string) => {
     .then((response) => {
       const reviews = response.data.reviews as Review[];
       return reviews;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const checkReviewable = (username: string) => {
+  return axios
+    .post(API_URL + "/protected/reviewable",
+      { trainerUsername: username }, {
+      headers: authHeader()
+    })
+    .then((res) => {
+      const canReview = res.data.canReview as boolean;
+      console.log(canReview);
+      return canReview;
+    })
+    .catch((error) => {
+      // TODO: this should be fixed after set payment status.
+      // throw (error);
+      return false;
+    })
+}
+
+
+export const addTrainerReviews = (reviewInput: ReviewInput) => {
+  return axios
+    .post(API_URL + "/protected/add-review", reviewInput, {
+      headers: authHeader(),
     })
     .catch((error) => {
       throw error;

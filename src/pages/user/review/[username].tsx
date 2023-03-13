@@ -2,7 +2,12 @@ import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
 import { useState, useEffect } from "react";
 import { UserProfile } from "@/services/user.service";
-import { getTrainerProfile } from "@/services/trainer.service";
+import {
+  addTrainerReviews,
+  checkReviewable,
+  getTrainerProfile,
+  ReviewInput,
+} from "@/services/trainer.service";
 import { useRouter } from "next/router";
 import { getTrainerReviews, Review } from "@/services/trainer.service";
 import { StarIcon } from "@heroicons/react/24/outline";
@@ -30,8 +35,13 @@ const Review = () => {
   const { username } = router.query;
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
+
+  const [reviewable, setReviewable] = useState<boolean>(false);
+
   useEffect(() => {
-    if (typeof username == "string") {
+    if (typeof username === "string") {
       getTrainerProfile(username)
         .then((res) => {
           setLoading(true);
@@ -39,6 +49,10 @@ const Review = () => {
           setLoading(false);
         })
         .catch(() => router.back());
+
+      checkReviewable(username).then((res) => {
+        setReviewable(res);
+      });
     } else {
       router.back();
     }
@@ -56,7 +70,7 @@ const Review = () => {
     } else {
       router.back();
     }
-  });
+  }, [router, username]);
 
   const StarRating = (rating: { rating: number }) => {
     return (
@@ -84,7 +98,6 @@ const Review = () => {
   };
 
   const ReviewRating = () => {
-    const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     return (
       <div className="flex justify-center flex-row gap-2 my-2">
@@ -95,11 +108,11 @@ const Review = () => {
               key={index}
               className={
                 index <= (hover || rating)
-                  ? "cursor-pointer  fill-yellow h-10 w-10 stroke-yellow"
+                  ? "cursor-pointer fill-yellow h-10 w-10 stroke-yellow"
                   : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
               }
               onClick={() => setRating(index)}
-              // onMouseEnter={() => setHover(index)}
+              onMouseEnter={() => setHover(index)}
               onMouseLeave={() => setHover(rating)}
             />
           );
@@ -120,6 +133,32 @@ const Review = () => {
         </div>
       </div>
     );
+  };
+
+  const onSubmit = () => {
+    const review = {
+      comment: comment,
+      rating: rating,
+      trainerUsername: username,
+    } as ReviewInput;
+    addTrainerReviews(review).then(() => {
+      if (typeof username === "string") {
+        getTrainerReviews(username)
+          .then((res) => {
+            setLoading(true);
+            setTrainerReviews(res);
+            setLoading(false);
+          })
+          .catch(() => router.back());
+
+        checkReviewable(username).then((res) => {
+          setReviewable(res);
+        });
+      }
+    });
+
+    setRating(0);
+    setComment("");
   };
 
   return (
@@ -175,11 +214,12 @@ const Review = () => {
                   name="Add your review"
                   width="w-2/3 md:w-1/3"
                   onClick={() => setShowModal(true)}
+                  disabled={!reviewable}
                 />
                 {showModal ? (
                   <>
                     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                      <div className="relative my-6 mx-auto w-1/2">
+                      <div className="relative  my-6 mx-auto w-1/2">
                         <div className="border-0 rounded-2xl shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                           <div className="relative p-6 flex-auto">
                             <div className="flex flex-col">
@@ -190,7 +230,10 @@ const Review = () => {
                               <p className="text-xl text-black my-2">
                                 Add your review
                               </p>
-                              <textarea className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"></textarea>
+                              <textarea
+                                onChange={(e) => setComment(e.target.value)}
+                                className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"
+                              ></textarea>
                               <div className="flex items-center justify-end space-x-5 border-solid border-slate-200 rounded-b">
                                 <Button
                                   name="cancel"
@@ -200,7 +243,10 @@ const Review = () => {
                                 <Button
                                   name="submit"
                                   width="w-1/4"
-                                  onClick={() => setShowModal(false)}
+                                  onClick={() => {
+                                    setShowModal(false);
+                                    onSubmit();
+                                  }}
                                 />
                               </div>
                             </div>
