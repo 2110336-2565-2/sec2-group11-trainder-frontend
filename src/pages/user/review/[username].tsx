@@ -10,7 +10,6 @@ import Image from "next/image";
 
 const Review = () => {
   const [showModal, setShowModal] = useState(false);
-  // const [rating, setRating] = useState(0);
   const [trainerProfile, setTrainerProfile] = useState<UserProfile>({
     username: "user",
     firstname: "firstname",
@@ -52,6 +51,7 @@ const Review = () => {
     }
   }, [username]);
 
+
   const StarRating = (rating: { rating: number }) => {
     return (
       <div className="flex flex-row">
@@ -85,7 +85,6 @@ const Review = () => {
         {[...Array(5)].map((e, index) => {
           index += 1;
           return (
-         
               <StarIcon
               key={index}
                 className={
@@ -94,7 +93,7 @@ const Review = () => {
                     : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
                 }
                 onClick={() => setRating(index)}
-                onMouseEnter={() => setHover(index)}
+                // onMouseEnter={() => setHover(index)}
                 onMouseLeave={() => setHover(rating)}
               />
 
@@ -119,7 +118,7 @@ const Review = () => {
 
   return (
     <>
-      <div className="w-full h-screen flex flex-row items-center justify-center text-3xl bg-backgroundColor">
+      <div className="w-full h-screen pt-20 pl-6 flex flex-row items-center justify-center text-3xl bg-backgroundColor">
         <div className="w-2/5 h-screen flex-col">
           <div className="mt-[20%]"></div>
           <div className="flex items-center justify-start px-2 md:px-5">
@@ -130,7 +129,7 @@ const Review = () => {
           </div>
           <div className="mt-[15%] flex flex-col items-center justify-start px-2 md:px-5">
             {trainerProfile.firstname} {trainerProfile.lastname}
-            <div className="max-h-min overflow-hidden mt-6 md:mt-10 flex justify-center">
+            <div className="relative w-52 h-52 md:w-60 md:h-60 lg:w-80 lg:h-80 mt-6 md:mt-10 rounded-2xl overflow-hidden">
               <Image
                 src="/default_profile.jpg"
                 alt=""
@@ -138,7 +137,7 @@ const Review = () => {
                 sizes="(max-width: 768px) 100vw"
                 style={{ objectFit: "contain"}}
               />
-      </div>
+            </div>
           </div>
         </div>
         <div className="w-3/5 flex flex-col h-screen">
@@ -188,15 +187,6 @@ const Review = () => {
                 username="default name"
               />
 
-              {/*this section error because trainerReviews is empty so comment and other element is undefined*/}
-              {/* {trainerReviews[0].createdAt} */}
-              {/* {trainerReviews.map((review,idx) => {
-              return (
-                <div key={idx}>
-                  <ReviewBox comment={review.comment} createdAt={review.createdAt} rating={review.rating} username={review.username}/>
-                </div>
-              );
-              })} */}
             </div>
           </div>
           <div className="flex justify-end w-full space-x-10 text-start text-lg md:text-xl ">
