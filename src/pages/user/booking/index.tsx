@@ -22,7 +22,7 @@ const TrainerFilter = () => {
   const [specialtiesFilter, setSpecialtiesFilter] = useState<string[]>([]);
   useEffect(() => {
     filterTrainer({
-      limit: 10,
+      limit: 1000,
       specialty: specialtiesFilter,
     } as FilterInput).then((res) => {
       setTrainerProfiles(res);
