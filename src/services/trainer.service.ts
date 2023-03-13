@@ -62,6 +62,32 @@ export const filterTrainer = (
     });
 };
 
+// export const getTrainerReviews = (username: string): Promise<ReviewDetail[]> => {
+//   return axios
+//     .post(
+//           API_URL + "/protected/reviews",
+//           {
+//             limit:10,
+//             trainerusername: username,
+//           },
+//           {
+//             headers: authHeader(),
+//           }
+//         )
+//     .then((response) => {
+//       let reviewList: ReviewDetail[] = [];
+//       response.data.review.forEach((userReview: any) => {
+//         const review = userReview as ReviewDetail;
+//         reviewList.push(review);
+//       });
+//       return reviewList;
+//     })
+//     .catch((error) => {
+//       throw error;
+//     });
+// };
+
+
 export const getTrainerReviews = (username: string) => {
   return axios
     .post(
@@ -77,7 +103,7 @@ export const getTrainerReviews = (username: string) => {
     .then((response) => {
       const reviewData = response.data.review;
       const reviewList = reviewData as ReviewDetail[];
-      return {reviewList:reviewList};
+      return reviewList;
     })
     .catch((error) => {
       throw error;

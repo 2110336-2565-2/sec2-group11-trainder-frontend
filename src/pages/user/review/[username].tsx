@@ -42,7 +42,7 @@ const Review = () => {
       getTrainerReviews(username)
         .then((res2) => {
           setLoading(true);
-          setTrainerReviews(res2.reviewList);
+          setTrainerReviews(res2);
           setLoading(false);
         })
         .catch(() => router.back());
@@ -186,6 +186,18 @@ const Review = () => {
                 rating={2}
                 username="default name"
               />
+
+              {/*this section error maybe trainerReviews is empty so comment and other element is undefined*/}
+              {/* {trainerReviews[0].comment}
+              {trainerReviews.length} */}
+              {/* {trainerReviews.map((review,idx) => {
+              return (
+                <div key={idx}>
+                  <ReviewBox comment={review.comment} createdAt={review.createdAt} rating={review.rating} username={review.username}/>
+                </div>
+              );
+              })} */}
+
 
             </div>
           </div>
