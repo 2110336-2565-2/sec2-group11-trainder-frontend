@@ -191,13 +191,17 @@ const Review = () => {
                                 Add your review
                               </p>
                               <textarea className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"></textarea>
-                              <div className="flex items-center justify-end  border-solid border-slate-200 rounded-b">
-                                <div className="w-1/3">
-                                  <Button
-                                    name="submit"
-                                    onClick={() => setShowModal(false)}
-                                  />
-                                </div>
+                              <div className="flex items-center justify-end space-x-5 border-solid border-slate-200 rounded-b">
+                                <Button
+                                  name="cancel"
+                                  width="w-1/4"
+                                  onClick={() => setShowModal(false)}
+                                />
+                                <Button
+                                  name="submit"
+                                  width="w-1/4"
+                                  onClick={() => setShowModal(false)}
+                                />
                               </div>
                             </div>
                           </div>
