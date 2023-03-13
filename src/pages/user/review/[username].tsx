@@ -2,7 +2,12 @@ import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
 import { useState, useEffect } from "react";
 import { UserProfile } from "@/services/user.service";
-import { getTrainerProfile } from "@/services/trainer.service";
+import {
+  addTrainerReviews,
+  checkReviewable,
+  getTrainerProfile,
+  ReviewInput,
+} from "@/services/trainer.service";
 import { useRouter } from "next/router";
 import { getTrainerReviews, Review } from "@/services/trainer.service";
 import { StarIcon } from "@heroicons/react/24/outline";
@@ -33,8 +38,10 @@ const Review = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
 
+  const [reviewable, setReviewable] = useState<boolean>(false);
+
   useEffect(() => {
-    if (typeof username == "string") {
+    if (typeof username === "string") {
       getTrainerProfile(username)
         .then((res) => {
           setLoading(true);
@@ -42,6 +49,10 @@ const Review = () => {
           setLoading(false);
         })
         .catch(() => router.back());
+
+      checkReviewable(username).then((res) => {
+        setReviewable(res);
+      });
     } else {
       router.back();
     }
@@ -59,7 +70,7 @@ const Review = () => {
     } else {
       router.back();
     }
-  });
+  }, [router, username]);
 
   const StarRating = (rating: { rating: number }) => {
     return (
@@ -97,7 +108,7 @@ const Review = () => {
               key={index}
               className={
                 index <= (hover || rating)
-                  ? "cursor-pointer  fill-yellow h-10 w-10 stroke-yellow"
+                  ? "cursor-pointer fill-yellow h-10 w-10 stroke-yellow"
                   : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
               }
               onClick={() => setRating(index)}
@@ -125,16 +136,29 @@ const Review = () => {
   };
 
   const onSubmit = () => {
-    const addingReview = {
-      comment,
-      rating,
-      username,
-    };
+    const review = {
+      comment: comment,
+      rating: rating,
+      trainerUsername: username,
+    } as ReviewInput;
+    addTrainerReviews(review).then(() => {
+      if (typeof username === "string") {
+        getTrainerReviews(username)
+          .then((res) => {
+            setLoading(true);
+            setTrainerReviews(res);
+            setLoading(false);
+          })
+          .catch(() => router.back());
+
+        checkReviewable(username).then((res) => {
+          setReviewable(res);
+        });
+      }
+    });
 
     setRating(0);
     setComment("");
-
-    console.log("submit addingReview", addingReview);
   };
 
   return (
@@ -190,6 +214,7 @@ const Review = () => {
                   name="Add your review"
                   width="w-2/3 md:w-1/3"
                   onClick={() => setShowModal(true)}
+                  disabled={!reviewable}
                 />
                 {showModal ? (
                   <>
