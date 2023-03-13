@@ -31,10 +31,21 @@ const Home = () => {
                 </div>
               }
             />
-            {profile?.usertype === "Trainer" && (
+            {profile?.usertype === "Trainer" ? (
               <MenuItem
-                text="View All Reviews"
+                text="View Your Reviews"
                 href={`/user/review/${encodeURIComponent(profile.username)}`}
+                icon={
+                  <DocumentTextIcon
+                    className="h-11 w-11 text-blue"
+                    strokeWidth={2}
+                  />
+                }
+              />
+            ) : (
+              <MenuItem
+                text="Add Reviews"
+                href={`/user/review`}
                 icon={
                   <DocumentTextIcon
                     className="h-11 w-11 text-blue"
