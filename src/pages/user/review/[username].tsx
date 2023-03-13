@@ -2,9 +2,9 @@ import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
 import { useState, useEffect } from "react";
 import { UserProfile } from "@/services/user.service";
-import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
+import { getTrainerProfile } from "@/services/trainer.service";
 import { useRouter } from "next/router";
-import { getTrainerReviews, ReviewDetail } from "@/services/trainer.service";
+import { getTrainerReviews, Review } from "@/services/trainer.service";
 import { StarIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
@@ -24,7 +24,7 @@ const Review = () => {
     lng: 0,
   });
 
-  const [trainerReviews, setTrainerReviews] = useState<ReviewDetail[]>([]);
+  const [trainerReviews, setTrainerReviews] = useState<Review[]>([]);
 
   const router = useRouter();
   const { username } = router.query;
@@ -33,24 +33,30 @@ const Review = () => {
   useEffect(() => {
     if (typeof username == "string") {
       getTrainerProfile(username)
-        .then((res1) => {
+        .then((res) => {
           setLoading(true);
-          setTrainerProfile(res1.userProfile);
-          setLoading(false);
-        })
-        .catch(() => router.back());
-      getTrainerReviews(username)
-        .then((res2) => {
-          setLoading(true);
-          setTrainerReviews(res2);
+          setTrainerProfile(res.userProfile);
           setLoading(false);
         })
         .catch(() => router.back());
     } else {
       router.back();
     }
-  }, [username]);
+  }, [router, username]);
 
+  useEffect(() => {
+    if (typeof username === "string") {
+      getTrainerReviews(username)
+        .then((res) => {
+          setLoading(true);
+          setTrainerReviews(res);
+          setLoading(false);
+        })
+        .catch(() => router.back());
+    } else {
+      router.back();
+    }
+  });
 
   const StarRating = (rating: { rating: number }) => {
     return (
@@ -85,164 +91,128 @@ const Review = () => {
         {[...Array(5)].map((e, index) => {
           index += 1;
           return (
-              <StarIcon
+            <StarIcon
               key={index}
-                className={
-                  index <= (hover || rating)
-                    ? "cursor-pointer  fill-yellow h-10 w-10 stroke-yellow"
-                    : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
-                }
-                onClick={() => setRating(index)}
-                // onMouseEnter={() => setHover(index)}
-                onMouseLeave={() => setHover(rating)}
-              />
-
+              className={
+                index <= (hover || rating)
+                  ? "cursor-pointer  fill-yellow h-10 w-10 stroke-yellow"
+                  : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
+              }
+              onClick={() => setRating(index)}
+              // onMouseEnter={() => setHover(index)}
+              onMouseLeave={() => setHover(rating)}
+            />
           );
         })}
       </div>
     );
   };
 
-  const ReviewBox = (review: ReviewDetail) => {
+  const ReviewBox = (review: Review, key: any) => {
     return (
-      <div className="h-[20%] w-[80%] bg-white mb-[5%] border-2 border-gray rounded-3xl items-center justify-between drop-shadow-lg hover:bg-gray-light">
+      <div
+        className="my-5 bg-white border-2 border-gray rounded-3xl items-center justify-between drop-shadow-lg"
+        key={key}
+      >
         <div className="m-5">
-          <div className="text-lg">
-            <StarRating rating={review.rating}></StarRating>
-          </div>
-          <div className="text-lg">comment : {review.comment}</div>
+          <StarRating rating={review.Rating} />
+          <div className="text-lg py-2">{review.Comment}</div>
         </div>
       </div>
     );
   };
 
   return (
-    <>
-      <div className="w-full h-screen pt-20 pl-6 flex flex-row items-center justify-center text-3xl bg-backgroundColor">
-        <div className="w-2/5 h-screen flex-col">
-          <div className="mt-[20%]"></div>
-          <div className="flex items-center justify-start px-2 md:px-5">
-            <BackButton href="/user/booking" />
-            <p className="text-left text-2xl md:text-3xl font-bold display: inline-flex">
+    <main className="w-full h-screen pt-20 pl-6 flex flex-col bg-backgroundColor overflow-hidden ">
+      {!loading && (
+        <>
+          <div className="flex items-center mb-3 md:mb-8">
+            <BackButton />
+            <p className="text-xl md:text-3xl mx-5 md:mx-10 font-bold display: inline-flex">
               Rating and Review
             </p>
           </div>
-          <div className="mt-[15%] flex flex-col items-center justify-start px-2 md:px-5">
-            {trainerProfile.firstname} {trainerProfile.lastname}
-            <div className="relative w-52 h-52 md:w-60 md:h-60 lg:w-80 lg:h-80 mt-6 md:mt-10 rounded-2xl overflow-hidden">
-              <Image
-                src="/default_profile.jpg"
-                alt=""
-                fill
-                sizes="(max-width: 768px) 100vw"
-                style={{ objectFit: "contain"}}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="w-3/5 flex flex-col h-screen">
-          <div className="mt-[15%]"></div>
-          <div className="flex-grow overflow-auto">
-            <div className="h-full overflow-auto scrollbar-thin scrollbar-thumb-white-300 scrollbar-track-transparent">
-              <ReviewBox
-                comment="default comment"
-                createdAt="default address"
-                rating={5}
-                username="default name"
-              />
-              <ReviewBox
-                comment="default comment"
-                createdAt="default address"
-                rating={4.5}
-                username="default name"
-              />
-              <ReviewBox
-                comment="default comment"
-                createdAt="default address"
-                rating={4}
-                username="default name"
-              />
-              <ReviewBox
-                comment="default comment"
-                createdAt="default address"
-                rating={3.5}
-                username="default name"
-              />
-              <ReviewBox
-                comment="default comment"
-                createdAt="default address"
-                rating={3}
-                username="default name"
-              />
-              <ReviewBox
-                comment="default comment"
-                createdAt="default address"
-                rating={2.5}
-                username="default name"
-              />
-              <ReviewBox
-                comment="default comment"
-                createdAt="default address"
-                rating={2}
-                username="default name"
-              />
-
-              {/*this section error maybe trainerReviews is empty so comment and other element is undefined*/}
-              {/* {trainerReviews[0].comment}
-              {trainerReviews.length} */}
-              {/* {trainerReviews.map((review,idx) => {
-              return (
-                <div key={idx}>
-                  <ReviewBox comment={review.comment} createdAt={review.createdAt} rating={review.rating} username={review.username}/>
+          <div className="flex h-full">
+            <div className="w-2/5 flex-col mr-10">
+              <div className="flex flex-col items-center justify-start px-2 md:px-5 h-full text-2xl">
+                {trainerProfile.firstname} {trainerProfile.lastname}
+                <div className="relative w-52 h-52 md:w-60 md:h-60 lg:w-80 lg:h-80 mt-6 md:mt-10 rounded-2xl overflow-hidden">
+                  <Image
+                    src="/default_profile.jpg"
+                    alt=""
+                    fill
+                    sizes="(max-width: 768px) 100vw"
+                    style={{ objectFit: "contain" }}
+                  />
                 </div>
-              );
-              })} */}
-
-
+              </div>
             </div>
-          </div>
-          <div className="flex justify-end w-full space-x-10 text-start text-lg md:text-xl ">
-            <div className="w-1/3 mr-[20%]">
-              <Button
-                name="Add your review"
-                onClick={() => setShowModal(true)}
-              />
-              {showModal ? (
-                <>
-                  <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                    <div className="relative  my-6 mx-auto w-1/2">
-                      <div className="border-0 rounded-2xl shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                        <div className="relative p-6 flex-auto">
-                          <div className="flex flex-col">
-                            <p className="text-xl text-black text-center">
-                              What is your rate ?
-                            </p>
-                            <ReviewRating />
-                            <p className="text-xl text-black my-2">
-                              Add your review
-                            </p>
-                            <textarea className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"></textarea>
-                            <div className="flex items-center justify-end  border-solid border-slate-200 rounded-b">
-                              <div className="w-1/3">
-                                <Button
-                                  name="submit"
-                                  onClick={() => setShowModal(false)}
-                                />
+            <div className="w-3/5 h-full flex flex-col">
+              <div className="h-4/6 overflow-y-auto px-10 mb-8">
+                {trainerReviews !== undefined && trainerReviews.length > 0 ? (
+                  <>
+                    {trainerReviews.map((review, index) => {
+                      return (
+                        <ReviewBox
+                          key={index}
+                          Comment={review.Comment}
+                          CreatedAt={review.CreatedAt}
+                          Rating={review.Rating}
+                          Username={review.Username}
+                        />
+                      );
+                    })}
+                  </>
+                ) : (
+                  <div className="flex h-full items-center justify-center text-xl">
+                    No reviews about this trainer
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end w-full px-8">
+                <Button
+                  name="Add your review"
+                  width="w-2/3 md:w-1/3"
+                  onClick={() => setShowModal(true)}
+                />
+                {showModal ? (
+                  <>
+                    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                      <div className="relative my-6 mx-auto w-1/2">
+                        <div className="border-0 rounded-2xl shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                          <div className="relative p-6 flex-auto">
+                            <div className="flex flex-col">
+                              <p className="text-xl text-black text-center">
+                                What is your rate ?
+                              </p>
+                              <ReviewRating />
+                              <p className="text-xl text-black my-2">
+                                Add your review
+                              </p>
+                              <textarea className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"></textarea>
+                              <div className="flex items-center justify-end  border-solid border-slate-200 rounded-b">
+                                <div className="w-1/3">
+                                  <Button
+                                    name="submit"
+                                    onClick={() => setShowModal(false)}
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                </>
-              ) : null}
+                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                  </>
+                ) : null}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </>
+        </>
+      )}
+    </main>
   );
 };
 export default Review;
