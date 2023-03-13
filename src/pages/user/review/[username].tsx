@@ -39,6 +39,7 @@ const Review = () => {
   const [rating, setRating] = useState(0);
 
   const [reviewable, setReviewable] = useState<boolean>(false);
+  const [isRating, setIsRating] = useState<boolean>(true);
 
   useEffect(() => {
     if (typeof username === "string") {
@@ -111,7 +112,10 @@ const Review = () => {
                   ? "cursor-pointer fill-yellow h-10 w-10 stroke-yellow"
                   : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
               }
-              onClick={() => setRating(index)}
+              onClick={() => {
+                setRating(index);
+                setIsRating(true);
+              }}
               onMouseEnter={() => setHover(index)}
               onMouseLeave={() => setHover(rating)}
             />
@@ -136,11 +140,17 @@ const Review = () => {
   };
 
   const onSubmit = () => {
+    if (rating <= 0) {
+      setIsRating(false);
+      return;
+    }
+
     const review = {
       comment: comment,
       rating: rating,
       trainerUsername: username,
     } as ReviewInput;
+
     addTrainerReviews(review).then(() => {
       if (typeof username === "string") {
         getTrainerReviews(username)
@@ -159,6 +169,8 @@ const Review = () => {
 
     setRating(0);
     setComment("");
+    setIsRating(true);
+    setShowModal(false);
   };
 
   return (
@@ -226,6 +238,13 @@ const Review = () => {
                               <p className="text-xl text-black text-center">
                                 What is your rate ?
                               </p>
+                              {!isRating ? (
+                                <div className="text-sm text-pink-dark">
+                                  please select rating
+                                </div>
+                              ) : (
+                                <></>
+                              )}
                               <ReviewRating />
                               <p className="text-xl text-black my-2">
                                 Add your review
@@ -238,13 +257,17 @@ const Review = () => {
                                 <Button
                                   name="cancel"
                                   width="w-1/4"
-                                  onClick={() => setShowModal(false)}
+                                  onClick={() => {
+                                    setShowModal(false);
+                                    setRating(0);
+                                    setComment("");
+                                    setIsRating(true);
+                                  }}
                                 />
                                 <Button
                                   name="submit"
                                   width="w-1/4"
                                   onClick={() => {
-                                    setShowModal(false);
                                     onSubmit();
                                   }}
                                 />
