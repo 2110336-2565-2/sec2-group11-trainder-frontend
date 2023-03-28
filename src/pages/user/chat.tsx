@@ -1,10 +1,8 @@
 const Chat = () => {
   return (
-    <>
-      <div className="w-full h-screen flex items-center justify-center text-3xl bg-backgroundColor">
-        Coming soon....
-      </div>
-    </>
+    <div className="min-h-screen w-full h-full flex items-center justify-center text-3xl">
+      Coming soon....
+    </div>
   );
 };
 

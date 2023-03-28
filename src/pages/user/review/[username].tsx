@@ -1,6 +1,6 @@
 import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { UserProfile } from "@/services/user.service";
 import {
   addTrainerReviews,
@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { getTrainerReviews, Review } from "@/services/trainer.service";
 import { StarIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { Dialog, Transition } from "@headlessui/react";
 
 const Review = () => {
   const [showModal, setShowModal] = useState(false);
@@ -174,7 +175,7 @@ const Review = () => {
   };
 
   return (
-    <main className="w-full h-screen pt-20 pl-6 flex flex-col bg-backgroundColor overflow-hidden ">
+    <main className="w-full h-screen pt-20 pl-6 flex flex-col overflow-hidden ">
       {!loading && (
         <>
           <div className="flex items-center mb-3 md:mb-8">
@@ -228,13 +229,37 @@ const Review = () => {
                   onClick={() => setShowModal(true)}
                   disabled={!reviewable}
                 />
-                {showModal ? (
-                  <>
-                    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                      <div className="relative  my-6 mx-auto w-1/2">
-                        <div className="border-0 rounded-2xl shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                          <div className="relative p-6 flex-auto">
-                            <div className="flex flex-col">
+                <Transition appear show={showModal} as={Fragment}>
+                  <Dialog
+                    as="div"
+                    className="relative z-10"
+                    onClose={() => setShowModal(false)}
+                  >
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0"
+                      enterTo="opacity-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <div className="fixed inset-0 bg-black bg-opacity-25" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 overflow-y-auto">
+                      <div className="flex min-h-full items-center justify-center text-center p-4 md:p-0">
+                        <Transition.Child
+                          as={Fragment}
+                          enter="ease-out duration-300"
+                          enterFrom="opacity-0 scale-95"
+                          enterTo="opacity-100 scale-100"
+                          leave="ease-in duration-200"
+                          leaveFrom="opacity-100 scale-100"
+                          leaveTo="opacity-0 scale-95"
+                        >
+                          <Dialog.Panel className="w-1/2 h-full transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all rounded-2xl">
+                            <div>
                               <p className="text-xl text-black text-center">
                                 What is your rate ?
                               </p>
@@ -253,33 +278,32 @@ const Review = () => {
                                 onChange={(e) => setComment(e.target.value)}
                                 className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"
                               ></textarea>
-                              <div className="flex items-center justify-end space-x-5 border-solid border-slate-200 rounded-b">
-                                <Button
-                                  name="cancel"
-                                  width="w-1/4"
-                                  onClick={() => {
-                                    setShowModal(false);
-                                    setRating(0);
-                                    setComment("");
-                                    setIsRating(true);
-                                  }}
-                                />
-                                <Button
-                                  name="submit"
-                                  width="w-1/4"
-                                  onClick={() => {
-                                    onSubmit();
-                                  }}
-                                />
-                              </div>
                             </div>
-                          </div>
-                        </div>
+
+                            <div className="flex justify-end mt-10 space-x-5">
+                              <Button
+                                name="Cancel"
+                                width="w-1/4"
+                                onClick={() => {
+                                  setShowModal(false);
+                                  setRating(0);
+                                  setComment("");
+                                  setIsRating(true);
+                                }}
+                              />
+                              <Button
+                                name="Submit"
+                                width="w-1/4"
+                                onClick={() => onSubmit()}
+                                type="button"
+                              />
+                            </div>
+                          </Dialog.Panel>
+                        </Transition.Child>
                       </div>
                     </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                  </>
-                ) : null}
+                  </Dialog>
+                </Transition>
               </div>
             </div>
           </div>

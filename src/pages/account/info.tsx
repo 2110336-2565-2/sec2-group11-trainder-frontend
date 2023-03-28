@@ -244,7 +244,7 @@ const TrainerInfo = () => {
   };
 
   return (
-    <main className="min-h-screen h-full bg-backgroundColor">
+    <main className="min-h-screen h-full">
       <div className="flex flex-1 flex-col p-5 md:p-10">
         <div className="flex items-center mb-3 md:mb-8">
           <BackButton />
