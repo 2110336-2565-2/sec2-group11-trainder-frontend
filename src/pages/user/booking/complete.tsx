@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 const BookingComplete = () => {
   const router = useRouter();
   return (
-    <main className="min-h-screen h-full bg-backgroundColor pt-20 px-6 pb-6 flex">
+    <main className="min-h-screen h-full pt-20 px-6 pb-6 flex">
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <CheckBadgeIcon className="h-32 w-32 my-10" />
         <div className="text-xl">

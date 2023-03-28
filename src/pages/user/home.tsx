@@ -16,7 +16,7 @@ const Home = () => {
   }, []);
 
   return (
-    <main className="min-h-screen h-full w-full bg-backgroundColor">
+    <main className="min-h-screen h-full w-full">
       {!loading && (
         <>
           <Calendar />

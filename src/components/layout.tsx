@@ -7,7 +7,7 @@ export const Layout = ({ children }: React.PropsWithChildren) => {
   return (
     <>
       {!hideNavbar.includes(router.pathname) && <NavBar />}
-      <main>{children}</main>
+      <main className="min-h-screen h-full w-full bg-backgroundColor">{children}</main>
     </>
   );
 };

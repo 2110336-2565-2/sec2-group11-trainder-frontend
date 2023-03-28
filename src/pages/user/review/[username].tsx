@@ -175,7 +175,7 @@ const Review = () => {
   };
 
   return (
-    <main className="w-full h-screen pt-20 pl-6 flex flex-col bg-backgroundColor overflow-hidden ">
+    <main className="w-full h-screen pt-20 pl-6 flex flex-col overflow-hidden ">
       {!loading && (
         <>
           <div className="flex items-center mb-3 md:mb-8">

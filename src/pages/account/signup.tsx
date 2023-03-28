@@ -256,7 +256,7 @@ export default function Signup() {
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <main className="flex h-screen bg-backgroundColor">
+    <main className="flex h-screen">
       <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
         <div className="relative object-contain w-full h-3/5 my-12">
           <Image

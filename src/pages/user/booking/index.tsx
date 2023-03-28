@@ -66,7 +66,7 @@ const TrainerFilter = () => {
   ];
 
   return (
-    <main className="w-full min-h-screen h-full bg-backgroundColor">
+    <main className="w-full min-h-screen h-full">
       <div className="w-full flex flex-col pt-20">
         <div className="flex items-center justify-start px-2 md:px-5">
           <BackButton />

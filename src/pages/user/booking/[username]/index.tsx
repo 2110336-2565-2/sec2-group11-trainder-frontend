@@ -127,7 +127,7 @@ const BookTrainerProfile = () => {
   });
   if (!isLoaded || loading) return <div>Loading...</div>;
   return (
-    <main className="min-h-screen h-full w-full bg-backgroundColor">
+    <main className="min-h-screen h-full w-full">
       <div className="min-h-screen h-full flex flex-col md:flex-row">
         {/* Profile image and name */}
         <div className="flex flex-col w-full md:w-2/5 px-5 md:px-10 pt-20 pb-10">

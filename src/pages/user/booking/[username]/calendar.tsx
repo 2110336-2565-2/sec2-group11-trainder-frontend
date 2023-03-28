@@ -156,7 +156,7 @@ const Calendar = () => {
   };
 
   return (
-    <main className="w-full h-screen pt-20 px-6 pb-6 flex">
+    <main className="w-full h-screen bg-white pt-20 px-6 pb-6 flex">
       {/* Warning */}
       <div className="flex my-3">
         <Transition appear show={isWarning} as={Fragment}>
