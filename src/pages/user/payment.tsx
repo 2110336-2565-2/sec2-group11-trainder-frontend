@@ -38,6 +38,8 @@ const Payment = () => {
       // Send the token to your server to create a charge
     } catch (error) {
       // Handle error on the UI
+        console.log(error);
+        alert(error)
     }
   };
 
