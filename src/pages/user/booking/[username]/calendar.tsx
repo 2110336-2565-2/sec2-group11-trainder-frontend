@@ -30,7 +30,7 @@ const Calendar = () => {
       }
       const input = {
         date: selectedDate.format("YYYY-MM-DD"),
-        endTime: `${endTime.toString()}:00`,
+        endTime: `${endTime.toString()}:59`,
         startTime: `${startTime.toString()}:00`,
         trainer: username,
       } as BookingInput;
