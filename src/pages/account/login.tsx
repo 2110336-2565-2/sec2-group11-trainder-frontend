@@ -43,7 +43,7 @@ export default function Login() {
   }, [loggedIn, router]);
 
   return (
-    <main className="flex h-screen bg-backgroundColor">
+    <main className="flex h-screen">
       <div className="w-1/2 h-full bg-blue hidden md:flex flex-col items-center justify-center">
         <div className="relative object-center h-3/5 w-4/5">
           <Image
