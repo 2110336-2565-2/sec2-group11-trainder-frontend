@@ -95,9 +95,9 @@ const Notification = () => {
               >
                 {getName(booking)}
                 <div className="text-gray-500">
-                  {booking.startDateTime.getDate()}/
-                  {booking.startDateTime.getMonth()}/
-                  {booking.startDateTime.getFullYear()}
+                  {booking.startDateTime.getUTCDate()}/
+                  {booking.startDateTime.getUTCMonth() + 1}/
+                  {booking.startDateTime.getUTCFullYear()}
                 </div>
                 {getTime(booking)}
                 {getBottomRow(booking)}
