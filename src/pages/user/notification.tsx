@@ -51,6 +51,23 @@ const Notification = () => {
       return <div className="pt-5 flex">Waiting for confirmation.</div>;
     } else {
       if (booking.status === "confirm") {
+        if (booking.payment.status === "paid") {
+          return (
+            <div className="flex justify-between pt-5">
+              <div className="px-2">
+                <Button
+                  name="Complete Booking"
+                  onClick={async () => {
+                    await updateBooking({
+                      bookingId: booking._id,
+                      status: "complete",
+                    });
+                  }}
+                ></Button>
+              </div>
+            </div>
+          );
+        }
         return <div className="pt-5 flex">Confirmed.</div>;
       }
       return (

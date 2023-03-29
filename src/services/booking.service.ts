@@ -36,6 +36,7 @@ export type BookingList = {
   trainee: string;
   traineeFirstName: string;
   traineeLastName: string;
+  payment: Payment;
 };
 
 export const createBooking = (bookingInput: BookingInput) => {
