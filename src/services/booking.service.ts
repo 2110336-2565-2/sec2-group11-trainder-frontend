@@ -11,6 +11,20 @@ export type BookingInput = {
   startTime: string;
   trainer: string;
 };
+export type Payment = {
+  totalCost: Number;
+  status: string;
+  chargeID: string;
+};
+export type Booking = {
+  _id: string;
+  trainer: string;
+  trainee: string;
+  endDateTime: Date;
+  startDateTime: Date;
+  status: string;
+  payment: Payment;
+};
 export type BookingList = {
   _id: string;
   endDateTime: Date;
@@ -47,7 +61,7 @@ export const deleteBooking = (deleteBookingInfo: { bookingId: string }) => {
       throw err;
     });
 };
-export const getBooking = () => {
+export const getBookings = () => {
   return axios
     .get(API_URL + "/protected/bookings", { headers: authHeader() })
     .then((response) => {
@@ -78,5 +92,17 @@ export const createBooking = (bookingInput: BookingInput) => {
         return error.response.data;
       }
       throw error;
+    });
+};
+
+export const getBooking = (bookingID: string) => {
+  return axios
+    .get(API_URL + `/protected/booking?id=${bookingID}`, { headers: authHeader() })
+    .then((response) => {
+      const r = response.data.booking;
+      const booking = r as Booking;
+      booking.startDateTime = new Date(r.startDateTime);
+      booking.endDateTime = new Date(r.endDateTime);
+      return booking;
     });
 };
