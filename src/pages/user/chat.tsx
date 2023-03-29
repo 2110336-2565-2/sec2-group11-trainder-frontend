@@ -77,9 +77,9 @@ const Chat = () => {
             <ChatBox name="Chaeyong Pak" message="last message" />
           </div>
         </div>
-        <div className="flex flex-col w-3/5 h-screen bg-white">
-          <div className="pt-5  bg-gray-100 ">
-            <div className="flex flex-row items-center">
+        <div className="flex flex-col w-3/5 h-screen bg-gray-100 relative">
+          
+            <div className="pt-5 flex flex-row items-center">
               <div className=" ml-[1%] rounded-full overflow-hidden">
                 <Image
                   src="/default_profile.jpg"
@@ -91,40 +91,47 @@ const Chat = () => {
               </div>
               <p className="px-2">Lalisa Manoban</p>
             </div>
+          
+          <div className="absolute bottom-1/4 w-full">
             <div className="p-5 flex flex-row items-end">
               <div className="bg-[#5D86BC] h-8 rounded-lg p-1 drop-shadow-2xl">
                 <p>Some Chat1</p>
               </div>
               <p className="px-1 text-xs">14.50</p>
             </div>
-            <div className="p-5 flex flex-row items-end">
-              <div className="bg-white h-8 rounded-lg p-1 drop-shadow-2xl">
-                <p>Some Chat2</p>
+            <div className="grid justify-items-end">
+              <div className="p-5 flex flex-row items-end">
+                <p className="px-1 text-xs">15.00</p>
+                <div className="bg-white h-8 rounded-lg p-1 drop-shadow-2xl">
+                  <p>Some Chat2</p>
+                </div>
               </div>
-              <p className="px-1 text-xs">15.00</p>
             </div>
-            <div className="p-5 flex flex-row items-end">
-              <div className="bg-white h-8 rounded-lg p-1 drop-shadow-2xl">
-                <p>Some Chat3</p>
+
+            <div className="grid justify-items-end">
+              <div className="p-5 flex flex-row items-end">
+                <p className="px-1 text-xs">15.00</p>
+                <div className="bg-white h-8 rounded-lg p-1 drop-shadow-2xl">
+                  <p>Some Chat3</p>
+                </div>
               </div>
-              <p className="px-1 text-xs">15.00</p>
             </div>
-            <div className="p-5 flex flex-row items-end">
+            <div className="p-5 flex flex-row items-end ">
               <div className="bg-[#5D86BC] h-8 rounded-lg p-1 drop-shadow-2xl">
                 <p>Some Chat4</p>
               </div>
               <p className="px-1 text-xs">15.05</p>
             </div>
-            <div className="p-2 bg-white">
-              <input
-                className="p-2 rounded-3xl w-full border bg-gray-300"
-                type="text"
-                placeholder="Aa"
-              />
-            </div>
+          </div>
+          <div className="p-2 bg-white absolute bottom-20 w-full ">
+            <input
+              className="p-2 rounded-3xl w-full border bg-gray-300  "
+              type="text"
+              placeholder="Aa"
+            />
+          </div>
           </div>
         </div>
-      </div>
 
       {showModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50 flex flex-row justify-center items-center">
