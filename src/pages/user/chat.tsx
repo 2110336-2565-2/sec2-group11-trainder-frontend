@@ -60,7 +60,7 @@ const Chat = () => {
 
   return (
     <main className="w-full h-screen pt-20 flex flex-col overflow-hidden ">
-      
+      <div className="flex flex-row">
         <div className="flex flex-col w-2/5 h-screen bg-white">
           <div className="flex flex-row h-[10%] w-full justify-between">
             <p className="text-xl md:text-3xl font-bold ml-[2%] mt-[2%]">
@@ -77,8 +77,54 @@ const Chat = () => {
             <ChatBox name="Chaeyong Pak" message="last message" />
           </div>
         </div>
-   
-      
+        <div className="flex flex-col w-3/5 h-screen bg-white">
+          <div className="pt-5  bg-gray-100 ">
+            <div className="flex flex-row items-center">
+              <div className=" ml-[1%] rounded-full overflow-hidden">
+                <Image
+                  src="/default_profile.jpg"
+                  alt=""
+                  width={50}
+                  height={50}
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+              <p className="px-2">Lalisa Manoban</p>
+            </div>
+            <div className="p-5 flex flex-row items-end">
+              <div className="bg-[#5D86BC] h-8 rounded-lg p-1 drop-shadow-2xl">
+                <p>Some Chat1</p>
+              </div>
+              <p className="px-1 text-xs">14.50</p>
+            </div>
+            <div className="p-5 flex flex-row items-end">
+              <div className="bg-white h-8 rounded-lg p-1 drop-shadow-2xl">
+                <p>Some Chat2</p>
+              </div>
+              <p className="px-1 text-xs">15.00</p>
+            </div>
+            <div className="p-5 flex flex-row items-end">
+              <div className="bg-white h-8 rounded-lg p-1 drop-shadow-2xl">
+                <p>Some Chat3</p>
+              </div>
+              <p className="px-1 text-xs">15.00</p>
+            </div>
+            <div className="p-5 flex flex-row items-end">
+              <div className="bg-[#5D86BC] h-8 rounded-lg p-1 drop-shadow-2xl">
+                <p>Some Chat4</p>
+              </div>
+              <p className="px-1 text-xs">15.05</p>
+            </div>
+            <div className="p-2 bg-white">
+              <input
+                className="p-2 rounded-3xl w-full border bg-gray-300"
+                type="text"
+                placeholder="Aa"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {showModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50 flex flex-row justify-center items-center">
