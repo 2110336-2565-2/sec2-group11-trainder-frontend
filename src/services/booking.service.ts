@@ -82,10 +82,9 @@ export const getBookings = () => {
     });
 };
 
-export const getSpecificDateBookings = async () => {
-  // TODO: add specific date as input after API is fixed
+export const getSpecificDateBookings = async (date: string) => {
   return axios
-    .get(API_URL + '/protected/today-event', { headers: authHeader() })
+    .get(API_URL + '/protected/today-event', { headers: authHeader(), params: { date: date } })
     .then((response) => {
       let bookings: BookingList[] = [];
       if (response.data.bookings) {

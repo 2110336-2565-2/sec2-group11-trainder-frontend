@@ -25,12 +25,12 @@ export default function Calendar(props: CalendarProps) {
   const [bookings, setBookings] = useState<BookingList[]>([]);
 
   useEffect(() => {
-    getSpecificDateBookings().then((data) => {
+    getSpecificDateBookings(selectDate.format("YYYY-MM-DD")).then((data) => {
       if (data) {
         setBookings(data);
       }
     });
-  }, []);
+  }, [selectDate]);
 
   return (
     <div className="flex flex-col gap-16 py-5 px-16 md:divide-x w-full md:flex-row justify-center md:justify-evenly items-center">
