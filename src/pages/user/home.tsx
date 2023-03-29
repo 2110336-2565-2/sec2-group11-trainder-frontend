@@ -16,10 +16,13 @@ const Home = () => {
   }, []);
 
   return (
-    <main className="min-h-screen h-full w-full">
+    <main className="min-h-screen h-full w-full pt-20">
       {!loading && (
         <>
-          <Calendar />
+          <div>
+            <h1 className="px-3 md:px-7 text-xl md:text-2xl font-bold">Upcoming Schedule</h1>
+            <Calendar usertype={profile?.usertype ?? ""} />
+          </div>
           <div className="bg-gray h-1 mx-10 rounded-full"></div>
           <div className="flex flex-col sm:flex-row px-10 py-5 items-center gap-10">
             <MenuItem
