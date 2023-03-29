@@ -61,7 +61,6 @@ const Notification = () => {
               onClick={async () => {
                 await updateBooking({
                   bookingId: booking._id,
-                  paymentStatus: booking.status,
                   status: "confirm",
                 });
               }}
