@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { formatDateTime } from "@/utils/date";
+import Link from "next/link";
 
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
@@ -32,12 +33,26 @@ const Notification = () => {
   };
 
   const getBottomRow = (booking: BookingList) => {
-    if (booking.status === "confirm") {
-      return <div className="pt-5 flex">Confirmed.</div>;
-    }
     if (profile?.usertype === "Trainee") {
+      if (booking.status === "confirm") {
+        return (
+          <>
+            <div className="pt-5 flex">Confirmed.</div>
+            {/* TODO: Fix styles */}
+            <Link
+              href={`/user/booking/payment/${booking._id}`}
+              className="text-blue hover:underline"
+            >
+              Pay
+            </Link>
+          </>
+        );
+      }
       return <div className="pt-5 flex">Waiting for confirmation.</div>;
     } else {
+      if (booking.status === "confirm") {
+        return <div className="pt-5 flex">Confirmed.</div>;
+      }
       return (
         <div className="flex justify-between pt-5">
           <div className="px-2">

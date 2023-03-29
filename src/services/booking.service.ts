@@ -11,6 +11,20 @@ export type BookingInput = {
   startTime: string;
   trainer: string;
 };
+export type Payment = {
+  totalCost: Number;
+  status: string;
+  chargeID: string;
+};
+export type Booking = {
+  _id: string;
+  trainer: string;
+  trainee: string;
+  endDateTime: Date;
+  startDateTime: Date;
+  status: string;
+  payment: Payment;
+};
 export type BookingList = {
   _id: string;
   endDateTime: Date;
@@ -101,4 +115,16 @@ export const getSpecificDateBookings = async (date: string) => {
         throw error;
       }
     });
-}
+};
+
+export const getBooking = (bookingID: string) => {
+  return axios
+    .get(API_URL + `/protected/booking?id=${bookingID}`, { headers: authHeader() })
+    .then((response) => {
+      const r = response.data.booking;
+      const booking = r as Booking;
+      booking.startDateTime = new Date(r.startDateTime);
+      booking.endDateTime = new Date(r.endDateTime);
+      return booking;
+    });
+};
