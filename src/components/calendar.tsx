@@ -1,17 +1,17 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { generateDate, months } from "@/util/calendar";
+import { generateDate, months } from "@/utils/calendar";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ListBulletIcon,
 } from "@heroicons/react/24/outline";
-import cn from "@/util/cn";
+import cn from "@/utils/cn";
 import {
   BookingList,
   getSpecificDateBookings,
 } from "@/services/booking.service";
-import { formatDateTime } from "@/util/date";
+import { formatDateTime } from "@/utils/date";
 
 type CalendarProps = {
   usertype: string;
@@ -141,7 +141,7 @@ export default function Calendar(props: CalendarProps) {
           })
         ) : (
           <p className="text-gray-400">
-            There is currently no training appointment scheduled for today.
+            There is currently no training appointment scheduled on this day.
           </p>
         )}
       </div>

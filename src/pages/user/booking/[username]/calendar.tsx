@@ -1,7 +1,7 @@
 import { BackButton } from "@/components/backbutton";
 import { Button } from "@/components/button";
 import { BookingInput, createBooking } from "@/services/booking.service";
-import { generateDate } from "@/util/calendar";
+import { generateDate } from "@/utils/calendar";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   ChevronLeftIcon,

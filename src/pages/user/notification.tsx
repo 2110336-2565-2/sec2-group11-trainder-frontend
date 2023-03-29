@@ -7,7 +7,7 @@ import {
 } from "@/services/booking.service";
 import { Button } from "@/components/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
-import { formatDateTime } from "@/util/date";
+import { formatDateTime } from "@/utils/date";
 
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
