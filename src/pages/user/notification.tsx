@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import {
   BookingList,
   deleteBooking,
-  getBooking,
+  getBookings,
   updateBooking,
 } from "@/services/booking.service";
 import { Button } from "@/components/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
+import { formatDateTime } from "@/util/date";
 
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
@@ -17,31 +18,11 @@ const Notification = () => {
     });
   }, []);
   useEffect(() => {
-    getBooking().then((data) => {
+    getBookings().then((data) => {
       setBooking(data);
     });
   });
-  const getTime = (booking: BookingList) => {
-    let hourOfStart, hourOfEnd, minutesOfStart, minutesOfEnd;
-    const startHour = booking.startDateTime.getUTCHours();
-    const endHour = booking.endDateTime.getUTCHours();
-    const startMinutes = booking.startDateTime.getMinutes();
-    const endMinutes = booking.endDateTime.getMinutes();
-    hourOfStart =
-      startHour < 10 ? "0" + startHour.toString() : startHour.toString();
-    hourOfEnd = endHour < 10 ? "0" + endHour.toString() : endHour.toString();
-    minutesOfStart =
-      startMinutes < 10
-        ? "0" + startMinutes.toString()
-        : startMinutes.toString();
-    minutesOfEnd =
-      endMinutes < 10 ? "0" + endMinutes.toString() : endMinutes.toString();
-    return (
-      <div className="text-gray-500">
-        {hourOfStart}.{minutesOfStart} - {hourOfEnd}.{minutesOfEnd}
-      </div>
-    );
-  };
+
   const getName = (booking: BookingList) => {
     const name =
       profile?.usertype === "Trainee"
@@ -49,6 +30,7 @@ const Notification = () => {
         : booking.traineeFirstName + " " + booking.traineeLastName;
     return <div className="text-xl font-500">{name}</div>;
   };
+
   const getBottomRow = (booking: BookingList) => {
     if (booking.status === "confirm") {
       return <div className="pt-5 flex">Confirmed.</div>;
@@ -82,11 +64,16 @@ const Notification = () => {
       );
     }
   };
+
   const getBookingList = () => {
     if (booking !== undefined && booking.length > 0) {
       return (
         <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10 justify-center items-center p-5">
           {booking?.map((booking) => {
+            const [date, time] = formatDateTime(
+              booking.startDateTime,
+              booking.endDateTime
+            );
             return booking.status !== "complete" ? (
               <div
                 key={booking._id}
@@ -95,11 +82,8 @@ const Notification = () => {
               >
                 {getName(booking)}
                 <div className="text-gray-500">
-                  {booking.startDateTime.getUTCDate()}/
-                  {booking.startDateTime.getUTCMonth() + 1}/
-                  {booking.startDateTime.getUTCFullYear()}
+                  {date} <br /> {time}
                 </div>
-                {getTime(booking)}
                 {getBottomRow(booking)}
               </div>
             ) : (
