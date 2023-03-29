@@ -1,16 +1,39 @@
 import dayjs from "dayjs";
-import React, { useState } from "react";
-import { generateDate, months } from "@/util/calendar";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import cn from "@/util/cn";
+import { useEffect, useState } from "react";
+import { generateDate, months } from "@/utils/calendar";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ListBulletIcon,
+} from "@heroicons/react/24/outline";
+import cn from "@/utils/cn";
+import {
+  BookingList,
+  getSpecificDateBookings,
+} from "@/services/booking.service";
+import { formatDateTime } from "@/utils/date";
 
-export default function Calendar() {
+type CalendarProps = {
+  usertype: string;
+};
+
+export default function Calendar(props: CalendarProps) {
   const days = ["S", "M", "T", "W", "T", "F", "S"];
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
+  const [bookings, setBookings] = useState<BookingList[]>([]);
+
+  useEffect(() => {
+    getSpecificDateBookings(selectDate.format("YYYY-MM-DD")).then((data) => {
+      if (data) {
+        setBookings(data);
+      }
+    });
+  }, [selectDate]);
+
   return (
-    <div className="flex flex-col gap-16 pt-20 pb-10 px-16 md:divide-x w-full md:flex-row justify-center md:justify-evenly items-center">
+    <div className="flex flex-col gap-16 py-5 px-16 md:divide-x w-full md:flex-row justify-center md:justify-evenly items-center">
       <div className="w-96 h-100 ">
         <div className="flex justify-between items-center">
           <h1 className="font-semibold">
@@ -85,11 +108,42 @@ export default function Calendar() {
       </div>
       <div className="w-96 sm:px-5">
         <h1 className="font-semibold">
-          Schedule for {selectDate.toDate().toDateString()}
+          Schedule for {selectDate.format("ddd, MMM DD YYYY")}
         </h1>
-        <p className="text-gray-400">
-          There is currently no training appointment scheduled for today.
-        </p>
+        {bookings.length > 0 ? (
+          bookings.map((booking, index) => {
+            return (
+              <div key={index} className="py-3 flex space-x-5">
+                <ListBulletIcon className="h-6 w-6" />
+                <div className="flex flex-col space-y-1">
+                  <p>
+                    {
+                      formatDateTime(
+                        booking.startDateTime,
+                        booking.endDateTime
+                      )[1]
+                    }
+                  </p>
+                  {props.usertype === "Trainee" ? (
+                    <p>
+                      <span className="font-bold">Trainer:</span>{" "}
+                      {booking.trainerFirstName} {booking.trainerLastName}
+                    </p>
+                  ) : (
+                    <p>
+                      <span className="font-bold">Trainee:</span>{" "}
+                      {booking.traineeFirstName} {booking.traineeLastName}
+                    </p>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-gray-400">
+            There is currently no training appointment scheduled on this day.
+          </p>
+        )}
       </div>
     </div>
   );

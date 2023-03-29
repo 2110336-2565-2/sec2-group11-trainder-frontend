@@ -38,6 +38,19 @@ export type BookingList = {
   traineeLastName: string;
 };
 
+export const createBooking = (bookingInput: BookingInput) => {
+  return axios
+    .post(API_URL + "/protected/create-booking", bookingInput, {
+      headers: authHeader(),
+    })
+    .catch((error) => {
+      if (error.response) {
+        return error.response.data;
+      }
+      throw error;
+    });
+};
+
 export const updateBooking = (updateBookingInfo: {
   bookingId: string;
   paymentStatus: string;
@@ -82,16 +95,25 @@ export const getBookings = () => {
       }
     });
 };
-export const createBooking = (bookingInput: BookingInput) => {
+
+export const getSpecificDateBookings = async (date: string) => {
   return axios
-    .post(API_URL + "/protected/create-booking", bookingInput, {
-      headers: authHeader(),
+    .get(API_URL + '/protected/today-event', { headers: authHeader(), params: { date: date } })
+    .then((response) => {
+      let bookings: BookingList[] = [];
+      if (response.data.bookings) {
+        bookings = response.data.bookings;
+        bookings.map((booking) => {
+          booking.startDateTime = new Date(booking.startDateTime);
+          booking.endDateTime = new Date(booking.endDateTime);
+        });
+      }
+      return bookings;
     })
     .catch((error) => {
-      if (error.response) {
-        return error.response.data;
+      if (error) {
+        throw error;
       }
-      throw error;
     });
 };
 
