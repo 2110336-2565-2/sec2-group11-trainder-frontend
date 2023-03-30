@@ -9,6 +9,10 @@ import { Button } from "@/components/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { formatDateTime } from "@/utils/date";
 import Link from "next/link";
+import {
+  CheckCircleIcon,
+  CursorArrowRaysIcon,
+} from "@heroicons/react/24/outline";
 
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
@@ -33,22 +37,38 @@ const Notification = () => {
   };
 
   const getBottomRow = (booking: BookingList) => {
+    if (booking.status === "complete") {
+      return (
+        <div className="pt-5 flex items-center text-green-light font-bold">
+          <CheckCircleIcon className="h-8 w-8 mr-2" strokeWidth={2} />
+          Complete
+        </div>
+      );
+    }
     if (profile?.usertype === "Trainee") {
       if (booking.status === "confirm") {
         return (
           <>
-            <div className="pt-5 flex">Confirmed.</div>
-            {/* TODO: Fix styles */}
+            <div className="pt-5 flex font-bold">Confirmed.</div>
             <Link
               href={`/user/booking/payment/${booking._id}`}
-              className="text-blue hover:underline"
+              className="flex mt-1"
             >
-              Pay
+              Click to&nbsp;
+              <span className="text-blue hover:underline">Pay</span>
+              <CursorArrowRaysIcon
+                className="h-6 w-6 ml-2 text-blue"
+                strokeWidth={2}
+              />
             </Link>
           </>
         );
       }
-      return <div className="pt-5 flex">Waiting for confirmation.</div>;
+      return (
+        <div className="pt-5 flex text-gray font-bold">
+          Waiting for confirmation.
+        </div>
+      );
     } else {
       if (booking.status === "confirm") {
         if (booking.payment.status === "paid") {
@@ -68,7 +88,7 @@ const Notification = () => {
             </div>
           );
         }
-        return <div className="pt-5 flex">Confirmed.</div>;
+        return <div className="pt-5 flex font-bold">Confirmed.</div>;
       }
       return (
         <div className="flex justify-between pt-5">
@@ -105,27 +125,25 @@ const Notification = () => {
               booking.startDateTime,
               booking.endDateTime
             );
-            return booking.status !== "complete" ? (
+            return (
               <div
                 key={booking._id}
                 className="flex flex-col items-center text-center h-full break-words p-5 duration-300
                                     bg-white w-auto border-2 border-gray rounded-3xl drop-shadow-lg"
               >
                 {getName(booking)}
-                <div className="text-gray-500">
+                <div className="text-gray">
                   {date} <br /> {time}
                 </div>
                 {getBottomRow(booking)}
               </div>
-            ) : (
-              <></>
             );
           })}
         </div>
       );
     } else {
       return (
-        <div className="text-gray-400 mt-5 p-5 text-center text-2xl">
+        <div className="text-gray mt-5 p-5 text-center text-2xl">
           There is currently no upcoming training appointment scheduled.
         </div>
       );
