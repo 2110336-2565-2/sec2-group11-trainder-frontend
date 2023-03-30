@@ -36,6 +36,7 @@ export type BookingList = {
   trainee: string;
   traineeFirstName: string;
   traineeLastName: string;
+  payment: Payment;
 };
 
 export const createBooking = (bookingInput: BookingInput) => {
@@ -53,7 +54,6 @@ export const createBooking = (bookingInput: BookingInput) => {
 
 export const updateBooking = (updateBookingInfo: {
   bookingId: string;
-  paymentStatus: string;
   status: string;
 }) => {
   return axios
@@ -98,7 +98,10 @@ export const getBookings = () => {
 
 export const getSpecificDateBookings = async (date: string) => {
   return axios
-    .get(API_URL + '/protected/today-event', { headers: authHeader(), params: { date: date } })
+    .get(API_URL + "/protected/today-event", {
+      headers: authHeader(),
+      params: { date: date },
+    })
     .then((response) => {
       let bookings: BookingList[] = [];
       if (response.data.bookings) {
@@ -119,7 +122,9 @@ export const getSpecificDateBookings = async (date: string) => {
 
 export const getBooking = (bookingID: string) => {
   return axios
-    .get(API_URL + `/protected/booking?id=${bookingID}`, { headers: authHeader() })
+    .get(API_URL + `/protected/booking?id=${bookingID}`, {
+      headers: authHeader(),
+    })
     .then((response) => {
       const r = response.data.booking;
       const booking = r as Booking;

@@ -9,20 +9,31 @@ import { Button } from "@/components/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { formatDateTime } from "@/utils/date";
 import Link from "next/link";
+import {
+  CheckCircleIcon,
+  CursorArrowRaysIcon,
+} from "@heroicons/react/24/outline";
 
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
   const [profile, setProfile] = useState<UserProfile>();
+  const [isBookingsUpdate, setBookingsUpdate] = useState<boolean>(true);
+
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
     });
   }, []);
+
   useEffect(() => {
-    getBookings().then((data) => {
-      setBooking(data);
-    });
-  }, []);
+    if (isBookingsUpdate) {
+      getBookings().then((data) => {
+        setBooking(data);
+        setBookingsUpdate(false);
+      });
+    }
+    console.log("update");
+  }, [isBookingsUpdate]);
 
   const getName = (booking: BookingList) => {
     const name =
@@ -33,25 +44,61 @@ const Notification = () => {
   };
 
   const getBottomRow = (booking: BookingList) => {
+    if (booking.status === "complete") {
+      return (
+        <div className="pt-5 flex items-center text-green-light font-bold">
+          <CheckCircleIcon className="h-8 w-8 mr-2" strokeWidth={2} />
+          Complete
+        </div>
+      );
+    }
     if (profile?.usertype === "Trainee") {
       if (booking.status === "confirm") {
+        if (booking.payment.status === "paid") {
+          return <div className="pt-5 flex font-bold">Paid</div>;
+        }
         return (
           <>
-            <div className="pt-5 flex">Confirmed.</div>
-            {/* TODO: Fix styles */}
+            <div className="pt-5 flex font-bold">Confirmed</div>
             <Link
               href={`/user/booking/payment/${booking._id}`}
-              className="text-blue hover:underline"
+              className="flex mt-1"
             >
-              Pay
+              Click to&nbsp;
+              <span className="text-blue hover:underline">Pay</span>
+              <CursorArrowRaysIcon
+                className="h-6 w-6 ml-2 text-blue"
+                strokeWidth={2}
+              />
             </Link>
           </>
         );
       }
-      return <div className="pt-5 flex">Waiting for confirmation.</div>;
+      return (
+        <div className="pt-5 flex text-gray font-bold">
+          Waiting for confirmation.
+        </div>
+      );
     } else {
       if (booking.status === "confirm") {
-        return <div className="pt-5 flex">Confirmed.</div>;
+        if (booking.payment.status === "paid") {
+          return (
+            <div className="flex justify-between pt-5">
+              <div className="px-2">
+                <Button
+                  name="Complete Booking"
+                  onClick={async () => {
+                    await updateBooking({
+                      bookingId: booking._id,
+                      status: "complete",
+                    }).then(() => setBookingsUpdate(true));
+                  }}
+                ></Button>
+              </div>
+            </div>
+          );
+        }
+        return <div className="pt-5 flex font-bold">Confirmed</div>;
       }
       return (
         <div className="flex justify-between pt-5">
@@ -61,9 +108,8 @@ const Notification = () => {
               onClick={async () => {
                 await updateBooking({
                   bookingId: booking._id,
-                  paymentStatus: booking.status,
                   status: "confirm",
-                });
+                }).then(() => setBookingsUpdate(true));
               }}
             ></Button>
           </div>
@@ -71,7 +117,9 @@ const Notification = () => {
             <Button
               name="Cancel"
               onClick={async () => {
-                await deleteBooking({ bookingId: booking._id });
+                await deleteBooking({ bookingId: booking._id }).then(() =>
+                  setBookingsUpdate(true)
+                );
               }}
             ></Button>
           </div>
@@ -89,27 +137,25 @@ const Notification = () => {
               booking.startDateTime,
               booking.endDateTime
             );
-            return booking.status !== "complete" ? (
+            return (
               <div
                 key={booking._id}
                 className="flex flex-col items-center text-center h-full break-words p-5 duration-300
                                     bg-white w-auto border-2 border-gray rounded-3xl drop-shadow-lg"
               >
                 {getName(booking)}
-                <div className="text-gray-500">
+                <div className="text-gray">
                   {date} <br /> {time}
                 </div>
                 {getBottomRow(booking)}
               </div>
-            ) : (
-              <></>
             );
           })}
         </div>
       );
     } else {
       return (
-        <div className="text-gray-400 mt-5 p-5 text-center text-2xl">
+        <div className="text-gray mt-5 p-5 text-center text-2xl">
           There is currently no upcoming training appointment scheduled.
         </div>
       );
