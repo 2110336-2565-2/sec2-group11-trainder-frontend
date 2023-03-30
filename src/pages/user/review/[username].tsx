@@ -1,5 +1,5 @@
-import { BackButton } from "@/components/backbutton";
-import { Button } from "@/components/button";
+import { BackButton } from "@/components/common/backbutton";
+import { Button } from "@/components/common/button";
 import { useState, useEffect, Fragment } from "react";
 import { UserProfile } from "@/services/user.service";
 import {
@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { getTrainerReviews, Review } from "@/services/trainer.service";
 import { StarIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { Dialog, Transition } from "@headlessui/react";
+import { Modal } from "@/components/common/modal";
 
 const Review = () => {
   const [showModal, setShowModal] = useState(false);
@@ -111,7 +111,7 @@ const Review = () => {
               className={
                 index <= (hover || rating)
                   ? "cursor-pointer fill-yellow h-10 w-10 stroke-yellow"
-                  : "cursor-pointer fill-none h-10 w-10 stroke-slate-300"
+                  : "cursor-pointer fill-none h-10 w-10 stroke-gray-light"
               }
               onClick={() => {
                 setRating(index);
@@ -229,81 +229,49 @@ const Review = () => {
                   onClick={() => setShowModal(true)}
                   disabled={!reviewable}
                 />
-                <Transition appear show={showModal} as={Fragment}>
-                  <Dialog
-                    as="div"
-                    className="relative z-10"
-                    onClose={() => setShowModal(false)}
-                  >
-                    <Transition.Child
-                      as={Fragment}
-                      enter="ease-out duration-300"
-                      enterFrom="opacity-0"
-                      enterTo="opacity-100"
-                      leave="ease-in duration-200"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <div className="fixed inset-0 bg-black bg-opacity-25" />
-                    </Transition.Child>
-
-                    <div className="fixed inset-0 overflow-y-auto">
-                      <div className="flex min-h-full items-center justify-center text-center p-4 md:p-0">
-                        <Transition.Child
-                          as={Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0 scale-95"
-                          enterTo="opacity-100 scale-100"
-                          leave="ease-in duration-200"
-                          leaveFrom="opacity-100 scale-100"
-                          leaveTo="opacity-0 scale-95"
-                        >
-                          <Dialog.Panel className="w-1/2 h-full transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all rounded-2xl">
-                            <div>
-                              <p className="text-xl text-black text-center">
-                                What is your rate ?
-                              </p>
-                              {!isRating ? (
-                                <div className="text-sm text-pink-dark">
-                                  please select rating
-                                </div>
-                              ) : (
-                                <></>
-                              )}
-                              <ReviewRating />
-                              <p className="text-xl text-black my-2">
-                                Add your review
-                              </p>
-                              <textarea
-                                onChange={(e) => setComment(e.target.value)}
-                                className="w-full h-20 px-3 py-2 text-base text-gray-700 bg-slate-300 border rounded-lg focus:shadow-outline my-1"
-                              ></textarea>
-                            </div>
-
-                            <div className="flex justify-end mt-10 space-x-5">
-                              <Button
-                                name="Cancel"
-                                width="w-1/4"
-                                onClick={() => {
-                                  setShowModal(false);
-                                  setRating(0);
-                                  setComment("");
-                                  setIsRating(true);
-                                }}
-                              />
-                              <Button
-                                name="Submit"
-                                width="w-1/4"
-                                onClick={() => onSubmit()}
-                                type="button"
-                              />
-                            </div>
-                          </Dialog.Panel>
-                        </Transition.Child>
+                <Modal
+                  isShow={showModal}
+                  onClose={() => setShowModal(false)}
+                  width="w-1/2"
+                >
+                  <div className="m-3">
+                    <p className="text-xl text-black text-center">
+                      What is your rate ?
+                    </p>
+                    {!isRating ? (
+                      <div className="text-sm text-pink-dark">
+                        please select rating
                       </div>
-                    </div>
-                  </Dialog>
-                </Transition>
+                    ) : (
+                      <></>
+                    )}
+                    <ReviewRating />
+                    <p className="text-xl text-black my-2">Add your review</p>
+                    <textarea
+                      onChange={(e) => setComment(e.target.value)}
+                      className="w-full h-20 px-3 py-2 text-base bg-gray-light border rounded-lg focus:shadow-outline my-1"
+                    ></textarea>
+                  </div>
+
+                  <div className="flex justify-end mt-10 space-x-5">
+                    <Button
+                      name="Cancel"
+                      width="w-1/4"
+                      onClick={() => {
+                        setShowModal(false);
+                        setRating(0);
+                        setComment("");
+                        setIsRating(true);
+                      }}
+                    />
+                    <Button
+                      name="Submit"
+                      width="w-1/4"
+                      onClick={() => onSubmit()}
+                      type="button"
+                    />
+                  </div>
+                </Modal>
               </div>
             </div>
           </div>

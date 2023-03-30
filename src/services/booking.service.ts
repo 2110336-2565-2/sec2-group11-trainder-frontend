@@ -11,6 +11,20 @@ export type BookingInput = {
   startTime: string;
   trainer: string;
 };
+export type Payment = {
+  totalCost: Number;
+  status: string;
+  chargeID: string;
+};
+export type Booking = {
+  _id: string;
+  trainer: string;
+  trainee: string;
+  endDateTime: Date;
+  startDateTime: Date;
+  status: string;
+  payment: Payment;
+};
 export type BookingList = {
   _id: string;
   endDateTime: Date;
@@ -22,11 +36,24 @@ export type BookingList = {
   trainee: string;
   traineeFirstName: string;
   traineeLastName: string;
+  payment: Payment;
+};
+
+export const createBooking = (bookingInput: BookingInput) => {
+  return axios
+    .post(API_URL + "/protected/create-booking", bookingInput, {
+      headers: authHeader(),
+    })
+    .catch((error) => {
+      if (error.response) {
+        return error.response.data;
+      }
+      throw error;
+    });
 };
 
 export const updateBooking = (updateBookingInfo: {
   bookingId: string;
-  paymentStatus: string;
   status: string;
 }) => {
   return axios
@@ -47,7 +74,7 @@ export const deleteBooking = (deleteBookingInfo: { bookingId: string }) => {
       throw err;
     });
 };
-export const getBooking = () => {
+export const getBookings = () => {
   return axios
     .get(API_URL + "/protected/bookings", { headers: authHeader() })
     .then((response) => {
@@ -68,15 +95,41 @@ export const getBooking = () => {
       }
     });
 };
-export const createBooking = (bookingInput: BookingInput) => {
+
+export const getSpecificDateBookings = async (date: string) => {
   return axios
-    .post(API_URL + "/protected/create-booking", bookingInput, {
+    .get(API_URL + "/protected/today-event", {
       headers: authHeader(),
+      params: { date: date },
+    })
+    .then((response) => {
+      let bookings: BookingList[] = [];
+      if (response.data.bookings) {
+        bookings = response.data.bookings;
+        bookings.map((booking) => {
+          booking.startDateTime = new Date(booking.startDateTime);
+          booking.endDateTime = new Date(booking.endDateTime);
+        });
+      }
+      return bookings;
     })
     .catch((error) => {
-      if (error.response) {
-        return error.response.data;
+      if (error) {
+        throw error;
       }
-      throw error;
+    });
+};
+
+export const getBooking = (bookingID: string) => {
+  return axios
+    .get(API_URL + `/protected/booking?id=${bookingID}`, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      const r = response.data.booking;
+      const booking = r as Booking;
+      booking.startDateTime = new Date(r.startDateTime);
+      booking.endDateTime = new Date(r.endDateTime);
+      return booking;
     });
 };

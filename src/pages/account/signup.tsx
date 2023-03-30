@@ -4,12 +4,12 @@ import { LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
-import Places from "@/components/places";
+import Places from "@/components/map/places";
 import { useLoadScript } from "@react-google-maps/api";
-import { Dropdown } from "@/components/dropdown";
+import { Dropdown } from "@/components/common/dropdown";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
-import { Button } from "@/components/button";
-import { InputBox } from "@/components/inputBox";
+import { Button } from "@/components/common/button";
+import { InputBox } from "@/components/common/inputBox";
 import Link from "next/link";
 import Image from "next/image";
 

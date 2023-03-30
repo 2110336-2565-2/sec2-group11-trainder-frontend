@@ -1,8 +1,8 @@
-import { BackButton } from "@/components/backbutton";
-import { Button } from "@/components/button";
+import { BackButton } from "@/components/common/backbutton";
+import { Button } from "@/components/common/button";
+import { Modal } from "@/components/common/modal";
 import { BookingInput, createBooking } from "@/services/booking.service";
-import { generateDate } from "@/util/calendar";
-import { Dialog, Transition } from "@headlessui/react";
+import { generateDate } from "@/utils/calendar";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { Fragment, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 const Calendar = () => {
   const router = useRouter();
@@ -159,71 +159,35 @@ const Calendar = () => {
     <main className="w-full h-screen bg-white pt-20 px-6 pb-6 flex">
       {/* Warning */}
       <div className="flex my-3">
-        <Transition appear show={isWarning} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-10"
-            onClose={() => setWarning(false)}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 overflow-y-auto">
-              <div className="flex min-h-full items-center justify-center text-center p-4">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 scale-95 opacity-100"
-                  enterTo="opacity-100 scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <Dialog.Panel className="w-full max-w-sm h-full transform overflow-hidden bg-white p-3 text-center align-middle shadow-xl transition-all rounded-2xl">
-                    <ExclamationCircleIcon
-                      className="h-10 w-10 text-pink-dark"
-                      strokeWidth={2}
-                    />
-                    <Dialog.Title
-                      as="h2"
-                      className="text-lg md:text-xl font-bold leading-6 text-pink-dark"
-                    >
-                      Warning
-                    </Dialog.Title>
-                    <div className="mt-4">Please select time slot.</div>
-
-                    <div className="flex justify-center mt-10">
-                      <Button
-                        name="Got it!"
-                        width="w-1/2"
-                        onClick={() => setWarning(false)}
-                        type="button"
-                      />
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </Dialog>
-        </Transition>
+        <Modal
+          isShow={isWarning}
+          onClose={() => setWarning(false)}
+          title="Warning"
+          titleColor="text-pink-dark"
+          icon={
+            <ExclamationCircleIcon
+              className="h-10 w-10 text-pink-dark"
+              strokeWidth={2}
+            />
+          }
+        >
+          <div className="mt-4">Please select time slot.</div>
+          <div className="flex justify-center mt-10">
+            <Button
+              name="Got it!"
+              width="w-1/2"
+              onClick={() => setWarning(false)}
+              type="button"
+            />
+          </div>
+        </Modal>
       </div>
 
       {/* Calendar & Time slot */}
       <div className="flex flex-grow flex-col md:flex-row gap-8">
         <div className="w-full md:w-2/3 h-2/3 md:h-full flex flex-col bg-backgroundColor p-5">
           <div className="flex items-center text-2xl md:text-3xl font-bold">
-            <BackButton
-              mx="mx-4"
-            />
+            <BackButton mx="mx-4" />
             {firstname} {lastname}
           </div>
           <div className="flex-1">

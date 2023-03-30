@@ -1,4 +1,4 @@
-import { Button } from "@/components/button";
+import { Button } from "@/components/common/button";
 import { CheckBadgeIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 

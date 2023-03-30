@@ -1,5 +1,5 @@
-import { BackButton } from "@/components/backbutton";
-import { Dropdown } from "@/components/dropdown";
+import { BackButton } from "@/components/common/backbutton";
+import { Dropdown } from "@/components/common/dropdown";
 import {
   getCurrentTrainerInfo,
   TrainerProfile,
