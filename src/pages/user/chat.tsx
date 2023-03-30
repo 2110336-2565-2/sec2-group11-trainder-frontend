@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import { Modal } from "@/components/common/modal";
 import Image from "next/image";
 
 const Chat = () => {
@@ -9,7 +10,7 @@ const Chat = () => {
 
   const ChatBox = (props:{name:string,message:string}) => {
 
-    const isSelected:boolean = selectedChat===props.name;
+    const isSelected:boolean = selectedChat===props.name; //may be change to unique value later
     const handleChatBoxClick = () => {
       setSelectedChat(props.name);
     };
@@ -78,13 +79,18 @@ const Chat = () => {
         <ChatBox name="Lalisa Manobal" message="last message" />
         <ChatBox name="Jennie Kim" message="last message" />
         <ChatBox name="Jisoo Kim" message="last message" />
-        <ChatBox name="Chaeyong Pak" message="last message" />
+        <ChatBox name="Chaeyoung Park" message="last message" />
 
         </div>
       </div>
-      {showModal && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50 flex flex-row justify-center items-center">
-          <div className="flex flex-col bg-white p-8 rounded-md w-1/2 h-1/2">
+
+      <Modal
+        isShow={showModal}
+        onClose={() => setShowModal(false)}
+        width="w-1/2"
+      >
+
+          <div className="flex flex-col bg-white p-8 rounded-md h-1/2">
             <div className=" flex flex-row justify-between">
               <p className="text-xl">Add new chat</p>
               <button onClick={handleCloseModalClick} className="w-5 h-5">
@@ -100,8 +106,9 @@ const Chat = () => {
               <TrainerListBox name="Salisa Slytherin"/>
             </div> 
           </div>
-        </div>
-      )}
+  
+      </Modal>
+      
     </main>
   );
 };
