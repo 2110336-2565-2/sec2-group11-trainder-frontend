@@ -29,7 +29,7 @@ const Chat = () => {
     <main className="w-full h-screen pt-20 flex flex-col overflow-hidden ">
       <div className="flex flex-row">
         <div className="flex flex-col w-2/5 h-screen bg-[#FCF4F1]"></div>
-        <div className="flex flex-col w-3/5 h-screen bg-gray-100 relative">
+        <div className="flex flex-col w-3/5 h-screen bg-[#F1EFEF] relative">
           <div className="pt-5 flex flex-row items-center">
             <div className=" ml-[1%] rounded-full overflow-hidden">
               <Image
@@ -43,7 +43,7 @@ const Chat = () => {
             <p className="px-2">Lalisa Manoban</p>
           </div>
 
-          <div className="absolute bottom-1/4 w-full">
+          <div className="absolute bottom-1/4 w-full overflow-auto">
             <ContactPersonMessage message="Hello" time="14.50" />
             <UserMessage message="..." time="15.00" />
             <UserMessage message="Some Chat ..." time="15.00" />
