@@ -1,5 +1,5 @@
-import { BackButton } from "@/components/backbutton";
-import { Button } from "@/components/button";
+import { BackButton } from "@/components/common/backbutton";
+import { Button } from "@/components/common/button";
 import {
   FilteredTrainerProfile,
   FilterInput,
