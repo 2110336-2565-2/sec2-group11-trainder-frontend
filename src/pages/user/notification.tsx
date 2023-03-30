@@ -17,16 +17,23 @@ import {
 const Notification = () => {
   const [booking, setBooking] = useState<[BookingList]>();
   const [profile, setProfile] = useState<UserProfile>();
+  const [isBookingsUpdate, setBookingsUpdate] = useState<boolean>(true);
+
   useEffect(() => {
     getCurrentUserProfile().then((data) => {
       setProfile(data);
     });
   }, []);
+
   useEffect(() => {
-    getBookings().then((data) => {
-      setBooking(data);
-    });
-  }, []);
+    if (isBookingsUpdate) {
+      getBookings().then((data) => {
+        setBooking(data);
+        setBookingsUpdate(false);
+      });
+    }
+    console.log("update");
+  }, [isBookingsUpdate]);
 
   const getName = (booking: BookingList) => {
     const name =
@@ -49,7 +56,7 @@ const Notification = () => {
       if (booking.status === "confirm") {
         return (
           <>
-            <div className="pt-5 flex font-bold">Confirmed.</div>
+            <div className="pt-5 flex font-bold">Confirmed</div>
             <Link
               href={`/user/booking/payment/${booking._id}`}
               className="flex mt-1"
@@ -81,14 +88,14 @@ const Notification = () => {
                     await updateBooking({
                       bookingId: booking._id,
                       status: "complete",
-                    });
+                    }).then(() => setBookingsUpdate(true));
                   }}
                 ></Button>
               </div>
             </div>
           );
         }
-        return <div className="pt-5 flex font-bold">Confirmed.</div>;
+        return <div className="pt-5 flex font-bold">Confirmed</div>;
       }
       return (
         <div className="flex justify-between pt-5">
@@ -99,7 +106,7 @@ const Notification = () => {
                 await updateBooking({
                   bookingId: booking._id,
                   status: "confirm",
-                });
+                }).then(() => setBookingsUpdate(true));
               }}
             ></Button>
           </div>
@@ -107,7 +114,9 @@ const Notification = () => {
             <Button
               name="Cancel"
               onClick={async () => {
-                await deleteBooking({ bookingId: booking._id });
+                await deleteBooking({ bookingId: booking._id }).then(() =>
+                  setBookingsUpdate(true)
+                );
               }}
             ></Button>
           </div>
