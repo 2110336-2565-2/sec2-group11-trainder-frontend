@@ -22,7 +22,7 @@ const Notification = () => {
     getBookings().then((data) => {
       setBooking(data);
     });
-  });
+  }, []);
 
   const getName = (booking: BookingList) => {
     const name =
