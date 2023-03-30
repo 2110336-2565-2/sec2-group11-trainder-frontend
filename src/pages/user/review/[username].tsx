@@ -1,5 +1,5 @@
-import { BackButton } from "@/components/backbutton";
-import { Button } from "@/components/button";
+import { BackButton } from "@/components/common/backbutton";
+import { Button } from "@/components/common/button";
 import { useState, useEffect, Fragment } from "react";
 import { UserProfile } from "@/services/user.service";
 import {
@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { getTrainerReviews, Review } from "@/services/trainer.service";
 import { StarIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { Modal } from "@/components/modal";
+import { Modal } from "@/components/common/modal";
 
 const Review = () => {
   const [showModal, setShowModal] = useState(false);

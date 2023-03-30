@@ -1,5 +1,5 @@
-import Calendar from "@/components/calendar";
-import { MenuItem } from "@/components/menuItem";
+import Calendar from "@/components/home/calendar";
+import { MenuItem } from "@/components/home/menuItem";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { DocumentTextIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { checkLoggedIn, login } from "@/services/auth.service";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "@/components/button";
-import { InputBox } from "@/components/inputBox";
+import { Button } from "@/components/common/button";
+import { InputBox } from "@/components/common/inputBox";
 import Image from "next/image";
 
 type LoginFormData = {

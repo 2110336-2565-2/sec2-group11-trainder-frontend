@@ -1,6 +1,6 @@
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/button";
+import { Button } from "@/components/common/button";
 import { useRouter } from "next/router";
 import Image from "next/image";
 

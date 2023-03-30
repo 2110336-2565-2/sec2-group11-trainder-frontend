@@ -5,7 +5,7 @@ import {
   getBookings,
   updateBooking,
 } from "@/services/booking.service";
-import { Button } from "@/components/button";
+import { Button } from "@/components/common/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { formatDateTime } from "@/utils/date";
 import Link from "next/link";
@@ -32,7 +32,6 @@ const Notification = () => {
         setBookingsUpdate(false);
       });
     }
-    console.log("update");
   }, [isBookingsUpdate]);
 
   const getName = (booking: BookingList) => {
@@ -162,14 +161,12 @@ const Notification = () => {
     }
   };
   return (
-    <>
-      <main className="w-full flex bg-backgroundColor pt-24 h-full min-h-screen flex-col">
-        <div className="text-3xl mx-8">Training session appointments</div>
-        <div className="flex-col flex justify-center w-full">
-          {getBookingList()}
-        </div>
-      </main>
-    </>
+    <main className="w-full flex pt-24 h-full min-h-screen flex-col">
+      <div className="text-3xl mx-8">Training session appointments</div>
+      <div className="flex-col flex justify-center w-full">
+        {getBookingList()}
+      </div>
+    </main>
   );
 };
 export default Notification;
