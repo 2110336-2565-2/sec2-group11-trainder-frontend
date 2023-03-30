@@ -26,7 +26,7 @@ const Chat = () => {
   };
 
   return (
-    <main className="w-full h-screen pt-20 flex flex-col overflow-hidden ">
+    <main className="w-full h-screen pt-14 flex flex-col overflow-hidden">
       <div className="flex flex-row">
         <div className="flex flex-col w-2/5 h-screen bg-[#FCF4F1]"></div>
         <div className="flex flex-col w-3/5 h-screen bg-[#F1EFEF] relative">
@@ -43,7 +43,7 @@ const Chat = () => {
             <p className="px-2">Lalisa Manoban</p>
           </div>
 
-          <div className="absolute bottom-1/4 w-full overflow-auto">
+          <div className="absolute bottom-16 w-full overflow-auto">
             <ContactPersonMessage message="Hello" time="14.50" />
             <UserMessage message="..." time="15.00" />
             <UserMessage message="Some Chat ..." time="15.00" />
@@ -51,9 +51,9 @@ const Chat = () => {
               message="This is very very long text"
               time="15.05"
             />
-            <ContactPersonMessage message="This is short text" time="15.06" />
+            <ContactPersonMessage message="This is short text" time="15.06"/>
           </div>
-          <div className="p-2 bg-white absolute bottom-20 w-full ">
+          <div className="p-2 bg-white absolute bottom-16 w-full ">
             <input
               className="p-2 rounded-3xl w-full border bg-gray-300  "
               type="text"
