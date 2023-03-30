@@ -51,10 +51,7 @@ const Chat = () => {
               message="This is very very long text"
               time="15.05"
             />
-                       <ContactPersonMessage
-              message="This is short text"
-              time="15.06"
-            />
+            <ContactPersonMessage message="This is short text" time="15.06" />
           </div>
           <div className="p-2 bg-white absolute bottom-20 w-full ">
             <input
