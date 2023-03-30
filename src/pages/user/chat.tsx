@@ -28,7 +28,7 @@ const Chat = () => {
   return (
     <main className="w-full h-screen pt-20 flex flex-col overflow-hidden ">
       <div className="flex flex-row">
-        <div className="flex flex-col w-2/5 h-screen bg-white"></div>
+        <div className="flex flex-col w-2/5 h-screen bg-[#FCF4F1]"></div>
         <div className="flex flex-col w-3/5 h-screen bg-gray-100 relative">
           <div className="pt-5 flex flex-row items-center">
             <div className=" ml-[1%] rounded-full overflow-hidden">
