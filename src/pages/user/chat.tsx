@@ -17,7 +17,7 @@ const Chat = () => {
 
     return (
       <div
-        className={`flex flex-row h-[15%] mt-[2%] w-full items-center ${
+        className={`flex flex-row h-[18%] pt-[3%] pb-[2%] w-full items-center ${
           isSelected ? "bg-gray-300" : "hover:bg-gray-200"
        }`}
         onClick={handleChatBoxClick}
@@ -32,8 +32,8 @@ const Chat = () => {
           />
         </div>
         <div className="h-full w-full flex-col mt-[2%] ml-[5%]">
-          <p className="text-xl m-[2%]">{props.name}</p>
-          <p className="text-gray m-[2%]">
+          <p className="text-xl m-[1%]">{props.name}</p>
+          <p className="text-gray m-[1%]">
             message : {props.message}
           </p>
         </div>
@@ -65,7 +65,7 @@ const Chat = () => {
   }
 
   return (
-    <main className="w-full h-screen pt-20 flex flex-col overflow-hidden ">
+    <main className="w-full h-screen pt-16 flex flex-col overflow-hidden ">
       <div className="flex flex-col w-2/5 h-screen bg-white">
         <div className="flex flex-row h-[10%] w-full justify-between">
           <p className="text-xl md:text-3xl font-bold ml-[2%] mt-[2%]">
