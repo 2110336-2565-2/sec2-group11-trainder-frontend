@@ -54,6 +54,9 @@ const Notification = () => {
     }
     if (profile?.usertype === "Trainee") {
       if (booking.status === "confirm") {
+        if (booking.payment.status === "paid") {
+          return <div className="pt-5 flex font-bold">Paid</div>;
+        }
         return (
           <>
             <div className="pt-5 flex font-bold">Confirmed</div>
