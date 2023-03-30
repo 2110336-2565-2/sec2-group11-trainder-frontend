@@ -1,6 +1,6 @@
-import { BackButton } from "@/components/backbutton";
-import { Button } from "@/components/button";
-import { InputBox } from "@/components/inputBox";
+import { BackButton } from "@/components/common/backbutton";
+import { Button } from "@/components/common/button";
+import { InputBox } from "@/components/common/inputBox";
 import { Booking, getBooking } from "@/services/booking.service";
 import { createPayment } from "@/services/payment.service";
 import { useRouter } from "next/router";

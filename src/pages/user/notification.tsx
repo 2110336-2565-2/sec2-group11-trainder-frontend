@@ -5,7 +5,7 @@ import {
   getBookings,
   updateBooking,
 } from "@/services/booking.service";
-import { Button } from "@/components/button";
+import { Button } from "@/components/common/button";
 import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
 import { formatDateTime } from "@/utils/date";
 import Link from "next/link";

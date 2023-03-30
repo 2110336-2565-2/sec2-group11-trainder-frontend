@@ -1,6 +1,6 @@
-import { BackButton } from "@/components/backbutton";
-import { Button } from "@/components/button";
-import { Modal } from "@/components/modal";
+import { BackButton } from "@/components/common/backbutton";
+import { Button } from "@/components/common/button";
+import { Modal } from "@/components/common/modal";
 import { BookingInput, createBooking } from "@/services/booking.service";
 import { generateDate } from "@/utils/calendar";
 import {
