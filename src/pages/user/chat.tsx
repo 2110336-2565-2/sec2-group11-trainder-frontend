@@ -2,41 +2,44 @@ import { useState } from "react";
 import { PlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import Image from "next/image";
 
-const ChatBox = (props:{name:string,message:string}) => {
-  const [isClicked, setIsClicked] = useState(false);
-
-  const handleChatBoxClick = () => {
-    setIsClicked(!isClicked);
-  };
-
-  return (
-    <div
-      className={`flex flex-row h-[15%] w-full items-center ${
-        isClicked ? "bg-gray-300" : "hover:bg-gray-200"
-      }`}
-      onClick={handleChatBoxClick}
-    >
-      <div className="ml-[5%] rounded-full overflow-hidden">
-        <Image
-          src="/default_profile.jpg"
-          alt=""
-          width={90}
-          height={90}
-          style={{ objectFit: "cover" }}
-        />
-      </div>
-      <div className="h-full w-full flex-col mt-[2%] ml-[5%]">
-        <p className="text-xl m-[2%]">{props.name}</p>
-        <p className="text-gray m-[2%]">
-          message : {props.message}
-        </p>
-      </div>
-    </div>
-  );
-};
-
 const Chat = () => {
   const [showModal, setShowModal] = useState(false);
+
+  const [selectedChat, setSelectedChat] = useState("");
+
+  const ChatBox = (props:{name:string,message:string}) => {
+
+    const isSelected:boolean = selectedChat===props.name;
+    const handleChatBoxClick = () => {
+      setSelectedChat(props.name);
+    };
+
+    return (
+      <div
+        className={`flex flex-row h-[15%] mt-[2%] w-full items-center ${
+          isSelected ? "bg-gray-300" : "hover:bg-gray-200"
+       }`}
+        onClick={handleChatBoxClick}
+     >
+        <div className="ml-[5%] rounded-full overflow-hidden">
+          <Image
+           src="/default_profile.jpg"
+           alt=""
+            width={90}
+            height={90}
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+        <div className="h-full w-full flex-col mt-[2%] ml-[5%]">
+          <p className="text-xl m-[2%]">{props.name}</p>
+          <p className="text-gray m-[2%]">
+            message : {props.message}
+          </p>
+        </div>
+      </div>
+    );
+  };
+  
 
   const handleAddChatClick = () => {
     setShowModal(true);
@@ -72,10 +75,11 @@ const Chat = () => {
           </button>
         </div>
         <div className="h-full w-full overflow-y-scroll">
-          <ChatBox name="Lalisa Manobal" message="last message"/>
-          <ChatBox name="Jennie Kim" message="last message"/>
-          <ChatBox name="Jisoo Kim" message="last message"/>
-          <ChatBox name="Chaeyong Pak" message="last message"/>
+        <ChatBox name="Lalisa Manobal" message="last message" />
+        <ChatBox name="Jennie Kim" message="last message" />
+        <ChatBox name="Jisoo Kim" message="last message" />
+        <ChatBox name="Chaeyong Pak" message="last message" />
+
         </div>
       </div>
       {showModal && (
