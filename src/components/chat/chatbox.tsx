@@ -3,12 +3,10 @@ import Image from "next/image";
 const ChatBox = () => {
   const UserMessage = (props: { message: string; time: string }) => {
     return (
-      <div className="grid justify-items-end">
-        <div className="p-5 flex flex-row items-end">
-          <p className="px-1 text-xs">{props.time}</p>
-          <div className="bg-blue h-8 rounded-xl p-1 drop-shadow-2xl">
-            <p>{props.message}</p>
-          </div>
+      <div className="flex px-3 py-2 items-end justify-end ">
+        <p className="px-2 text-xs">{props.time}</p>
+        <div className="bg-blue rounded-full px-4 py-1 shadow-lg text-white">
+          {props.message}
         </div>
       </div>
     );
@@ -16,19 +14,19 @@ const ChatBox = () => {
 
   const ContactPersonMessage = (props: { message: string; time: string }) => {
     return (
-      <div className="p-5 flex flex-row items-end">
-        <div className="bg-white h-8 rounded-xl p-1 drop-shadow-2xl">
+      <div className="flex px-3 py-2 items-end">
+        <div className="bg-white rounded-full px-4 py-1 shadow-lg">
           <p>{props.message}</p>
         </div>
-        <p className="px-1 text-xs">{props.time}</p>
+        <p className="px-2 text-xs">{props.time}</p>
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col w-3/5 h-screen relative">
-      <div className="px-5 pt-20 flex flex-row items-center">
-        <div className=" ml-[1%] rounded-full overflow-hidden">
+    <div className="flex flex-col w-2/3 h-screen relative">
+      <div className="px-5 pt-20 pb-3 flex flex-row items-center bg-backgroundColor">
+        <div className="rounded-full overflow-hidden">
           <Image
             src="/default_profile.jpg"
             alt=""
@@ -40,7 +38,7 @@ const ChatBox = () => {
         <p className="px-2">Lalisa Manoban</p>
       </div>
 
-      <div className="absolute bottom-12 w-full overflow-auto">
+      <div className="w-full overflow-auto flex flex-col flex-1">
         <ContactPersonMessage message="Hello" time="14.50" />
         <UserMessage message="..." time="15.00" />
         <UserMessage message="Some Chat ..." time="15.00" />
@@ -50,7 +48,7 @@ const ChatBox = () => {
         />
         <ContactPersonMessage message="This is short text" time="15.06" />
       </div>
-      <div className="p-2 bg-white absolute bottom-0 w-full ">
+      <div className="p-2 bg-white w-full">
         <input
           className="p-2 rounded-3xl w-full border bg-[#F5F2F2]"
           type="text"
