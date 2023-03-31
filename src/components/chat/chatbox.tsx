@@ -6,7 +6,7 @@ const ChatBox = () => {
       <div className="grid justify-items-end">
         <div className="p-5 flex flex-row items-end">
           <p className="px-1 text-xs">{props.time}</p>
-          <div className="bg-[#5D86BC] h-8 rounded-xl p-1 drop-shadow-2xl">
+          <div className="bg-blue h-8 rounded-xl p-1 drop-shadow-2xl">
             <p>{props.message}</p>
           </div>
         </div>
@@ -28,8 +28,8 @@ const ChatBox = () => {
   return (
     <main className="w-full h-screen pt-14 flex flex-col overflow-hidden">
       <div className="flex flex-row">
-        <div className="flex flex-col w-2/5 h-screen bg-[#FCF4F1]"></div>
-        <div className="flex flex-col w-3/5 h-screen bg-[#F1EFEF] relative">
+        <div className="flex flex-col w-2/5 h-screen bg-white"></div>
+        <div className="flex flex-col w-3/5 h-screen relative">
           <div className="px-5 pt-8 flex flex-row items-center">
             <div className=" ml-[1%] rounded-full overflow-hidden">
               <Image
