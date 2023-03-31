@@ -26,7 +26,7 @@ const ChatBox = () => {
   };
 
   return (
-    <main className="w-full h-screen pt-14 flex flex-col overflow-hidden">
+    <main className="w-full h-screen pt-16 flex flex-col overflow-hidden">
       <div className="flex flex-row">
         <div className="flex flex-col w-2/5 h-screen bg-white"></div>
         <div className="flex flex-col w-3/5 h-screen relative">
