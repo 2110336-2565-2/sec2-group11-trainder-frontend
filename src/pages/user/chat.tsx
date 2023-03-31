@@ -3,6 +3,7 @@ import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Modal } from "@/components/common/modal";
 import { ChatList, getAllChats } from "@/services/chat.service";
 import Sidebar from "@/components/chat/sidebar";
+import ChatBox from "@/components/chat/chatbox";
 
 const Chat = () => {
   const [showModal, setShowModal] = useState(false);
@@ -38,16 +39,19 @@ const Chat = () => {
 
   return (
     <main className="w-full h-full min-h-screen flex flex-col overflow-hidden">
-      <div className="flex flex-col flex-1 w-1/3 pt-20 bg-white">
-        <div className="flex flex-row w-full px-6 justify-between">
-          <p className="text-2xl md:text-3xl font-bold">Chats</p>
-          <button onClick={handleAddChatClick}>
-            <PlusIcon className="h-8 w-8" strokeWidth={2} />
-          </button>
+      <div className="flex">
+        <div className="flex flex-col flex-1 w-1/3 pt-20 bg-white">
+          <div className="flex flex-row w-full px-6 justify-between">
+            <p className="text-2xl md:text-3xl font-bold">Chats</p>
+            <button onClick={handleAddChatClick}>
+              <PlusIcon className="h-8 w-8" strokeWidth={2} />
+            </button>
+          </div>
+          <div className="h-full w-full mt-4 overflow-auto">
+            <Sidebar allChats={allChats} />
+          </div>
         </div>
-        <div className="h-full w-full mt-4 overflow-auto">
-          <Sidebar allChats={allChats} />
-        </div>
+        <ChatBox />
       </div>
 
       <Modal
