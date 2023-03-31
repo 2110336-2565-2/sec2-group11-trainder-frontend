@@ -1,43 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Modal } from "@/components/common/modal";
-import Image from "next/image";
+import {
+  ChatList,
+  getAllChats,
+  getPastMessages,
+  Message,
+} from "@/services/chat.service";
+import Sidebar from "@/components/chat/sidebar";
 import ChatBox from "@/components/chat/chatbox";
 
 const Chat = () => {
   const [showModal, setShowModal] = useState(false);
-
+  const [allChats, setAllChats] = useState<ChatList[]>([]);
   const [selectedChat, setSelectedChat] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
 
-  const ContactPersonBox = (props: { name: string; message: string }) => {
-    const isSelected: boolean = selectedChat === props.name; //may be change to unique value later
-    const handleChatBoxClick = () => {
-      setSelectedChat(props.name);
-    };
+  useEffect(() => {
+    getAllChats().then((chat) => {
+      setAllChats(chat);
+    });
+  }, []);
 
-    return (
-      <div
-        className={`flex flex-row h-[18%] pt-[3%] pb-[2%] w-full items-center ${
-          isSelected ? "bg-gray-300" : "hover:bg-gray-200"
-        }`}
-        onClick={handleChatBoxClick}
-      >
-        <div className="ml-[5%] rounded-full overflow-hidden">
-          <Image
-            src="/default_profile.jpg"
-            alt=""
-            width={90}
-            height={90}
-            style={{ objectFit: "cover" }}
-          />
-        </div>
-        <div className="h-full w-full flex-col mt-[2%] ml-[5%]">
-          <p className="text-xl m-[1%]">{props.name}</p>
-          <p className="text-gray m-[1%]">message : {props.message}</p>
-        </div>
-      </div>
-    );
-  };
+  useEffect(() => {
+    getPastMessages(selectedChat).then((data) => {
+      setMessages(data);
+    });
+  }, [selectedChat]);
 
   const handleAddChatClick = () => {
     setShowModal(true);
@@ -62,26 +51,28 @@ const Chat = () => {
   };
 
   return (
-    <main className="w-full h-screen pt-16 flex flex-col overflow-hidden ">
-      <div className="flex flex-row">
-        <div className="flex flex-col w-2/5 h-screen bg-white">
-          <div className="flex flex-row h-[10%] w-full justify-between">
-            <p className="text-xl md:text-3xl font-bold ml-[2%] mt-[2%]">
-              Chats
-            </p>
-            <button onClick={handleAddChatClick} className="m-[2%]">
-              <PlusIcon className="w-10" />
+    <main className="w-full h-full min-h-screen flex flex-col overflow-hidden">
+      <div className="flex">
+        <div className="flex flex-col flex-1 w-1/3 pt-20 bg-white">
+          <div className="flex flex-row w-full px-6 justify-between">
+            <p className="text-2xl md:text-3xl font-bold">Chats</p>
+            <button onClick={handleAddChatClick}>
+              <PlusIcon className="h-8 w-8" strokeWidth={2} />
             </button>
           </div>
-          <div className="h-full w-full overflow-y-scroll">
-            <ContactPersonBox name="Lalisa Manobal" message="last message" />
-            <ContactPersonBox name="Jennie Kim" message="last message" />
-            <ContactPersonBox name="Jisoo Kim" message="last message" />
-            <ContactPersonBox name="Chaeyoung Park" message="last message" />
+          <div className="h-full w-full mt-4 overflow-auto">
+            <Sidebar
+              allChats={allChats}
+              selectedChat={selectedChat}
+              setSelectedChat={setSelectedChat}
+            />
           </div>
         </div>
-
-        <ChatBox />
+        {selectedChat ? (
+          <ChatBox messages={messages} audience={selectedChat} />
+        ) : (
+          <div className="w-2/3 h-screen"></div>
+        )}
       </div>
 
       <Modal
