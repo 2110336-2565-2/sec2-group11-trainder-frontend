@@ -26,11 +26,11 @@ const ChatBox = () => {
   };
 
   return (
-    <main className="w-full h-screen pt-16 flex flex-col overflow-hidden">
-      <div className="flex flex-row">
-        <div className="flex flex-col w-2/5 h-screen bg-white"></div>
-        <div className="flex flex-col w-3/5 h-screen relative">
-          <div className="px-5 pt-8 flex flex-row items-center">
+    // <main className="w-full h-screen pt-16 flex flex-col overflow-hidden">
+      //  <div className="flex flex-row">
+        //  <div className="flex flex-col w-2/5 h-screen bg-white"></div>
+        <div className="flex flex-col w-3/5 h-screen relative"> 
+                  <div className="px-5 pt-8 flex flex-row items-center">
             <div className=" ml-[1%] rounded-full overflow-hidden">
               <Image
                 src="/default_profile.jpg"
@@ -60,9 +60,9 @@ const ChatBox = () => {
               placeholder="Aa"
             />
           </div>
-        </div>
-      </div>
-    </main>
+         </div>
+      // </div>
+    // </main> 
   );
 };
 
