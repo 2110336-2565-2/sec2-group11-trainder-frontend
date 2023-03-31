@@ -1,6 +1,13 @@
+import { Message } from "@/services/chat.service";
+import { formatFromDate } from "@/utils/date";
 import Image from "next/image";
 
-const ChatBox = () => {
+type ChatProps = {
+  messages: Message[];
+  audience: string;
+};
+
+const ChatBox = (props: ChatProps) => {
   const UserMessage = (props: { message: string; time: string }) => {
     return (
       <div className="flex px-3 py-2 items-end justify-end ">
@@ -35,18 +42,28 @@ const ChatBox = () => {
             style={{ objectFit: "cover" }}
           />
         </div>
-        <p className="px-2">Lalisa Manoban</p>
+        <p className="px-2">{props.audience}</p>
       </div>
 
       <div className="w-full overflow-auto flex flex-col flex-1">
-        <ContactPersonMessage message="Hello" time="14.50" />
-        <UserMessage message="..." time="15.00" />
-        <UserMessage message="Some Chat ..." time="15.00" />
-        <ContactPersonMessage
-          message="This is very very long text"
-          time="15.05"
-        />
-        <ContactPersonMessage message="This is short text" time="15.06" />
+        {props.messages &&
+          props.messages.map((message, index) => {
+            return (
+              <div key={index}>
+                {message.sender === props.audience ? (
+                  <ContactPersonMessage
+                    message={message.content}
+                    time={formatFromDate(message.createdAt)[1]}
+                  />
+                ) : (
+                  <UserMessage
+                    message={message.content}
+                    time={formatFromDate(message.createdAt)[1]}
+                  />
+                )}
+              </div>
+            );
+          })}
       </div>
       <div className="p-2 bg-white w-full">
         <input

@@ -1,21 +1,21 @@
 import { ChatList } from "@/services/chat.service";
-import dayjs from "dayjs";
+import { formatFromDate } from "@/utils/date";
 import Image from "next/image";
-import { useState } from "react";
 
-const Sidebar = (props: { allChats: ChatList[] }) => {
-  const [selectedChat, setSelectedChat] = useState("");
-
+type SidebarProps = {
+  allChats: ChatList[];
+  selectedChat: string;
+  setSelectedChat: (audience: string) => any;
+};
+const Sidebar = (props: SidebarProps) => {
   const getMessageTime = (time: Date) => {
     const now = new Date();
     const isToday =
       time.getUTCFullYear() === now.getUTCFullYear() &&
       time.getUTCMonth() === now.getUTCMonth() &&
       time.getUTCDate() === now.getUTCDate();
-    const messageTime = dayjs(time.toISOString().slice(0, -1));
-    const displayTime = isToday
-      ? messageTime.format("HH:mm")
-      : messageTime.format("MMM DD, YYYY");
+    const messageTime = formatFromDate(time);
+    const displayTime = isToday ? messageTime[1] : messageTime[0];
     return displayTime;
   };
 
@@ -23,13 +23,13 @@ const Sidebar = (props: { allChats: ChatList[] }) => {
     <>
       {props.allChats &&
         props.allChats.map((chat, index) => {
-          const isSelected = selectedChat === chat.audience;
+          const isSelected = props.selectedChat === chat.audience;
           return (
             <div
               className={`flex flex-row py-3 w-full items-center ${
                 isSelected ? "bg-gray-light" : ""
               } hover:cursor-pointer hover:bg-gray-100`}
-              onClick={() => setSelectedChat(chat.audience)}
+              onClick={() => props.setSelectedChat(chat.audience)}
               key={index}
             >
               <div className="ml-6 md:ml-8 rounded-full overflow-hidden">

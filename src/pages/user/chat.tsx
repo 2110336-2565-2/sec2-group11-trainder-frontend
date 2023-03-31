@@ -1,19 +1,32 @@
 import { useEffect, useState } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Modal } from "@/components/common/modal";
-import { ChatList, getAllChats } from "@/services/chat.service";
+import {
+  ChatList,
+  getAllChats,
+  getPastMessages,
+  Message,
+} from "@/services/chat.service";
 import Sidebar from "@/components/chat/sidebar";
 import ChatBox from "@/components/chat/chatbox";
 
 const Chat = () => {
   const [showModal, setShowModal] = useState(false);
   const [allChats, setAllChats] = useState<ChatList[]>([]);
+  const [selectedChat, setSelectedChat] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
     getAllChats().then((chat) => {
       setAllChats(chat);
     });
   }, []);
+
+  useEffect(() => {
+    getPastMessages(selectedChat).then((data) => {
+      setMessages(data);
+    });
+  }, [selectedChat]);
 
   const handleAddChatClick = () => {
     setShowModal(true);
@@ -48,10 +61,18 @@ const Chat = () => {
             </button>
           </div>
           <div className="h-full w-full mt-4 overflow-auto">
-            <Sidebar allChats={allChats} />
+            <Sidebar
+              allChats={allChats}
+              selectedChat={selectedChat}
+              setSelectedChat={setSelectedChat}
+            />
           </div>
         </div>
-        <ChatBox />
+        {selectedChat ? (
+          <ChatBox messages={messages} audience={selectedChat} />
+        ) : (
+          <div className="w-2/3 h-screen"></div>
+        )}
       </div>
 
       <Modal

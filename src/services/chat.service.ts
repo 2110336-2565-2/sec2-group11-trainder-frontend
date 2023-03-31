@@ -30,3 +30,20 @@ export const getAllChats = async () => {
             return allChat;
         })
 }
+
+export const getPastMessages = async (audience: string) => {
+    return axios
+        .get(API_URL + "/protected/get-past-chat", {
+            headers: authHeader(),
+            params: { audience: audience }
+        })
+        .then((response) => {
+            const messages = response.data.chatMessages as Message[];
+            if (messages) {
+                messages.map((m) => {
+                    m.createdAt = new Date(m.createdAt);
+                })
+            }
+            return messages;
+        })
+}
