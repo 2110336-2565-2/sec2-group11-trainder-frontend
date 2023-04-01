@@ -36,7 +36,6 @@ const Chat = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [socket, setSocket] = useState<WebSocket>();
-  const [isSocketClosed, setIsSocketClosed] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(true);
   const text = useRef<HTMLInputElement>(null);
 
@@ -54,7 +53,6 @@ const Chat = () => {
     );
     console.log(ws);
     setSocket(ws);
-    setIsSocketClosed(false);
   }, []);
 
   useEffect(() => {
@@ -68,9 +66,9 @@ const Chat = () => {
 
   useEffect(() => {
     if (selectedChat) {
-      const trainer = profile?.username === "Trainer" ? username : selectedChat;
-      const trainee = profile?.username === "Trainee" ? username : selectedChat;
-      getSpecificRoom(selectedChat, username).then((room) => {
+      const trainer = profile?.usertype === "Trainer" ? username : selectedChat;
+      const trainee = profile?.usertype === "Trainee" ? username : selectedChat;
+      getSpecificRoom(trainee, trainer).then((room) => {
         if (room) {
           joinRoom(room.id, username);
         } else {
@@ -89,7 +87,7 @@ const Chat = () => {
     getPastMessages(selectedChat).then((data) => {
       setMessages(data);
     });
-  }, [joinRoom, profile?.username, selectedChat, username]);
+  }, [joinRoom, profile?.usertype, selectedChat, username]);
 
   useEffect(() => {
     if (socket !== undefined) {
@@ -106,27 +104,29 @@ const Chat = () => {
           setUpdate(true);
         }
       };
-      socket.onclose = () => {
-        console.log("close");
-        setIsSocketClosed(true);
-      };
+      socket.onclose = () => {};
       socket.onerror = () => {};
-      socket.onopen = () => {
-        console.log("open");
-      };
+      socket.onopen = () => {};
     }
   }, [messages, socket]);
 
   const sendMessage = () => {
     if (!text.current?.value) return;
-    if (isSocketClosed) {
-      getSpecificRoom(selectedChat, username).then((room) => {
-        if (room) {
-          joinRoom(room.id, username);
-        }
-      });
-    } else {
-      if (socket !== undefined) {
+    if (socket !== undefined) {
+      if (
+        socket.readyState === socket.CLOSED ||
+        socket.readyState === socket.CLOSING
+      ) {
+        const trainer =
+          profile?.usertype === "Trainer" ? username : selectedChat;
+        const trainee =
+          profile?.usertype === "Trainee" ? username : selectedChat;
+        getSpecificRoom(trainee, trainer).then((room) => {
+          if (room) {
+            joinRoom(room.id, username);
+          }
+        });
+      } else if (socket.readyState === socket.OPEN) {
         socket.send(text.current.value);
         text.current.value = "";
       }
