@@ -17,6 +17,7 @@ import {
 import Sidebar from "@/components/chat/sidebar";
 import ChatBox from "@/components/chat/chatbox";
 import { getCurrentUser } from "@/services/auth.service";
+import { UserProfile, getCurrentUserProfile } from "@/services/user.service";
 
 const WEBSOCKET_URL = process.env.NEXT_PUBLIC_API_URL
   ? "wss:" + process.env.NEXT_PUBLIC_API_URL.slice(6)
@@ -37,9 +38,15 @@ const Chat = () => {
   const [socket, setSocket] = useState<WebSocket>();
   const [isSocketClosed, setIsSocketClosed] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(true);
+  const text = useRef<HTMLInputElement>(null);
 
   const username = getCurrentUser().username;
-  const text = useRef<HTMLInputElement>(null);
+  const [profile, setProfile] = useState<UserProfile>();
+  useEffect(() => {
+    getCurrentUserProfile().then((data) => {
+      setProfile(data);
+    });
+  }, []);
 
   const joinRoom = useCallback((roomId: string, username: string) => {
     const ws = new WebSocket(
@@ -61,6 +68,8 @@ const Chat = () => {
 
   useEffect(() => {
     if (selectedChat) {
+      const trainer = profile?.username === "Trainer" ? username : selectedChat;
+      const trainee = profile?.username === "Trainee" ? username : selectedChat;
       getSpecificRoom(selectedChat, username).then((room) => {
         if (room) {
           joinRoom(room.id, username);
@@ -68,8 +77,8 @@ const Chat = () => {
           getRoomId(selectedChat).then((id) => {
             createRoom({
               id: id,
-              trainer: username,
-              trainee: selectedChat,
+              trainer: trainer,
+              trainee: trainee,
             }).then(() => {
               joinRoom(id, username);
             });
@@ -80,7 +89,7 @@ const Chat = () => {
     getPastMessages(selectedChat).then((data) => {
       setMessages(data);
     });
-  }, [joinRoom, selectedChat, username]);
+  }, [joinRoom, profile?.username, selectedChat, username]);
 
   useEffect(() => {
     if (socket !== undefined) {
