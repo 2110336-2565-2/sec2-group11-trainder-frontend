@@ -30,6 +30,8 @@ const ChatBox = (props: ChatProps) => {
     );
   };
 
+  let date = "";
+
   return (
     <div className="flex flex-col flex-1 relative">
       <div className="px-5 pt-20 pb-2 flex flex-row items-center w-full bg-backgroundColor fixed">
@@ -48,19 +50,33 @@ const ChatBox = (props: ChatProps) => {
       <div className="w-full flex flex-col flex-1 mt-36 overflow-auto">
         {props.messages &&
           props.messages.map((message, index) => {
+            const [messageDate, messageTime] = formatFromDate(
+              message.createdAt,
+              false
+            );
+            const showDate = messageDate !== date;
+            if (showDate) {
+              date = messageDate;
+            }
             return (
               <div key={index}>
-                {message.sender === props.audience ? (
-                  <ContactPersonMessage
-                    message={message.content}
-                    time={formatFromDate(message.createdAt, false)[1]}
-                  />
+                {showDate ? (
+                  <div className="flex justify-center text-sm text-gray-dark my-2">
+                    <p className="bg-gray bg-opacity-40 px-2 rounded-full">{messageDate}</p>
+                  </div>
                 ) : (
-                  <UserMessage
-                    message={message.content}
-                    time={formatFromDate(message.createdAt, false)[1]}
-                  />
+                  <></>
                 )}
+                <div>
+                  {message.sender === props.audience ? (
+                    <ContactPersonMessage
+                      message={message.content}
+                      time={messageTime}
+                    />
+                  ) : (
+                    <UserMessage message={message.content} time={messageTime} />
+                  )}
+                </div>
               </div>
             );
           })}
