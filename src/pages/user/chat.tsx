@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import {
   PaperAirplaneIcon,
   PlusIcon,
@@ -18,8 +18,8 @@ import Sidebar from "@/components/chat/sidebar";
 import ChatBox from "@/components/chat/chatbox";
 import { getCurrentUser } from "@/services/auth.service";
 
-const WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL
-  ? process.env.NEXT_PUBLIC_WEBSOCKET_URL
+const WEBSOCKET_URL = process.env.NEXT_PUBLIC_API_URL
+  ? "wss:" + process.env.NEXT_PUBLIC_API_URL.slice(6)
   : "";
 
 type WSMessage = {
@@ -41,6 +41,15 @@ const Chat = () => {
   const username = getCurrentUser().username;
   const text = useRef<HTMLInputElement>(null);
 
+  const joinRoom = useCallback((roomId: string, username: string) => {
+    const ws = new WebSocket(
+      `${WEBSOCKET_URL}/join-room/${roomId}?username=${username}`
+    );
+    console.log(ws);
+    setSocket(ws);
+    setIsSocketClosed(false);
+  }, []);
+
   useEffect(() => {
     if (update) {
       getAllChats().then((chat) => {
@@ -54,10 +63,7 @@ const Chat = () => {
     if (selectedChat) {
       getSpecificRoom(selectedChat, username).then((room) => {
         if (room) {
-          const ws = new WebSocket(
-            `${WEBSOCKET_URL}/join-room/${room.id}?username=${username}`
-          );
-          setSocket(ws);
+          joinRoom(room.id, username);
         } else {
           getRoomId(selectedChat).then((id) => {
             createRoom({
@@ -65,20 +71,16 @@ const Chat = () => {
               trainer: username,
               trainee: selectedChat,
             }).then(() => {
-              const ws = new WebSocket(
-                `${WEBSOCKET_URL}/join-room/${id}?username=${username}`
-              );
-              setSocket(ws);
+              joinRoom(id, username);
             });
           });
         }
-        setIsSocketClosed(false);
       });
     }
     getPastMessages(selectedChat).then((data) => {
       setMessages(data);
     });
-  }, [selectedChat, username]);
+  }, [joinRoom, selectedChat, username]);
 
   useEffect(() => {
     if (socket !== undefined) {
@@ -96,16 +98,24 @@ const Chat = () => {
         }
       };
       socket.onclose = () => {
+        console.log("close");
         setIsSocketClosed(true);
       };
       socket.onerror = () => {};
-      socket.onopen = () => {};
+      socket.onopen = () => {
+        console.log("open");
+      };
     }
   }, [messages, socket]);
 
   const sendMessage = () => {
     if (!text.current?.value) return;
     if (isSocketClosed) {
+      getSpecificRoom(selectedChat, username).then((room) => {
+        if (room) {
+          joinRoom(room.id, username);
+        }
+      });
     } else {
       if (socket !== undefined) {
         socket.send(text.current.value);
