@@ -10,8 +10,8 @@ export const formatDateTime = (startDateTime: Date, endDateTime: Date) => {
     return [date, `${startTime} - ${endTime}`];
 }
 
-export const formatFromDate = (date: Date) => {
-    const dateTime = dayjs(date.toISOString().slice(0, -1));
+export const formatFromDate = (date: Date, utc?: boolean) => {
+    const dateTime = dayjs(utc? date.toISOString().slice(0, -1) : date.toISOString());
     const day = dateTime.format("MMM DD, YYYY");
     const time = dateTime.format("HH:mm");
 

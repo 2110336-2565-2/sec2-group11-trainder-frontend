@@ -31,8 +31,8 @@ const ChatBox = (props: ChatProps) => {
   };
 
   return (
-    <div className="flex flex-col w-2/3 h-screen relative">
-      <div className="px-5 pt-20 pb-3 flex flex-row items-center bg-backgroundColor">
+    <div className="flex flex-col flex-1 relative">
+      <div className="px-5 pt-20 pb-2 flex flex-row items-center w-full bg-backgroundColor fixed">
         <div className="rounded-full overflow-hidden">
           <Image
             src="/default_profile.jpg"
@@ -45,7 +45,7 @@ const ChatBox = (props: ChatProps) => {
         <p className="px-2">{props.audience}</p>
       </div>
 
-      <div className="w-full overflow-auto flex flex-col flex-1">
+      <div className="w-full flex flex-col flex-1 mt-36 overflow-auto">
         {props.messages &&
           props.messages.map((message, index) => {
             return (
@@ -53,24 +53,17 @@ const ChatBox = (props: ChatProps) => {
                 {message.sender === props.audience ? (
                   <ContactPersonMessage
                     message={message.content}
-                    time={formatFromDate(message.createdAt)[1]}
+                    time={formatFromDate(message.createdAt, false)[1]}
                   />
                 ) : (
                   <UserMessage
                     message={message.content}
-                    time={formatFromDate(message.createdAt)[1]}
+                    time={formatFromDate(message.createdAt, false)[1]}
                   />
                 )}
               </div>
             );
           })}
-      </div>
-      <div className="p-2 bg-white w-full">
-        <input
-          className="p-2 rounded-3xl w-full border bg-[#F5F2F2]"
-          type="text"
-          placeholder="Aa"
-        />
       </div>
     </div>
   );
