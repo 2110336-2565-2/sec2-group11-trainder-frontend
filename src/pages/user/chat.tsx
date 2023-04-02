@@ -1,4 +1,10 @@
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import {
   ChatList,
@@ -13,7 +19,6 @@ import Sidebar from "@/components/chat/sidebar";
 import ChatBox from "@/components/chat/chatbox";
 import { getCurrentUser } from "@/services/auth.service";
 import { useRouter } from "next/router";
-
 const WEBSOCKET_URL = process.env.NEXT_PUBLIC_API_URL
   ? "wss:" + process.env.NEXT_PUBLIC_API_URL.slice(6)
   : "";
@@ -128,6 +133,10 @@ const Chat = () => {
     user.username,
     user.usertype,
   ]);
+  
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const sendMessage = () => {
     if (!text.current?.value) return;
@@ -144,7 +153,10 @@ const Chat = () => {
       sendMessage();
     }
   };
-
+  const messageEnd = useRef<null | HTMLDivElement>(null);
+  const scrollToBottom = () => {
+    messageEnd.current?.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <main className="w-full h-full min-h-screen flex flex-col overflow-hidden">
       <div className="flex">
@@ -164,6 +176,10 @@ const Chat = () => {
           <div className="flex flex-col w-2/3 h-screen relative">
             <div className="overflow-auto mb-14">
               <ChatBox messages={messages} audience={selectedChat} />
+              <div
+                style={{ float: "left", clear: "both" }}
+                ref={messageEnd}
+              ></div>
             </div>
             <div className="p-2 bg-white w-2/3 flex items-center space-x-4 fixed bottom-0">
               <input
