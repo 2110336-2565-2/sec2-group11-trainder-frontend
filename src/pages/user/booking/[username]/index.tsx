@@ -170,7 +170,20 @@ const BookTrainerProfile = () => {
             <></>
           ) : (
             <div className="flex w-full mt-10 px-16 lg:px-24 justify-around space-x-10 sm:space-x-16 md:space-x-20">
-              <Button name="Start Chat" />
+              <Button
+                name="Start Chat"
+                onClick={() => {
+                  router.push(
+                    {
+                      pathname: "/user/chat",
+                      query: {
+                        audience: username,
+                      },
+                    },
+                    "/user/chat"
+                  );
+                }}
+              />
               <Button
                 name="Calendar"
                 onClick={() =>

@@ -42,6 +42,14 @@ const Chat = () => {
   const user = getCurrentUser();
   const router = useRouter();
 
+  useEffect(() => {
+    const { audience } = router.query;
+    if (audience && typeof audience === "string") {
+      setSelectedChat(audience);
+      console.log("set audience");
+    }
+  }, [router.query]);
+
   const joinRoom = useCallback((roomId: string, username: string) => {
     const ws = new WebSocket(
       `${WEBSOCKET_URL}/join-room/${roomId}?username=${username}`
@@ -96,10 +104,16 @@ const Chat = () => {
           m.content !== "A new user has joined the room" &&
           m.content !== "user left the chat"
         ) {
-          setMessages([
-            ...messages,
-            { content: m.content, createdAt: new Date(), sender: m.username },
-          ]);
+          if (messages !== undefined && messages.length > 0) {
+            setMessages([
+              ...messages,
+              { content: m.content, createdAt: new Date(), sender: m.username },
+            ]);
+          } else {
+            setMessages([
+              { content: m.content, createdAt: new Date(), sender: m.username },
+            ]);
+          }
           setUpdate(true);
         }
       };
@@ -133,7 +147,7 @@ const Chat = () => {
     user.username,
     user.usertype,
   ]);
-  
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
