@@ -1,10 +1,5 @@
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
-import {
-  PaperAirplaneIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { Modal } from "@/components/common/modal";
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import {
   ChatList,
   createRoom,
@@ -17,7 +12,7 @@ import {
 import Sidebar from "@/components/chat/sidebar";
 import ChatBox from "@/components/chat/chatbox";
 import { getCurrentUser } from "@/services/auth.service";
-import { UserProfile, getCurrentUserProfile } from "@/services/user.service";
+import { useRouter } from "next/router";
 
 const WEBSOCKET_URL = process.env.NEXT_PUBLIC_API_URL
   ? "wss:" + process.env.NEXT_PUBLIC_API_URL.slice(6)
@@ -30,22 +25,17 @@ type WSMessage = {
 };
 
 const Chat = () => {
-  const [showModal, setShowModal] = useState(false);
   const [allChats, setAllChats] = useState<ChatList[]>([]);
   const [selectedChat, setSelectedChat] = useState("");
+  const [keepAlive, setKeepAlive] = useState<boolean>(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [socket, setSocket] = useState<WebSocket>();
   const [update, setUpdate] = useState<boolean>(true);
   const text = useRef<HTMLInputElement>(null);
 
-  const username = getCurrentUser().username;
-  const [profile, setProfile] = useState<UserProfile>();
-  useEffect(() => {
-    getCurrentUserProfile().then((data) => {
-      setProfile(data);
-    });
-  }, []);
+  const user = getCurrentUser();
+  const router = useRouter();
 
   const joinRoom = useCallback((roomId: string, username: string) => {
     const ws = new WebSocket(
@@ -53,6 +43,7 @@ const Chat = () => {
     );
     console.log(ws);
     setSocket(ws);
+    setKeepAlive(true);
   }, []);
 
   useEffect(() => {
@@ -66,11 +57,14 @@ const Chat = () => {
 
   useEffect(() => {
     if (selectedChat) {
-      const trainer = profile?.usertype === "Trainer" ? username : selectedChat;
-      const trainee = profile?.usertype === "Trainee" ? username : selectedChat;
+      setKeepAlive(false);
+      const trainer =
+        user.usertype === "Trainer" ? user.username : selectedChat;
+      const trainee =
+        user.usertype === "Trainee" ? user.username : selectedChat;
       getSpecificRoom(trainee, trainer).then((room) => {
         if (room) {
-          joinRoom(room.id, username);
+          joinRoom(room.id, user.username);
         } else {
           getRoomId(selectedChat).then((id) => {
             createRoom({
@@ -78,7 +72,7 @@ const Chat = () => {
               trainer: trainer,
               trainee: trainee,
             }).then(() => {
-              joinRoom(id, username);
+              joinRoom(id, user.username);
             });
           });
         }
@@ -87,7 +81,7 @@ const Chat = () => {
     getPastMessages(selectedChat).then((data) => {
       setMessages(data);
     });
-  }, [joinRoom, profile?.usertype, selectedChat, username]);
+  }, [joinRoom, selectedChat, user.username, user.usertype]);
 
   useEffect(() => {
     if (socket !== undefined) {
@@ -104,29 +98,41 @@ const Chat = () => {
           setUpdate(true);
         }
       };
-      socket.onclose = () => {};
+      socket.onclose = () => {
+        if (router.asPath === "/user/chat" && keepAlive) {
+          const trainer =
+            user.usertype === "Trainer" ? user.username : selectedChat;
+          const trainee =
+            user.usertype === "Trainee" ? user.username : selectedChat;
+          getSpecificRoom(trainee, trainer).then((room) => {
+            if (room) {
+              joinRoom(room.id, user.username);
+            }
+          });
+        }
+      };
       socket.onerror = () => {};
       socket.onopen = () => {};
+
+      if (!keepAlive) {
+        socket.close();
+      }
     }
-  }, [messages, socket]);
+  }, [
+    joinRoom,
+    keepAlive,
+    messages,
+    router.asPath,
+    selectedChat,
+    socket,
+    user.username,
+    user.usertype,
+  ]);
 
   const sendMessage = () => {
     if (!text.current?.value) return;
     if (socket !== undefined) {
-      if (
-        socket.readyState === socket.CLOSED ||
-        socket.readyState === socket.CLOSING
-      ) {
-        const trainer =
-          profile?.usertype === "Trainer" ? username : selectedChat;
-        const trainee =
-          profile?.usertype === "Trainee" ? username : selectedChat;
-        getSpecificRoom(trainee, trainer).then((room) => {
-          if (room) {
-            joinRoom(room.id, username);
-          }
-        });
-      } else if (socket.readyState === socket.OPEN) {
+      if (socket.readyState === socket.OPEN) {
         socket.send(text.current.value);
         text.current.value = "";
       }
@@ -139,25 +145,12 @@ const Chat = () => {
     }
   };
 
-  const TrainerListBox = (props: { name: string }) => {
-    return (
-      <button onClick={() => setShowModal(false)}>
-        <div className="text-xl p-[2%] text-gray hover:bg-gray-200">
-          {props.name}
-        </div>
-      </button>
-    );
-  };
-
   return (
     <main className="w-full h-full min-h-screen flex flex-col overflow-hidden">
       <div className="flex">
         <div className="flex flex-col flex-1 w-1/3 pt-20 bg-white">
           <div className="flex flex-row w-full px-6 justify-between">
             <p className="text-2xl md:text-3xl font-bold">Chats</p>
-            <button onClick={() => setShowModal(true)}>
-              <PlusIcon className="h-8 w-8" strokeWidth={2} />
-            </button>
           </div>
           <div className="h-full w-full mt-4 overflow-auto">
             <Sidebar
@@ -189,29 +182,6 @@ const Chat = () => {
           <div className="w-2/3 h-screen"></div>
         )}
       </div>
-
-      <Modal
-        isShow={showModal}
-        onClose={() => setShowModal(false)}
-        width="w-1/2"
-      >
-        <div className="flex flex-col bg-white p-8 rounded-md h-1/2">
-          <div className=" flex flex-row justify-between">
-            <p className="text-xl">Add new chat</p>
-            <button onClick={() => setShowModal(false)} className="w-5 h-5">
-              <XMarkIcon className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="flex flex-col overflow-y-scroll">
-            <TrainerListBox name="Soo JeeKim" />
-            <TrainerListBox name="Salisa Slytherin" />
-            <TrainerListBox name="Soo JeeKim" />
-            <TrainerListBox name="Salisa Slytherin" />
-            <TrainerListBox name="Soo JeeKim" />
-            <TrainerListBox name="Salisa Slytherin" />
-          </div>
-        </div>
-      </Modal>
     </main>
   );
 };
