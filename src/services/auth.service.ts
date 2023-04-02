@@ -26,12 +26,21 @@ export type RegistrationData = {
   lng: number;
 };
 
+type User = {
+  token: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  usertype: string;
+}
+
 export const login = (username: string, password: string) => {
   return axios
     .post<LoginResponse>(API_URL + "/login", { username, password })
     .then((response) => {
       if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
+        setCurrentUserNameAndRole();
       }
       return response.data;
     })
@@ -58,6 +67,20 @@ export const checkLoggedIn = (): Promise<boolean> => {
     return Promise.resolve(false);
   }
 };
+
+export const setCurrentUserNameAndRole = () => {
+  return axios.get(API_URL + "/protected/get-name-and-role",
+    {
+      headers: authHeader(), params: { username: getCurrentUser().username }
+    }).then((response) => {
+      const currentUser = getCurrentUser();
+      const user = response.data.result as User;
+      user.token = currentUser.token as string;
+      user.username = currentUser.username as string;
+      localStorage.setItem("user", JSON.stringify(user));
+    })
+}
+
 export const getCurrentUser = () => {
   if (typeof window !== "undefined") {
     const userData = localStorage.getItem("user");

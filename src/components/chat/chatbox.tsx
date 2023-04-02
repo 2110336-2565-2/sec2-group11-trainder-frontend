@@ -30,9 +30,11 @@ const ChatBox = (props: ChatProps) => {
     );
   };
 
+  let date = "";
+
   return (
-    <div className="flex flex-col w-2/3 h-screen relative">
-      <div className="px-5 pt-20 pb-3 flex flex-row items-center bg-backgroundColor">
+    <div className="flex flex-col flex-1 relative">
+      <div className="px-5 pt-20 pb-2 flex flex-row items-center w-full bg-backgroundColor fixed">
         <div className="rounded-full overflow-hidden">
           <Image
             src="/default_profile.jpg"
@@ -45,32 +47,39 @@ const ChatBox = (props: ChatProps) => {
         <p className="px-2">{props.audience}</p>
       </div>
 
-      <div className="w-full overflow-auto flex flex-col flex-1">
+      <div className="w-full flex flex-col flex-1 mt-36 overflow-auto">
         {props.messages &&
           props.messages.map((message, index) => {
+            const [messageDate, messageTime] = formatFromDate(
+              message.createdAt,
+              false
+            );
+            const showDate = messageDate !== date;
+            if (showDate) {
+              date = messageDate;
+            }
             return (
               <div key={index}>
-                {message.sender === props.audience ? (
-                  <ContactPersonMessage
-                    message={message.content}
-                    time={formatFromDate(message.createdAt)[1]}
-                  />
+                {showDate ? (
+                  <div className="flex justify-center text-sm text-gray-dark my-2">
+                    <p className="bg-gray bg-opacity-40 px-2 rounded-full">{messageDate}</p>
+                  </div>
                 ) : (
-                  <UserMessage
-                    message={message.content}
-                    time={formatFromDate(message.createdAt)[1]}
-                  />
+                  <></>
                 )}
+                <div>
+                  {message.sender === props.audience ? (
+                    <ContactPersonMessage
+                      message={message.content}
+                      time={messageTime}
+                    />
+                  ) : (
+                    <UserMessage message={message.content} time={messageTime} />
+                  )}
+                </div>
               </div>
             );
           })}
-      </div>
-      <div className="p-2 bg-white w-full">
-        <input
-          className="p-2 rounded-3xl w-full border bg-[#F5F2F2]"
-          type="text"
-          placeholder="Aa"
-        />
       </div>
     </div>
   );

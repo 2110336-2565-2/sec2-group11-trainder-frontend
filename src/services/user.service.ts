@@ -36,6 +36,22 @@ export const getCurrentUserProfile = () => {
     });
 };
 
+export type UserDetails = {
+  firstname: string;
+  lastname: string;
+  role: string;
+}
+
+export const getNameAndRole = (username: string) => {
+  return axios.get(API_URL + "/protected/get-name-and-role",
+    {
+      headers: authHeader(), params: { username: username }
+    }).then((response) => {
+      const user = response.data.result as UserDetails;
+      return user;
+    })
+}
+
 export type UpdateData = {
   userType: string;
   firstname: string;

@@ -28,7 +28,7 @@ const Sidebar = (props: SidebarProps) => {
             <div
               className={`flex flex-row py-3 w-full items-center ${
                 isSelected ? "bg-gray-light" : ""
-              } hover:cursor-pointer hover:bg-gray-100`}
+              } hover:cursor-pointer hover:bg-gray-light hover:bg-opacity-25`}
               onClick={() => props.setSelectedChat(chat.audience)}
               key={index}
             >
