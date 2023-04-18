@@ -11,9 +11,18 @@ export const formatDateTime = (startDateTime: Date, endDateTime: Date) => {
 }
 
 export const formatFromDate = (date: Date, utc?: boolean) => {
-    const dateTime = dayjs(utc? date.toISOString().slice(0, -1) : date.toISOString());
+    const dateTime = dayjs(utc ? date.toISOString().slice(0, -1) : date.toISOString());
     const day = dateTime.format("MMM DD, YYYY");
     const time = dateTime.format("HH:mm");
 
     return [day, time];
+}
+
+export const isToday = (date: Date) => {
+    const dateTime = dayjs(date.toISOString().slice(0, -1));
+    const today = dayjs();
+    const isSame = (dateTime.date() === today.date())
+        && (dateTime.month() === today.month())
+        && (dateTime.year() === today.year());
+    return isSame;
 }
