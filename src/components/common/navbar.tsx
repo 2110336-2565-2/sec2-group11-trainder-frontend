@@ -52,8 +52,11 @@ export const NavBar = () => {
     },
   ];
   const [username, setUsername] = useState<string>("");
+  const [usertype, setUsertype] = useState<string>("");
   useEffect(() => {
-    setUsername(getCurrentUser().username);
+    const user = getCurrentUser();
+    setUsername(user.username);
+    setUsertype(user.usertype);
   }, [router]);
 
   return (
@@ -95,23 +98,42 @@ export const NavBar = () => {
                     </div>
                   </div>
                   <div className="hidden md:block">
-                    {navLinks.map((link, index) => {
-                      return (
+                    {usertype === "Admin" ? (
+                      <>
                         <Link
-                          key={index}
-                          href={link.path}
+                          href={navLinks[0].path}
                           className={
                             "inline-flex items-center text-lg hover:bg-blue-dark mx-2 pl-2 pr-4 py-2 rounded-xl " +
-                            (router.asPath === link.path
+                            (router.asPath === navLinks[0].path
                               ? "text-yellow"
                               : "text-white")
                           }
                         >
-                          {link.icon}
-                          {link.name}
+                          {navLinks[0].icon}
+                          {navLinks[0].name}
                         </Link>
-                      );
-                    })}
+                      </>
+                    ) : (
+                      <>
+                        {navLinks.map((link, index) => {
+                          return (
+                            <Link
+                              key={index}
+                              href={link.path}
+                              className={
+                                "inline-flex items-center text-lg hover:bg-blue-dark mx-2 pl-2 pr-4 py-2 rounded-xl " +
+                                (router.asPath === link.path
+                                  ? "text-yellow"
+                                  : "text-white")
+                              }
+                            >
+                              {link.icon}
+                              {link.name}
+                            </Link>
+                          );
+                        })}
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="right-0 flex flex-col items-center">
