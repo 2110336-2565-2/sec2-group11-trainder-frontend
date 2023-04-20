@@ -5,15 +5,19 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaceFrownIcon } from "@heroicons/react/20/solid";
 import { Booking } from "@/services/booking.service";
-import { getPaymentNeedPayout } from "@/services/payment.service";
+import { getPaymentNeedPayout, payout } from "@/services/payment.service";
 import { formatDateTime } from "@/utils/date";
 import { Bars3Icon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { Modal } from "@/components/common/modal";
 
 const Payment = () => {
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User>();
   const [needPayoutBookings, setNeedPayoutBookings] = useState<Booking[]>([]);
   const router = useRouter();
+  const [confirm, setConfirm] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
+  const [selectedBookingId, setSelectedBookingId] = useState<string>();
+  const [update, setUpdate] = useState<boolean>(true);
 
   useEffect(() => {
     const userProfile = getCurrentUser();
@@ -23,18 +27,29 @@ const Payment = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-    getPaymentNeedPayout().then((bookings) => {
-      setNeedPayoutBookings(bookings);
-      setLoading(false);
-    });
-  }, []);
+    if (update) {
+      getPaymentNeedPayout().then((bookings) => {
+        setNeedPayoutBookings(bookings);
+        setUpdate(false);
+      });
+    }
+  }, [update]);
+
+  const handlePayout = () => {
+    console.log(selectedBookingId);
+    if (selectedBookingId != undefined && confirm) {
+      payout(selectedBookingId).then(() => {
+        setUpdate(true);
+        setConfirm(false);
+      });
+    }
+  };
 
   return (
     <>
       {user?.usertype === "Admin" ? (
         <>
-          {!loading && (
+          {!update && (
             <div className="min-h-screen h-full w-full pt-20">
               <div className="flex items-center justify-start px-2 md:px-5">
                 <BackButton />
@@ -61,21 +76,67 @@ const Payment = () => {
                         return (
                           <div
                             key={booking._id}
-                            className="flex items-center border-t border-b border-gray py-5 px-5 hover:bg-gray-light hover:bg-opacity-60"
+                            className="flex items-center justify-between border-t border-b border-gray py-5 px-5 hover:bg-gray-light hover:bg-opacity-60"
                           >
-                            <Bars3Icon className="h-6 w-6 mr-5" strokeWidth={2}/>
-                            <div className=" ">
-                              <p className="font-bold text-gray-dark">Booking details</p>
-                              <p className="px-2">
-                                Trainer : {booking.trainer}
+                            <div className="flex">
+                              <Bars3Icon
+                                className="h-6 w-6 mr-5"
+                                strokeWidth={2}
+                              />
+                              <div>
+                                <p className="font-bold text-gray-dark">
+                                  Booking details
+                                </p>
+                                <p className="px-2">
+                                  Trainer : {booking.trainer}
+                                </p>
+                                <p className="px-2">
+                                  Date : {date} {time}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center">
+                              <p className="mr-10 w-48 text-xl font-bold text-pink-dark">
+                                {booking.payment.totalCost.toString()} ฿
                               </p>
-                              <p className="px-2">
-                                Date : {date} {time}
-                              </p>
+                              <Button
+                                name={"Payout"}
+                                onClick={() => {
+                                  setAlert(true);
+                                  setSelectedBookingId(booking._id);
+                                }}
+                              />
                             </div>
                           </div>
                         );
                       })}
+                      <Modal
+                        isShow={alert}
+                        onClose={() => setAlert(false)}
+                        title="Confirm Payout"
+                      >
+                        <div className="mt-4">
+                          Are you sure to payout this booking ?
+                        </div>
+                        <div className="flex justify-center mt-10 mx-5 space-x-10">
+                          <Button
+                            name="Confirm"
+                            width="w-1/2"
+                            onClick={() => {
+                              setConfirm(true);
+                              handlePayout();
+                              setAlert(false);
+                            }}
+                            type="button"
+                          />
+                          <Button
+                            name="Cancel"
+                            width="w-1/2"
+                            onClick={() => setAlert(false)}
+                            type="button"
+                          />
+                        </div>
+                      </Modal>
                     </>
                   ) : (
                     <div className="flex justify-center text-gray text-lg mt-10">
