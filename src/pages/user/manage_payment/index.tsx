@@ -14,7 +14,6 @@ const Payment = () => {
   const [user, setUser] = useState<User>();
   const [needPayoutBookings, setNeedPayoutBookings] = useState<Booking[]>([]);
   const router = useRouter();
-  const [confirm, setConfirm] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
   const [selectedBookingId, setSelectedBookingId] = useState<string>();
   const [update, setUpdate] = useState<boolean>(true);
@@ -37,10 +36,9 @@ const Payment = () => {
 
   const handlePayout = () => {
     console.log(selectedBookingId);
-    if (selectedBookingId != undefined && confirm) {
+    if (selectedBookingId != undefined) {
       payout(selectedBookingId).then(() => {
         setUpdate(true);
-        setConfirm(false);
       });
     }
   };
@@ -123,7 +121,6 @@ const Payment = () => {
                             name="Confirm"
                             width="w-1/2"
                             onClick={() => {
-                              setConfirm(true);
                               handlePayout();
                               setAlert(false);
                             }}
