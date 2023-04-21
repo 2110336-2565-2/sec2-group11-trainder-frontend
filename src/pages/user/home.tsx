@@ -5,6 +5,7 @@ import {
   CurrencyDollarIcon,
   DocumentTextIcon,
   PlusIcon,
+  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
@@ -35,27 +36,50 @@ const Home = () => {
               <div className="bg-gray h-1 mx-10 rounded-full"></div>
               <div className="flex flex-col sm:flex-row px-10 py-5 items-center gap-10">
                 <MenuItem
-                  text="Booking new training"
+                  text={
+                    profile?.usertype === "Trainer"
+                      ? "View All Trainers"
+                      : "Booking new training"
+                  }
                   href="/user/booking"
                   icon={
-                    <div className="flex w-11 h-11 items-center justify-center text-white rounded-full bg-pink">
-                      <PlusIcon className="h-6 w-6" strokeWidth={4} />
-                    </div>
+                    profile?.usertype === "Trainer" ? (
+                      <UserGroupIcon
+                        className="h-11 w-11 text-pink"
+                        strokeWidth={2}
+                      />
+                    ) : (
+                      <div className="flex w-11 h-11 items-center justify-center text-white rounded-full bg-pink">
+                        <PlusIcon className="h-6 w-6" strokeWidth={4} />
+                      </div>
+                    )
                   }
                 />
                 {profile?.usertype === "Trainer" ? (
-                  <MenuItem
-                    text="View Your Reviews"
-                    href={`/user/review/${encodeURIComponent(
-                      profile.username
-                    )}`}
-                    icon={
-                      <DocumentTextIcon
-                        className="h-11 w-11 text-blue"
-                        strokeWidth={2}
-                      />
-                    }
-                  />
+                  <>
+                    <MenuItem
+                      text="View Your Reviews"
+                      href={`/user/review/${encodeURIComponent(
+                        profile.username
+                      )}`}
+                      icon={
+                        <DocumentTextIcon
+                          className="h-11 w-11 text-blue"
+                          strokeWidth={2}
+                        />
+                      }
+                    />
+                    <MenuItem
+                      text="Request Payout"
+                      href={`/user/payment/request`}
+                      icon={
+                        <CurrencyDollarIcon
+                          className="h-11 w-11 text-yellow"
+                          strokeWidth={2}
+                        />
+                      }
+                    />
+                  </>
                 ) : (
                   <MenuItem
                     text="Add Reviews"
@@ -78,10 +102,10 @@ const Home = () => {
               <div className="flex flex-col sm:flex-row px-10 py-5 items-center gap-10">
                 <MenuItem
                   text={"Manage Payment"}
-                  href={"/user/manage_payment"}
+                  href={"/user/payment/manage"}
                   icon={
                     <CurrencyDollarIcon
-                      className="h-11 w-11 text-blue"
+                      className="h-11 w-11 text-yellow"
                       strokeWidth={2}
                     />
                   }

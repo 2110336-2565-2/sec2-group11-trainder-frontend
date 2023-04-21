@@ -10,7 +10,7 @@ import { formatDateTime } from "@/utils/date";
 import { Bars3Icon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { Modal } from "@/components/common/modal";
 
-const Payment = () => {
+const ManagePayment = () => {
   const [user, setUser] = useState<User>();
   const [needPayoutBookings, setNeedPayoutBookings] = useState<Booking[]>([]);
   const router = useRouter();
@@ -63,10 +63,10 @@ const Payment = () => {
                   />
                   Need Payout Bookings
                 </div>
-                <div className="border-t border-b border-gray overflow-auto">
+                <div className="overflow-auto">
                   {needPayoutBookings.length != 0 ? (
                     <>
-                      {needPayoutBookings.map((booking) => {
+                      {needPayoutBookings.map((booking, index) => {
                         const [date, time] = formatDateTime(
                           booking.startDateTime,
                           booking.endDateTime
@@ -74,7 +74,9 @@ const Payment = () => {
                         return (
                           <div
                             key={booking._id}
-                            className="flex items-center justify-between border-t border-b border-gray py-5 px-5 hover:bg-gray-light hover:bg-opacity-60"
+                            className={`flex items-center justify-between ${
+                              index == 0 ? "" : "border-t"
+                            } border-gray border-collapse py-5 px-5 hover:bg-gray-light hover:bg-opacity-60`}
                           >
                             <div className="flex">
                               <Bars3Icon
@@ -162,4 +164,4 @@ const Payment = () => {
   );
 };
 
-export default Payment;
+export default ManagePayment;
