@@ -51,3 +51,32 @@ export const payout = (bookingID: string) => {
     throw error;
   });
 }
+
+export const getPaymentList = () => {
+  return axios.get(
+    API_URL + "/protected/payment-list",
+    { headers: authHeader() }
+  ).then((response) => {
+    const bookings = response.data.bookings as Booking[] ?? [];
+    if (bookings) {
+      bookings.map((data) => {
+        data.startDateTime = new Date(data.startDateTime);
+        data.endDateTime = new Date(data.endDateTime);
+      });
+    }
+    return bookings;
+  })
+}
+
+export const requestPayout = (bookingID: string) => {
+  return axios.post(
+    API_URL + "/protected/request-payout",
+    { bookingID: bookingID },
+    { headers: authHeader() }
+  ).catch((error) => {
+    if (error.response) {
+      return error.response.data;
+    }
+    throw error;
+  });
+}
