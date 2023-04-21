@@ -26,7 +26,7 @@ export type RegistrationData = {
   lng: number;
 };
 
-type User = {
+export type User = {
   token: string;
   username: string;
   firstname: string;
