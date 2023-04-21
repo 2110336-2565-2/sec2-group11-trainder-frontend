@@ -12,7 +12,6 @@ const RequestPayout = () => {
 
   useEffect(() => {
     if (update) {
-      console.log(update);
       getPaymentList().then((bookings) => {
         setPaidBookings(bookings);
         setUpdate(false);
