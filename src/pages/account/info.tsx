@@ -9,7 +9,7 @@ import { ArrowUpTrayIcon, UserIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const RenderInfoForm = () => {
+const TrainerInfo = () => {
   const [trainerInfo, setTrainerInfo] = useState<TrainerProfile>({
     specialty: [],
     rating: 0,
@@ -26,12 +26,21 @@ const RenderInfoForm = () => {
   const [selectedCertificate, setSelectedCertificate] = useState<File | null>(
     null
   );
+  const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
+    null
+  );
+  const [fee, setFee] = useState(0);
+  const [updatedMessage, setUpdatedMessage] = useState({
+    message: "",
+    color: "",
+  });
 
   useEffect(() => {
     getCurrentTrainerInfo().then((res) => {
       if (Object.keys(res).length === 0) return;
       setTrainerInfo(res);
       setSelectedSpec(res.specialty);
+      setFee(res.fee);
     });
   }, []);
 
@@ -50,167 +59,23 @@ const RenderInfoForm = () => {
     setSelectedCertificate(e.target.files[0]);
   };
 
-  const removeSelectedCertificate = () => {
-    setSelectedCertificate(null);
-  };
-
-  const info = [
-    {
-      label: "Specialty",
-      name: "specialty",
-      edit: true,
-      type: "select",
-      data: [
-        "None",
-        "Weight Loss",
-        "Weight Training",
-        "Yoga",
-        "Rehabilitation",
-      ],
-    },
-    { label: "Rating", name: "rating", edit: false, data: trainerInfo.rating },
-    { label: "Fee", name: "fee", edit: false, data: trainerInfo.fee },
-    {
-      label: "Trainee Count",
-      name: "traineeCount",
-      edit: false,
-      data: trainerInfo.traineeCount,
-    },
-    { label: "Certificate", name: "certificate", edit: true, type: "file" },
-  ];
-
-  return (
-    <>
-      {info.map((item, index) => {
-        return (
-          <div className="w-full my-2" key={index}>
-            <div className="py-2 font-bold">{item.label}</div>
-            {item.edit ? (
-              <>
-                {(() => {
-                  switch (item.type) {
-                    case "select":
-                      return (
-                        <Dropdown
-                          name={item.name}
-                          value={selectedSpec}
-                          onChange={handleSpecialtyChange}
-                          options={item.data ?? []}
-                          multiple={true}
-                          width="w-full lg:w-2/5 md:w-3/5"
-                        />
-                      );
-                    case "file":
-                      return (
-                        <>
-                          <label
-                            htmlFor="display-file"
-                            className={`flex items-center justify-center w-full md:w-5/6 h-48 md:h-64 p-4 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
-                              selectedCertificate ? "" : "opacity-75"
-                            } hover:bg-gray-dark hover:opacity-70`}
-                          >
-                            {selectedCertificate ? (
-                              <div className="relative object-contain h-full w-full">
-                                <Image
-                                  src={URL.createObjectURL(selectedCertificate)}
-                                  alt=""
-                                  fill
-                                  sizes="(max-width: 768px) 100vw"
-                                  style={{ objectFit: "contain" }}
-                                />
-                              </div>
-                            ) : (
-                              <p className="text-gray font-bold">
-                                Click to upload file
-                              </p>
-                            )}
-                            <input
-                              id="display-file"
-                              type="file"
-                              className="hidden"
-                              onChange={handleCertificate}
-                            />
-                          </label>
-                          <button
-                            className={`pl-2 text-sm text-gray hover:underline hover:text-pink-dark ${
-                              selectedCertificate ? "" : "hidden"
-                            }`}
-                            onClick={removeSelectedCertificate}
-                            type="button"
-                          >
-                            Clear selected file
-                          </button>
-                        </>
-                      );
-                    default:
-                      return (
-                        <input
-                          type={item.type}
-                          className="w-2/3 md:w-1/3 bg-white rounded-lg text-left py-2 px-3 border border-gray"
-                        ></input>
-                      );
-                  }
-                })()}
-              </>
-            ) : (
-              <input
-                className="px-3 bg-transparent"
-                type={"number"}
-                value={item.data || 0}
-                name={item.name}
-                disabled
-              ></input>
-            )}
-          </div>
-        );
-      })}
-    </>
-  );
-};
-
-const TrainerInfo = () => {
-  const [updatedMessage, setUpdatedMessage] = useState({
-    message: "",
-    color: "",
-  });
-  const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
-    null
-  );
-
   const handleProfileImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     if (e.target.files[0] == undefined) return;
     setSelectedProfileImg(e.target.files[0]);
   };
 
-  const removeSelectedProfileImg = () => {
-    setSelectedProfileImg(null);
-  };
-
   const handleTrainerInfoForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const infoData = e.target as typeof e.target & {
-      rating: { value: number };
-      fee: { value: number };
-      traineeCount: { value: number };
-      // certificateUrl: { value: string };
-    };
-    let i = 0;
-    let specialty: string[] = [];
-    while (e.currentTarget.elements.namedItem(`specialty[${i}]`) !== null) {
-      let spec = e.currentTarget.elements.namedItem(
-        `specialty[${i}]`
-      ) as HTMLInputElement;
-      if (spec.value !== "None") {
-        specialty.push(spec.value);
-      }
-      i++;
+    let specialty: string[] = selectedSpec;
+    if (specialty.includes("None")) {
+      specialty = [];
     }
     updateTrainerProfile({
       specialty: specialty,
-      rating: Number(infoData.rating.value),
-      fee: Number(infoData.fee.value),
-      traineeCount: Number(infoData.traineeCount.value),
+      rating: Number(trainerInfo.rating),
+      fee: fee,
+      traineeCount: Number(trainerInfo.rating),
       certificateUrl: "",
     } as TrainerProfile)
       .then(() => {
@@ -243,9 +108,118 @@ const TrainerInfo = () => {
     });
   };
 
+  const RenderInfoForm = () => {
+    const info = [
+      {
+        label: "Specialty",
+        name: "specialty",
+        type: "select",
+        data: [
+          "None",
+          "Weight Loss",
+          "Weight Training",
+          "Yoga",
+          "Rehabilitation",
+        ],
+      },
+      {
+        label: "Fee",
+        name: "fee",
+        type: "number",
+        data: trainerInfo.fee,
+      },
+      { label: "Certificate", name: "certificate", edit: true, type: "file" },
+    ];
+
+    return (
+      <>
+        {info.map((item, index) => {
+          return (
+            <div className="w-full my-2" key={index}>
+              <div className="py-2 font-bold">{item.label}</div>
+              {(() => {
+                switch (item.type) {
+                  case "select":
+                    return (
+                      <Dropdown
+                        name={item.name}
+                        value={selectedSpec}
+                        onChange={handleSpecialtyChange}
+                        options={
+                          item.data
+                            ? typeof item.data !== "number"
+                              ? item.data
+                              : []
+                            : []
+                        }
+                        multiple={true}
+                        width="w-full lg:w-2/5 md:w-3/5"
+                      />
+                    );
+                  case "file":
+                    return (
+                      <>
+                        <label
+                          htmlFor="display-file"
+                          className={`flex items-center justify-center w-full md:w-5/6 h-48 md:h-64 p-4 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
+                            selectedCertificate ? "" : "opacity-75"
+                          } hover:bg-gray-dark hover:opacity-70`}
+                        >
+                          {selectedCertificate ? (
+                            <div className="relative object-contain h-full w-full">
+                              <Image
+                                src={URL.createObjectURL(selectedCertificate)}
+                                alt=""
+                                fill
+                                sizes="(max-width: 768px) 100vw"
+                                style={{ objectFit: "contain" }}
+                              />
+                            </div>
+                          ) : (
+                            <p className="text-gray font-bold">
+                              Click to upload file
+                            </p>
+                          )}
+                          <input
+                            id="display-file"
+                            type="file"
+                            className="hidden"
+                            onChange={handleCertificate}
+                          />
+                        </label>
+                        <button
+                          className={`pl-2 text-sm text-gray hover:underline hover:text-pink-dark ${
+                            selectedCertificate ? "" : "hidden"
+                          }`}
+                          onClick={() => setSelectedCertificate(null)}
+                          type="button"
+                        >
+                          Clear selected file
+                        </button>
+                      </>
+                    );
+                  default:
+                    return (
+                      <input
+                        className="w-full lg:w-2/5 md:w-3/5 bg-white rounded-xl text-left py-2.5 px-3.5 border border-gray"
+                        type={item.type}
+                        value={fee}
+                        name={item.name}
+                        onChange={(e) => setFee(Number(e.target.value))}
+                      />
+                    );
+                }
+              })()}
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
   return (
     <main className="min-h-screen h-full">
-      <div className="flex flex-1 flex-col p-5 md:p-10">
+      <div className="flex flex-1 flex-col p-5 md:px-10">
         <div className="flex items-center mb-3 md:mb-8">
           <BackButton />
           <h1 className="text-xl md:text-3xl mx-5 md:mx-10">
@@ -295,7 +269,7 @@ const TrainerInfo = () => {
               className={`py-3 text-sm text-gray hover:underline hover:text-pink-dark ${
                 selectedProfileImg ? "" : "hidden"
               }`}
-              onClick={removeSelectedProfileImg}
+              onClick={() => setSelectedProfileImg(null)}
               type="button"
             >
               Clear selected profile image
