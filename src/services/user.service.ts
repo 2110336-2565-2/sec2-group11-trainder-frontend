@@ -71,3 +71,22 @@ export const updateProfile = (updateData: UpdateData) => {
       throw error;
     });
 };
+
+export const getProfileImage = (username: string) => {
+  return axios.get(
+    API_URL + "/protected/image",
+    { headers: authHeader(), params: { username: username } }
+  ).then(async (response) => {
+    const imgBase64 = response.data.message;
+    const imageUrl = 'data:image/jpeg;base64,' + imgBase64;
+    let file = null;
+    await fetch(imageUrl)
+      .then(res => res.blob())
+      .then(blob => {
+        file = new File([blob], "File name", { type: "image/jpeg" });
+      })
+    return file;
+  }).catch((error) => {
+    throw error
+  })
+}
