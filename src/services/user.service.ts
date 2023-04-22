@@ -87,6 +87,11 @@ export const getProfileImage = (username: string) => {
       })
     return file;
   }).catch((error) => {
-    throw error
+    if (error.response && error.response.status === 500) {
+      return null;
+    }
+    else {
+      throw error
+    }
   })
 }

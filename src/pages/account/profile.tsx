@@ -13,6 +13,7 @@ const Profile = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [profile, setProfile] = useState<UserProfile>();
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [updateImage, setUpdateImage] = useState<boolean>(false);
   const router = useRouter();
   useEffect(() => {
     setLoading(true);
@@ -23,7 +24,21 @@ const Profile = () => {
         setLoading(false);
       });
     });
-  }, [profile?.username]);
+  }, []);
+
+  useEffect(() => {
+    if (updateImage) {
+      if (profile?.username) {
+        setLoading(true);
+        getProfileImage(profile.username).then((data) => {
+          setProfileImage(data);
+          setLoading(false);
+          setUpdateImage(false);
+        });
+      }
+    }
+  }, [profile?.username, updateImage]);
+
   const getBirthDate = () => {
     if (profile?.birthdate) {
       const [birthdate, _] = formatFromDate(profile?.birthdate);
@@ -84,7 +99,10 @@ const Profile = () => {
                 </p>
               </div>
               <div className="flex justify-center py-6 h-full w-full">
-                <div className="relative h-40 md:h-48 w-40 md:w-48 rounded-full">
+                <button
+                  className="relative h-40 md:h-48 w-40 md:w-48 rounded-full hover:opacity-70 hover:cursor-pointer"
+                  onClick={() => {}}
+                >
                   <div className="relative object-cover h-full w-full rounded-full overflow-hidden">
                     <Image
                       src={
@@ -98,7 +116,7 @@ const Profile = () => {
                       style={{ objectFit: "cover" }}
                     />
                   </div>
-                </div>
+                </button>
               </div>
               <div className="bg-white py-8 px-10 rounded-3xl w-fit flex justify-center">
                 <div className="columns-1 sm:columns-2 text-lg md:text-xl">
