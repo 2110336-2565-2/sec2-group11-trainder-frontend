@@ -35,16 +35,7 @@ const ChatBox = (props: ChatProps) => {
   return (
     <div className="flex flex-col flex-1 relative">
       <div className="px-5 pt-20 pb-2 flex flex-row items-center w-full bg-backgroundColor fixed">
-        <div className="rounded-full overflow-hidden">
-          <Image
-            src="/default_profile.jpg"
-            alt=""
-            width={50}
-            height={50}
-            style={{ objectFit: "cover" }}
-          />
-        </div>
-        <p className="px-2">{props.audience}</p>
+        <p className="px-2 font-bold">{props.audience}</p>
       </div>
 
       <div className="w-full flex flex-col flex-1 mt-36 overflow-auto">
@@ -62,7 +53,9 @@ const ChatBox = (props: ChatProps) => {
               <div key={index}>
                 {showDate ? (
                   <div className="flex justify-center text-sm text-gray-dark my-2">
-                    <p className="bg-gray bg-opacity-40 px-2 rounded-full">{messageDate}</p>
+                    <p className="bg-gray bg-opacity-40 px-2 rounded-full">
+                      {messageDate}
+                    </p>
                   </div>
                 ) : (
                   <></>

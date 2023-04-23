@@ -40,9 +40,8 @@ export const Modal = (props: ModalProps) => {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={`w-full ${
-                  props.width ?? "max-w-sm"
-                } h-full transform overflow-hidden bg-white p-3 text-center align-middle shadow-xl transition-all rounded-2xl`}
+                className={`${props.width ?? "w-full max-w-sm"} 
+                h-full transform overflow-hidden bg-white p-3 text-center align-middle shadow-xl transition-all rounded-2xl`}
               >
                 {props.icon}
                 {title && (

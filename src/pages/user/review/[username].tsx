@@ -1,7 +1,7 @@
 import { BackButton } from "@/components/common/backbutton";
 import { Button } from "@/components/common/button";
-import { useState, useEffect, Fragment } from "react";
-import { UserProfile } from "@/services/user.service";
+import { useState, useEffect } from "react";
+import { UserProfile, getProfileImage } from "@/services/user.service";
 import {
   addTrainerReviews,
   checkReviewable,
@@ -29,6 +29,7 @@ const Review = () => {
     lat: 0,
     lng: 0,
   });
+  const [profileImage, setProfileImage] = useState<File | null>(null);
 
   const [trainerReviews, setTrainerReviews] = useState<Review[]>([]);
 
@@ -44,10 +45,13 @@ const Review = () => {
 
   useEffect(() => {
     if (typeof username === "string") {
+      setLoading(true);
       getTrainerProfile(username)
         .then((res) => {
-          setLoading(true);
           setTrainerProfile(res.userProfile);
+          getProfileImage(username).then((data) => {
+            setProfileImage(data);
+          });
           setLoading(false);
         })
         .catch(() => router.back());
@@ -62,9 +66,9 @@ const Review = () => {
 
   useEffect(() => {
     if (typeof username === "string") {
+      setLoading(true);
       getTrainerReviews(username)
         .then((res) => {
-          setLoading(true);
           setTrainerReviews(res);
           setLoading(false);
         })
@@ -154,9 +158,9 @@ const Review = () => {
 
     addTrainerReviews(review).then(() => {
       if (typeof username === "string") {
+        setLoading(true);
         getTrainerReviews(username)
           .then((res) => {
-            setLoading(true);
             setTrainerReviews(res);
             setLoading(false);
           })
@@ -190,11 +194,15 @@ const Review = () => {
                 {trainerProfile.firstname} {trainerProfile.lastname}
                 <div className="relative w-52 h-52 md:w-60 md:h-60 lg:w-80 lg:h-80 mt-6 md:mt-10 rounded-2xl overflow-hidden">
                   <Image
-                    src="/default_profile.jpg"
+                    src={
+                      profileImage
+                        ? URL.createObjectURL(profileImage)
+                        : "/default_profile.jpg"
+                    }
                     alt=""
                     fill
                     sizes="(max-width: 768px) 100vw"
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: "cover" }}
                   />
                 </div>
               </div>

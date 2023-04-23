@@ -1,10 +1,12 @@
 import { BackButton } from "@/components/common/backbutton";
 import { Dropdown } from "@/components/common/dropdown";
+import { getCurrentUser } from "@/services/auth.service";
 import {
   getCurrentTrainerInfo,
   TrainerProfile,
   updateTrainerProfile,
 } from "@/services/trainer.service";
+import { getProfileImage, uploadProfileImage } from "@/services/user.service";
 import { ArrowUpTrayIcon, UserIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -17,6 +19,7 @@ const TrainerInfo = () => {
     traineeCount: 0,
     certificateUrl: "",
   });
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [selectedSpec, setSelectedSpec] = useState<string[]>(
     trainerInfo.specialty === undefined ||
       (trainerInfo.specialty !== undefined && trainerInfo.specialty.length == 0)
@@ -36,11 +39,18 @@ const TrainerInfo = () => {
   });
 
   useEffect(() => {
+    const user = getCurrentUser();
     getCurrentTrainerInfo().then((res) => {
       if (Object.keys(res).length === 0) return;
       setTrainerInfo(res);
       setSelectedSpec(res.specialty);
       setFee(res.fee);
+      if (user) {
+        getProfileImage(user.username).then((data) => {
+          setProfileImage(data);
+          setSelectedProfileImg(data);
+        });
+      }
     });
   }, []);
 
@@ -75,14 +85,18 @@ const TrainerInfo = () => {
       specialty: specialty,
       rating: Number(trainerInfo.rating),
       fee: fee,
-      traineeCount: Number(trainerInfo.rating),
+      traineeCount: Number(trainerInfo.traineeCount),
       certificateUrl: "",
     } as TrainerProfile)
       .then(() => {
-        setUpdatedMessage({
-          message: "Your information has been saved",
-          color: "text-green-light",
-        });
+        if (selectedProfileImg && selectedProfileImg !== profileImage) {
+          uploadProfileImage(selectedProfileImg).then(() => {
+            setUpdatedMessage({
+              message: "Your information has been saved",
+              color: "text-green-light",
+            });
+          });
+        }
       })
       .catch((error) => {
         if (error.response && error.response.status !== 200) {
@@ -236,13 +250,13 @@ const TrainerInfo = () => {
             <div className="relative h-fit">
               <div className="h-20 w-20 md:h-40 md:w-40 rounded-full bg-blue">
                 {selectedProfileImg ? (
-                  <div className="relative object-contain h-full w-full rounded-full overflow-hidden">
+                  <div className="relative object-cover h-full w-full rounded-full overflow-hidden">
                     <Image
                       src={URL.createObjectURL(selectedProfileImg)}
                       alt=""
                       fill
                       sizes="(max-width: 768px) 100vw"
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "cover" }}
                     />
                   </div>
                 ) : (
@@ -267,9 +281,15 @@ const TrainerInfo = () => {
             </div>
             <button
               className={`py-3 text-sm text-gray hover:underline hover:text-pink-dark ${
-                selectedProfileImg ? "" : "hidden"
+                selectedProfileImg !== profileImage ? "" : "hidden"
               }`}
-              onClick={() => setSelectedProfileImg(null)}
+              onClick={() => {
+                if (profileImage) {
+                  setSelectedProfileImg(profileImage);
+                } else {
+                  setSelectedProfileImg(null);
+                }
+              }}
               type="button"
             >
               Clear selected profile image
