@@ -1,5 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import { getProfileImage } from "./user.service";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
     ? process.env.NEXT_PUBLIC_API_URL
@@ -14,6 +15,7 @@ export type Message = {
 export type ChatList = {
     audience: string,
     message: Message
+    image: File | null,
 }
 
 export type RoomDetails = {
@@ -65,12 +67,15 @@ export const getAllChats = async () => {
         .get(API_URL + "/protected/get-all-chats", {
             headers: authHeader(),
         })
-        .then((response) => {
+        .then(async (response) => {
             const allChat = response.data.allChat as ChatList[];
             if (allChat) {
-                allChat.map((chat) => {
+                await Promise.all(allChat.map(async (chat) => {
                     chat.message.createdAt = new Date(chat.message.createdAt);
-                })
+                    await getProfileImage(chat.audience).then((data) => {
+                        chat.image = data;
+                    })
+                }))
             }
             return allChat;
         })

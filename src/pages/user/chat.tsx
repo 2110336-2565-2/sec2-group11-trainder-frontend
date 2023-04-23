@@ -46,7 +46,6 @@ const Chat = () => {
     const { audience } = router.query;
     if (audience && typeof audience === "string") {
       setSelectedChat(audience);
-      console.log("set audience");
     }
   }, [router.query]);
 
@@ -54,7 +53,6 @@ const Chat = () => {
     const ws = new WebSocket(
       `${WEBSOCKET_URL}/join-room/${roomId}?username=${username}`
     );
-    console.log(ws);
     setSocket(ws);
     setKeepAlive(true);
   }, []);

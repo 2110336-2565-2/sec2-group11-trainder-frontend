@@ -32,14 +32,22 @@ const Sidebar = (props: SidebarProps) => {
               onClick={() => props.setSelectedChat(chat.audience)}
               key={index}
             >
-              <div className="ml-6 md:ml-8 rounded-full overflow-hidden">
-                <Image
-                  src="/default_profile.jpg"
-                  alt=""
-                  width={90}
-                  height={90}
-                  style={{ objectFit: "cover" }}
-                />
+              <div className="ml-6 md:ml-8">
+                <div className="h-20 w-20">
+                  <div className="h-full w-full relative rounded-full overflow-hidden">
+                    <Image
+                      src={
+                        chat.image
+                          ? URL.createObjectURL(chat.image)
+                          : "/default_profile.jpg"
+                      }
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
               </div>
               <div className="h-full w-full flex-col ml-2 md:ml-5">
                 <p className="text-base md:text-lg m-1">{chat.audience}</p>
