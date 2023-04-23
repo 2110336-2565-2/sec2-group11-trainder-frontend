@@ -1,5 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import FormData from "form-data";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
@@ -93,5 +94,18 @@ export const getProfileImage = (username: string) => {
     else {
       throw error
     }
+  })
+}
+
+export const uploadProfileImage = (image: File) => {
+  let data = new FormData();
+  data.append('image', image, 'profile.png');
+
+  return axios.post(
+    API_URL + "/protected/image",
+    data,
+    { headers: authHeader() }
+  ).catch((error) => {
+    throw error;
   })
 }
