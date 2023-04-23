@@ -65,8 +65,6 @@ export const filterTrainer = (
         })
         filteredTrainerProfiles.push(trainer);
       }));
-      console.log(filteredTrainerProfiles);
-
       return filteredTrainerProfiles;
     })
     .catch((error) => {
@@ -143,7 +141,6 @@ export const checkReviewable = (username: string) => {
     })
     .then((res) => {
       const canReview = res.data.canReview as boolean;
-      console.log(canReview);
       return canReview;
     })
     .catch((error) => {
