@@ -11,21 +11,25 @@ import {
   StarIcon,
   FunnelIcon,
 } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 
 const TrainerFilter = () => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [trainerProfiles, setTrainerProfiles] = useState<
     FilteredTrainerProfile[]
   >([]);
 
   const [specialtiesFilter, setSpecialtiesFilter] = useState<string[]>([]);
   useEffect(() => {
+    setLoading(true);
     filterTrainer({
       limit: 1000,
       specialty: specialtiesFilter,
     } as FilterInput).then((res) => {
       setTrainerProfiles(res);
+      setLoading(false);
     });
   }, [specialtiesFilter]);
 
@@ -157,94 +161,113 @@ const TrainerFilter = () => {
         </div>
 
         {/* List of trainer */}
-        <div className="mx-10 md:mx-28">
-          {trainerProfiles.map((trainerProfile, idx) => {
-            return (
-              <div key={idx}>
-                <Link href={`/user/booking/${encodeURIComponent(trainerProfile.username)}`}>
-                  <div className="bg-white w-auto border-2 border-gray rounded-3xl flex flex-row items-center justify-between my-5 p-2 drop-shadow-lg hover:bg-gray-light">
-                    <div className="flex items-center w-5/6">
-                      {/* Profile image */}
-                      <div className="bg-gray-300 w-32 h-32 rounded-lg m-3 hidden md:block"></div>
-                      {/* Information */}
-                      <div className="flex flex-col m-2">
-                        <p className="text-lg md:text-xl font-semibold">
-                          {trainerProfile.firstname} {trainerProfile.lastname} (
-                          {trainerProfile.username})
-                        </p>
-                        {/* Only show specialties in case it exists */}
-                        {trainerProfile.trainerInfo.specialty != null &&
-                          trainerProfile.trainerInfo.specialty.length != 0 && (
+        {!loading && (
+          <div className="mx-10 md:mx-28">
+            {trainerProfiles.map((trainerProfile, idx) => {
+              return (
+                <div key={idx}>
+                  <Link
+                    href={`/user/booking/${encodeURIComponent(
+                      trainerProfile.username
+                    )}`}
+                  >
+                    <div className="bg-white w-auto border-2 border-gray rounded-3xl flex flex-row items-center justify-between my-5 p-2 drop-shadow-lg hover:bg-gray-light">
+                      <div className="flex items-center w-5/6">
+                        {/* Profile image */}
+                        <div className="bg-gray-light w-32 h-32 rounded-lg m-3 hidden md:block object-cover overflow-hidden relative">
+                          {trainerProfile.image && (
+                            <Image
+                              src={URL.createObjectURL(trainerProfile.image)}
+                              alt={""}
+                              fill
+                              sizes="(max-width: 768px) 100vw"
+                              style={{ objectFit: "cover" }}
+                            />
+                          )}
+                        </div>
+                        {/* Information */}
+                        <div className="flex flex-col m-2">
+                          <p className="text-lg md:text-xl font-semibold">
+                            {trainerProfile.firstname} {trainerProfile.lastname}{" "}
+                            ({trainerProfile.username})
+                          </p>
+                          {/* Only show specialties in case it exists */}
+                          {trainerProfile.trainerInfo.specialty != null &&
+                            trainerProfile.trainerInfo.specialty.length !=
+                              0 && (
+                              <p className="text-blue-dark">
+                                Specialties:{" "}
+                                <span className="text-black">
+                                  {trainerProfile.trainerInfo.specialty.join(
+                                    ", "
+                                  )}{" "}
+                                </span>
+                              </p>
+                            )}
+                          <div className="flex flex-row">
                             <p className="text-blue-dark">
-                              Specialties:{" "}
+                              Rating:{" "}
                               <span className="text-black">
-                                {trainerProfile.trainerInfo.specialty.join(
-                                  ", "
-                                )}{" "}
+                                {trainerProfile.trainerInfo.rating}
                               </span>
                             </p>
-                          )}
-                        <div className="flex flex-row">
+                            <div className="flex flex-row mx-2">
+                              {[
+                                ...Array<Number>(
+                                  Math.round(trainerProfile.trainerInfo.rating)
+                                ),
+                              ].map((e, idx) => {
+                                return (
+                                  <StarIcon
+                                    key={idx}
+                                    className="h-6 w-6 fill-yellow stroke-yellow"
+                                    strokeWidth={2}
+                                  ></StarIcon>
+                                );
+                              })}
+                              {[
+                                ...Array<Number>(
+                                  5 -
+                                    Math.round(
+                                      trainerProfile.trainerInfo.rating
+                                    )
+                                ),
+                              ].map((e, idx) => {
+                                return (
+                                  <StarIcon
+                                    key={idx}
+                                    className="h-6 w-6 fill-none stroke-yellow"
+                                    strokeWidth={2}
+                                  ></StarIcon>
+                                );
+                              })}
+                            </div>
+                          </div>
                           <p className="text-blue-dark">
-                            Rating:{" "}
+                            Training fee:{" "}
                             <span className="text-black">
-                              {trainerProfile.trainerInfo.rating}
+                              {trainerProfile.trainerInfo.fee}
                             </span>
                           </p>
-                          <div className="flex flex-row mx-2">
-                            {[
-                              ...Array<Number>(
-                                Math.round(trainerProfile.trainerInfo.rating)
-                              ),
-                            ].map((e, idx) => {
-                              return (
-                                <StarIcon
-                                  key={idx}
-                                  className="h-6 w-6 fill-yellow stroke-yellow"
-                                  strokeWidth={2}
-                                ></StarIcon>
-                              );
-                            })}
-                            {[
-                              ...Array<Number>(
-                                5 -
-                                  Math.round(trainerProfile.trainerInfo.rating)
-                              ),
-                            ].map((e, idx) => {
-                              return (
-                                <StarIcon
-                                  key={idx}
-                                  className="h-6 w-6 fill-none stroke-yellow"
-                                  strokeWidth={2}
-                                ></StarIcon>
-                              );
-                            })}
-                          </div>
-                        </div>
-                        <p className="text-blue-dark">
-                          Training fee:{" "}
-                          <span className="text-black">
-                            {trainerProfile.trainerInfo.fee}
-                          </span>
-                        </p>
-                        {/* <p className="text-blue-dark">
+                          {/* <p className="text-blue-dark">
                         Currently Training:{" "}
                         <span className="text-black">
                           {trainerProfile.trainerInfo.traineeCount}
                         </span>
                       </p> */}
+                        </div>
                       </div>
+                      <ChevronRightIcon
+                        className="w-12 h-12 text-gray mr-0 md:mr-5"
+                        strokeWidth={2}
+                      ></ChevronRightIcon>
                     </div>
-                    <ChevronRightIcon
-                      className="w-12 h-12 text-gray mr-0 md:mr-5"
-                      strokeWidth={2}
-                    ></ChevronRightIcon>
-                  </div>
-                </Link>
-              </div>
-            );
-          })}
-        </div>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </main>
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-import { UserProfile } from "./user.service";
+import { UserProfile, getProfileImage } from "./user.service";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
@@ -23,6 +23,7 @@ export type FilteredTrainerProfile = {
   lastname: string;
   trainerInfo: TrainerProfile;
   username: string;
+  image: File | null;
 };
 
 export type Review = {
@@ -55,12 +56,17 @@ export const filterTrainer = (
     .post(API_URL + "/protected/filter-trainer", filterInput, {
       headers: authHeader(),
     })
-    .then((response) => {
+    .then(async (response) => {
       let filteredTrainerProfiles: FilteredTrainerProfile[] = [];
-      response.data.trainers.forEach((trainerUserProfile: any) => {
+      await Promise.all(response.data.trainers.map(async (trainerUserProfile: any) => {
         const trainer = trainerUserProfile as FilteredTrainerProfile;
+        await getProfileImage(trainer.username).then((image) => {
+          trainer.image = image;
+        })
         filteredTrainerProfiles.push(trainer);
-      });
+      }));
+      console.log(filteredTrainerProfiles);
+
       return filteredTrainerProfiles;
     })
     .catch((error) => {

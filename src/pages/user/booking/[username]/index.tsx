@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCurrentUserProfile, UserProfile } from "@/services/user.service";
+import { getProfileImage, UserProfile } from "@/services/user.service";
 import { useRouter } from "next/router";
 import { getTrainerProfile, TrainerProfile } from "@/services/trainer.service";
 import { useLoadScript } from "@react-google-maps/api";
@@ -9,18 +9,13 @@ import { Button } from "@/components/common/button";
 import Link from "next/link";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { User, getCurrentUser } from "@/services/auth.service";
+
 const BookTrainerProfile = () => {
   const router = useRouter();
   const { username } = router.query;
-  const [profile, setProfile] = useState<UserProfile>();
-  useEffect(() => {
-    setLoading(true);
-    getCurrentUserProfile().then((data) => {
-      setProfile(data);
-      setLoading(false);
-    });
-  }, []);
-
+  const [profile, setProfile] = useState<User>();
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [trainerCoordinate, setTrainerCoordinate] = useState<LatLngLiteral>({
     lat: 0,
@@ -48,17 +43,27 @@ const BookTrainerProfile = () => {
   });
 
   useEffect(() => {
+    const user = getCurrentUser();
+    if (user) {
+      setProfile(user);
+    }
+  }, []);
+
+  useEffect(() => {
     if (typeof username == "string") {
+      setLoading(true);
       getTrainerProfile(username)
         .then((res) => {
-          setLoading(true);
           setTrainerProfile(res.userProfile);
           setTrainerInfo(res.trainerProfile);
           setTrainerCoordinate({
             lat: res.userProfile.lat,
             lng: res.userProfile.lng,
           });
-          setLoading(false);
+          getProfileImage(username).then((data) => {
+            setProfileImage(data);
+            setLoading(false);
+          });
         })
         .catch(() => router.back());
     } else {
@@ -150,10 +155,15 @@ const BookTrainerProfile = () => {
           <div className=" mt-6 md:mt-10 flex justify-center h-full">
             <div className="object-cover overflow-hidden rounded-2xl relative w-28 h-28 sm:w-36 sm:h-36 md:w-72 md:h-72">
               <Image
-                src="/default_profile.jpg"
+                src={
+                  profileImage
+                    ? URL.createObjectURL(profileImage)
+                    : "/default_profile.jpg"
+                }
                 alt=""
                 fill
                 sizes="(max-width: 768px) 100vw"
+                style={{ objectFit: "cover" }}
               />
             </div>
           </div>
