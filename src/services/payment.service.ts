@@ -6,6 +6,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "";
 
+export type RequestPayoutInput = {
+  bookingID: string;
+  bank: string;
+  accountName: string;
+  accountNumber: string;
+}
+
 export const createPayment = (bookingID: string, token: string) => {
   return axios
     .post(
@@ -68,10 +75,10 @@ export const getPaymentList = () => {
   })
 }
 
-export const requestPayout = (bookingID: string) => {
+export const requestPayout = (data: RequestPayoutInput) => {
   return axios.post(
     API_URL + "/protected/request-payout",
-    { bookingID: bookingID },
+    data,
     { headers: authHeader() }
   ).catch((error) => {
     if (error.response) {
