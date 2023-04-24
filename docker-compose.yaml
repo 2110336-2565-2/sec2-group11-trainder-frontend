@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build: .
+    container_name: trainder-frontend
+    ports:
+      - "3000:3000"
+
+networks:
+  backend: {}
