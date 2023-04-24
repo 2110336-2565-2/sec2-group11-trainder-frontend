@@ -175,15 +175,13 @@ const TrainerFilter = () => {
                       <div className="flex items-center w-5/6">
                         {/* Profile image */}
                         <div className="bg-gray-light w-32 h-32 rounded-lg m-3 hidden md:block object-cover overflow-hidden relative">
-                          {trainerProfile.image && (
-                            <Image
-                              src={URL.createObjectURL(trainerProfile.image)}
-                              alt={""}
-                              fill
-                              sizes="(max-width: 768px) 100vw"
-                              style={{ objectFit: "cover" }}
-                            />
-                          )}
+                          <Image
+                            src={trainerProfile.image ? URL.createObjectURL(trainerProfile.image) : "/default_profile.jpg"}
+                            alt={""}
+                            fill
+                            sizes="(max-width: 768px) 100vw"
+                            style={{ objectFit: "cover" }}
+                          />
                         </div>
                         {/* Information */}
                         <div className="flex flex-col m-2">
