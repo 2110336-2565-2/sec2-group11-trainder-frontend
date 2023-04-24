@@ -67,7 +67,12 @@ export const Dropdown = (props: DropdownProps) => {
                     ) : (
                       <></>
                     )}
-                    <p className={`${selected ? "font-bold" : ""}`}>{choice}</p>
+                    <p
+                      className={`${selected ? "font-bold" : ""}`}
+                      id={`${props.name}_choice_${index}`}
+                    >
+                      {choice}
+                    </p>
                   </div>
                 )}
               </Listbox.Option>
