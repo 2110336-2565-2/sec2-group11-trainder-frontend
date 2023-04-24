@@ -26,13 +26,14 @@ const TrainerInfo = () => {
       ? ["None"]
       : trainerInfo.specialty
   );
-  const [selectedCertificate, setSelectedCertificate] = useState<File | null>(
-    null
-  );
+  // const [selectedCertificate, setSelectedCertificate] = useState<File | null>(
+  //   null
+  // );
   const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(
     null
   );
   const [fee, setFee] = useState(0);
+  const [certificate, setCertificate] = useState("");
   const [updatedMessage, setUpdatedMessage] = useState({
     message: "",
     color: "",
@@ -45,6 +46,7 @@ const TrainerInfo = () => {
       setTrainerInfo(res);
       setSelectedSpec(res.specialty);
       setFee(res.fee);
+      setCertificate(res.certificateUrl);
       if (user) {
         getProfileImage(user.username).then((data) => {
           setProfileImage(data);
@@ -63,11 +65,11 @@ const TrainerInfo = () => {
     setSelectedSpec(select);
   };
 
-  const handleCertificate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    if (e.target.files[0] == undefined) return;
-    setSelectedCertificate(e.target.files[0]);
-  };
+  // const handleCertificate = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (!e.target.files) return;
+  //   if (e.target.files[0] == undefined) return;
+  //   setSelectedCertificate(e.target.files[0]);
+  // };
 
   const handleProfileImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -86,7 +88,7 @@ const TrainerInfo = () => {
       rating: Number(trainerInfo.rating),
       fee: fee,
       traineeCount: Number(trainerInfo.traineeCount),
-      certificateUrl: "",
+      certificateUrl: certificate,
     } as TrainerProfile)
       .then(() => {
         if (selectedProfileImg && selectedProfileImg !== profileImage) {
@@ -95,6 +97,11 @@ const TrainerInfo = () => {
               message: "Your information has been saved",
               color: "text-green-light",
             });
+          });
+        } else {
+          setUpdatedMessage({
+            message: "Your information has been saved",
+            color: "text-green-light",
           });
         }
       })
@@ -140,9 +147,15 @@ const TrainerInfo = () => {
         label: "Fee",
         name: "fee",
         type: "number",
-        data: trainerInfo.fee,
+        data: fee,
       },
-      { label: "Certificate", name: "certificate", edit: true, type: "file" },
+      // { label: "Certificate", name: "certificate", edit: true, type: "file" },
+      {
+        label: "Certificate ID",
+        name: "certificate",
+        type: "text",
+        data: certificate,
+      },
     ];
 
     return (
@@ -161,7 +174,8 @@ const TrainerInfo = () => {
                         onChange={handleSpecialtyChange}
                         options={
                           item.data
-                            ? typeof item.data !== "number"
+                            ? typeof item.data !== "number" &&
+                              typeof item.data != "string"
                               ? item.data
                               : []
                             : []
@@ -170,56 +184,62 @@ const TrainerInfo = () => {
                         width="w-full lg:w-2/5 md:w-3/5"
                       />
                     );
-                  case "file":
-                    return (
-                      <>
-                        <label
-                          htmlFor="display-file"
-                          className={`flex items-center justify-center w-full md:w-5/6 h-48 md:h-64 p-4 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
-                            selectedCertificate ? "" : "opacity-75"
-                          } hover:bg-gray-dark hover:opacity-70`}
-                        >
-                          {selectedCertificate ? (
-                            <div className="relative object-contain h-full w-full">
-                              <Image
-                                src={URL.createObjectURL(selectedCertificate)}
-                                alt=""
-                                fill
-                                sizes="(max-width: 768px) 100vw"
-                                style={{ objectFit: "contain" }}
-                              />
-                            </div>
-                          ) : (
-                            <p className="text-gray font-bold">
-                              Click to upload file
-                            </p>
-                          )}
-                          <input
-                            id="display-file"
-                            type="file"
-                            className="hidden"
-                            onChange={handleCertificate}
-                          />
-                        </label>
-                        <button
-                          className={`pl-2 text-sm text-gray hover:underline hover:text-pink-dark ${
-                            selectedCertificate ? "" : "hidden"
-                          }`}
-                          onClick={() => setSelectedCertificate(null)}
-                          type="button"
-                        >
-                          Clear selected file
-                        </button>
-                      </>
-                    );
+                  // case "file":
+                  //   return (
+                  //     <>
+                  //       <label
+                  //         htmlFor="display-file"
+                  //         className={`flex items-center justify-center w-full md:w-5/6 h-48 md:h-64 p-4 border border-gray border-dashed rounded-lg cursor-pointer bg-gray-light ${
+                  //           selectedCertificate ? "" : "opacity-75"
+                  //         } hover:bg-gray-dark hover:opacity-70`}
+                  //       >
+                  //         {selectedCertificate ? (
+                  //           <div className="relative object-contain h-full w-full">
+                  //             <Image
+                  //               src={URL.createObjectURL(selectedCertificate)}
+                  //               alt=""
+                  //               fill
+                  //               sizes="(max-width: 768px) 100vw"
+                  //               style={{ objectFit: "contain" }}
+                  //             />
+                  //           </div>
+                  //         ) : (
+                  //           <p className="text-gray font-bold">
+                  //             Click to upload file
+                  //           </p>
+                  //         )}
+                  //         <input
+                  //           id="display-file"
+                  //           type="file"
+                  //           className="hidden"
+                  //           onChange={handleCertificate}
+                  //         />
+                  //       </label>
+                  //       <button
+                  //         className={`pl-2 text-sm text-gray hover:underline hover:text-pink-dark ${
+                  //           selectedCertificate ? "" : "hidden"
+                  //         }`}
+                  //         onClick={() => setSelectedCertificate(null)}
+                  //         type="button"
+                  //       >
+                  //         Clear selected file
+                  //       </button>
+                  //     </>
+                  //   );
                   default:
                     return (
                       <input
                         className="w-full lg:w-2/5 md:w-3/5 bg-white rounded-xl text-left py-2.5 px-3.5 border border-gray"
                         type={item.type}
-                        value={fee}
+                        value={item.data}
                         name={item.name}
-                        onChange={(e) => setFee(Number(e.target.value))}
+                        onChange={(e) => {
+                          if (item.name === "fee") {
+                            setFee(Number(e.target.value));
+                          } else {
+                            setCertificate(e.target.value);
+                          }
+                        }}
                       />
                     );
                 }
