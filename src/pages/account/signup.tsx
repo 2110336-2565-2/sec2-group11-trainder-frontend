@@ -208,9 +208,10 @@ export default function Signup() {
     ) as HTMLInputElement;
     const results = await getGeocode({ address: address.value });
     const { lat, lng } = getLatLng(results[0]);
-    if (
-      address.value === undefined ||
-      address.value === "" ||
+    if (address.value === undefined || address.value === "") {
+      isCompleted = false;
+      setFormCompleted(false);
+    } else if (
       lat === null ||
       lat === undefined ||
       lng === null ||
