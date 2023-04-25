@@ -114,7 +114,11 @@ const Notification = () => {
                 await updateBooking({
                   bookingId: booking._id,
                   status: "confirm",
-                }).then(() => setBookingsUpdate(true));
+                }).then(() => setBookingsUpdate(true)).catch((err) => {
+                  if(err.response && err.response.status === 400) {
+                    alert(err.response.data.message);
+                  }
+                });
               }}
             ></Button>
           </div>
