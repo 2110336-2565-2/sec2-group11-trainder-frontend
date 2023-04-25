@@ -184,6 +184,15 @@ export default function Signup() {
       if (!isCompleted) return;
     });
 
+    // check address is filled
+    const address = e.currentTarget.elements.namedItem(
+      "address"
+    ) as HTMLInputElement;
+    if (address.value === undefined || address.value === "") {
+      setFormCompleted(false);
+      return;
+    }
+
     // check password is matched
     const password = e.currentTarget.elements.namedItem(
       "password"
