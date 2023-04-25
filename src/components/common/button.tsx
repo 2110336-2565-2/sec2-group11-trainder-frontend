@@ -2,6 +2,7 @@ type ButtonProps = {
   name: string;
   onClick?: () => void;
   disabled?: boolean;
+  id?: string;
   width?: string;
   margin?: string;
   type?: "button" | "submit" | "reset";
@@ -20,6 +21,7 @@ export const Button = (props: ButtonProps) => {
       type={props.type}
       onClick={props.onClick}
       disabled={props.disabled ?? false}
+      id={`${props.id ?? "button"}`}
     >
       {props.name}
     </button>
