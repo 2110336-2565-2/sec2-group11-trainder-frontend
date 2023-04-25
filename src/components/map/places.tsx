@@ -28,6 +28,7 @@ export default function Places() {
         placeholder="House No. & Street"
         className="w-full pl-3.5 py-2.5 mt-2 mb-2 mx-2 block border border-gray rounded-xl"
         name="address"
+        id="address"
       />
       <div>
         {status === "OK" &&

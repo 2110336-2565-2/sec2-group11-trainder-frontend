@@ -29,6 +29,7 @@ export const InputBox = (props: InputBoxProps) => {
         pattern={props.pattern}
         required={props.required}
         name={props.name}
+        id={props.name}
       />
       {props.icon != null ? <>{props.icon}</> : <></>}
     </div>

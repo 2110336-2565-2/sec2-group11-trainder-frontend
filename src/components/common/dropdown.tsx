@@ -30,6 +30,7 @@ export const Dropdown = (props: DropdownProps) => {
               className={`block ${
                 props.value ? "text-black" : "text-gray-400"
               }`}
+              id={`selected_${props.name}`}
             >
               {props.value
                 ? Array.isArray(props.value)
