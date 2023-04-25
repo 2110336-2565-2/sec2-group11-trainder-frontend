@@ -313,6 +313,7 @@ export default function Signup() {
               width="w-1/2"
               type="submit"
               disabled={!isFormCompleted}
+              id="create_account_button"
             />
           </div>
         </form>
