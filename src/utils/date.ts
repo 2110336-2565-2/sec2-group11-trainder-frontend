@@ -18,8 +18,8 @@ export const formatFromDate = (date: Date, utc?: boolean) => {
     return [day, time];
 }
 
-export const isToday = (date: Date) => {
-    const dateTime = dayjs(date.toISOString().slice(0, -1));
+export const isToday = (date: Date, utc?: boolean) => {
+    const dateTime = dayjs(utc ? date.toISOString().slice(0, -1) : date.toISOString());
     const today = dayjs();
     const isSame = (dateTime.date() === today.date())
         && (dateTime.month() === today.month())
