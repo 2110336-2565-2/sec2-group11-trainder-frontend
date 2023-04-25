@@ -83,7 +83,7 @@ const Notification = () => {
         if (booking.payment.status === "paid") {
           return (
             <>
-              {isToday(booking.startDateTime) ? (
+              {isToday(booking.startDateTime, true) ? (
                 <div className="flex justify-between pt-5">
                   <div className="px-2">
                     <Button
