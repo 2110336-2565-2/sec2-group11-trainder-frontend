@@ -3,6 +3,7 @@ import { Button } from "@/components/common/button";
 import { Modal } from "@/components/common/modal";
 import { BookingInput, createBooking } from "@/services/booking.service";
 import { generateDate } from "@/utils/calendar";
+import { isToday } from "@/utils/date";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -135,17 +136,25 @@ const Calendar = () => {
         setStartTime(time);
       }
     };
-
+    const date = new Date(selectedDate.toISOString());
+    console.log(date);
+    console.log(isToday(date));
     return (
       <>
         {Array.from(Array(24).keys()).map((time) => {
+          const disable = isToday(date) && time <= now.hour();
           return (
             <button
               className={`flex w-full px-5 items-center h-14 ${
-                time >= startTime && time <= endTime ? "bg-pink" : "bg-white"
+                disable
+                  ? "bg-gray-light text-gray"
+                  : time >= startTime && time <= endTime
+                  ? "bg-pink"
+                  : "bg-white"
               } border-y border-gray`}
               key={time}
               onClick={() => setTimeSlot(time)}
+              disabled={disable}
             >
               {time}.00
             </button>
