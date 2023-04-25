@@ -168,6 +168,24 @@ export default function Signup() {
   const handleFormCompletion = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // check password is matched
+    const password = e.currentTarget.elements.namedItem(
+      "password"
+    ) as HTMLInputElement;
+    const confirmPassword = e.currentTarget.elements.namedItem(
+      "confirmPassword"
+    ) as HTMLInputElement;
+    if (
+      confirmPassword.value !== "" &&
+      password.value !== confirmPassword.value
+    ) {
+      setPasswordMatch(false);
+      setFormCompleted(false);
+      return;
+    } else {
+      setPasswordMatch(true);
+    }
+
     // check all field is filled
     let isCompleted = true;
     fields.map((part) => {
@@ -191,24 +209,6 @@ export default function Signup() {
     if (address.value === undefined || address.value === "") {
       setFormCompleted(false);
       return;
-    }
-
-    // check password is matched
-    const password = e.currentTarget.elements.namedItem(
-      "password"
-    ) as HTMLInputElement;
-    const confirmPassword = e.currentTarget.elements.namedItem(
-      "confirmPassword"
-    ) as HTMLInputElement;
-    if (
-      confirmPassword.value !== "" &&
-      password.value !== confirmPassword.value
-    ) {
-      setPasswordMatch(false);
-      setFormCompleted(false);
-      return;
-    } else {
-      setPasswordMatch(true);
     }
 
     setFormCompleted(isCompleted);
