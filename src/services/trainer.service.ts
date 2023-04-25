@@ -57,13 +57,13 @@ export const filterTrainer = (
       headers: authHeader(),
     })
     .then(async (response) => {
-      let filteredTrainerProfiles: FilteredTrainerProfile[] = [];
-      await Promise.all(response.data.trainers.map(async (trainerUserProfile: any) => {
+      let filteredTrainerProfiles: FilteredTrainerProfile[] = Array(response.data.trainers);
+      await Promise.all(response.data.trainers.map(async (trainerUserProfile: any, index: number) => {
         const trainer = trainerUserProfile as FilteredTrainerProfile;
         await getProfileImage(trainer.username).then((image) => {
           trainer.image = image;
+          filteredTrainerProfiles[index] = trainer;
         })
-        filteredTrainerProfiles.push(trainer);
       }));
       return filteredTrainerProfiles;
     })
