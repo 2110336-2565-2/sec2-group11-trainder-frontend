@@ -165,7 +165,7 @@ export default function Signup() {
     );
   };
 
-  const handleFormCompletion = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormCompletion = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // check password is matched
@@ -280,7 +280,7 @@ export default function Signup() {
           Make an appointment then start workout!
         </p>
       </div>
-      <div className="w-full md:w-3/5 flex flex-col justify-center items-center">
+      <div className="relative w-full md:w-3/5 flex flex-col justify-center items-center">
         <p className="text-center text-4xl">Hello !</p>
         <p className="text-gray text-center">
           Please enter your personal details <br /> and start journey with us
@@ -309,7 +309,7 @@ export default function Signup() {
           <div className="flex justify-center">
             <Button
               name="Create Account"
-              margin="mt-10 mb-3"
+              margin="mt-10 mb-14"
               width="w-1/2"
               type="submit"
               disabled={!isFormCompleted}
