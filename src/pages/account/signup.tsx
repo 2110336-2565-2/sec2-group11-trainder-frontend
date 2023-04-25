@@ -207,9 +207,9 @@ export default function Signup() {
       "address"
     ) as HTMLInputElement;
     if (address.value === undefined || address.value === "") {
+      isCompleted = false;
       setFormCompleted(false);
-      return;
-    }
+    } 
 
     setFormCompleted(isCompleted);
   };
@@ -220,6 +220,8 @@ export default function Signup() {
       const formData = e.target as typeof e.target & RegistrationFormInput;
       const results = await getGeocode({ address: formData.address.value });
       const { lat, lng } = getLatLng(results[0]);
+      console.log(results);
+      console.log(lat, lng);
       register({
         username: formData.username.value,
         password: formData.password.value,
@@ -265,8 +267,8 @@ export default function Signup() {
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <main className="flex h-screen">
-      <div className="w-2/5 h-full bg-blue hidden md:flex flex-col items-center justify-center">
+    <main className="flex min-h-screen h-full">
+      <div className="w-2/5 bg-blue hidden md:flex flex-col items-center justify-center">
         <div className="relative object-contain w-full h-3/5 my-12">
           <Image
             src="/signup.png"
@@ -280,7 +282,7 @@ export default function Signup() {
           Make an appointment then start workout!
         </p>
       </div>
-      <div className="w-full md:w-3/5 h-full flex flex-col justify-center items-center">
+      <div className="w-full md:w-3/5 flex flex-col justify-center items-center">
         <p className="text-center text-4xl">Hello !</p>
         <p className="text-gray text-center">
           Please enter your personal details <br /> and start journey with us
