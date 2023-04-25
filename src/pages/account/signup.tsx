@@ -165,7 +165,7 @@ export default function Signup() {
     );
   };
 
-  const handleFormCompletion = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormCompletion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // check password is matched
@@ -206,10 +206,19 @@ export default function Signup() {
     const address = e.currentTarget.elements.namedItem(
       "address"
     ) as HTMLInputElement;
-    if (address.value === undefined || address.value === "") {
+    const results = await getGeocode({ address: address.value });
+    const { lat, lng } = getLatLng(results[0]);
+    if (
+      address.value === undefined ||
+      address.value === "" ||
+      lat === null ||
+      lat === undefined ||
+      lng === null ||
+      lng === undefined
+    ) {
       isCompleted = false;
       setFormCompleted(false);
-    } 
+    }
 
     setFormCompleted(isCompleted);
   };
@@ -220,8 +229,6 @@ export default function Signup() {
       const formData = e.target as typeof e.target & RegistrationFormInput;
       const results = await getGeocode({ address: formData.address.value });
       const { lat, lng } = getLatLng(results[0]);
-      console.log(results);
-      console.log(lat, lng);
       register({
         username: formData.username.value,
         password: formData.password.value,
