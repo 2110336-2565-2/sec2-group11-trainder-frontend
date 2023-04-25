@@ -39,7 +39,7 @@ export const Dropdown = (props: DropdownProps) => {
                 : props.placeholder}
             </span>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronDownIcon className="h-6 w-6" strokeWidth={2} />
+              <ChevronDownIcon className="h-6 w-6" strokeWidth={2} id={`${props.name}_arrow`}/>
             </span>
           </Listbox.Button>
           <Listbox.Options
